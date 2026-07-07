@@ -35,3 +35,13 @@ endpoints). The skill holds no course facts itself, only knowledge of where to
 look, so its answers are always as current as the site. It triggers
 automatically on questions about the course, or invoke it directly with
 `/comp4020:course-info`.
+
+### check-balance
+
+Answers "check my balance", "how much budget do I have left?", "why is my key
+not working?" by querying the course proxy's `/api/me` endpoint with the same
+key Claude Code is already using — no extra setup or login. Reports weekly spend
+against the cap and when the budget resets, explains the common failure modes
+(off-campus without the ANU VPN, revoked key), and knows what to suggest when
+the budget runs out. Triggers automatically on budget/usage questions, or invoke
+it directly with `/comp4020:check-balance`.
