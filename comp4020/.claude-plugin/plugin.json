@@ -1,7 +1,7 @@
 {
   "name": "comp4020",
-  "version": "0.1.0",
-  "description": "Skills for COMP4020/COMP8020 Agentic Coding Studio students: answer course-admin questions from the live course website",
+  "version": "0.2.0",
+  "description": "Skills for COMP4020/COMP8020 Agentic Coding Studio students: course info, budget, environment setup and doctor, deadline radar, and submission preflight",
   "author": {
     "name": "COMP4020 teaching team",
     "url": "https://comp.anu.edu.au/courses/comp4020-agentic-coding-studio/"
