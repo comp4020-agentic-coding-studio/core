@@ -72,7 +72,7 @@ If today falls in the two-week break, say so — nothing is due _this_ week; loo
 to the resumption in week 7. Skip anything marked `meta.draft: true` from firm
 claims, or flag it as not-yet-finalised.
 
-## 4. Report
+## 5. Report
 
 - Lead with the single most urgent thing: "Next up: **<title>**, due <date/time>
   (<weight>%)."
