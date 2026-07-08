@@ -57,10 +57,9 @@ not exist — read the HTML page instead.
   JSON) states the precise time-of-day and timezone rules, so fetch and quote
   those rather than assuming.
 - **Policies and course admin** (extensions, academic integrity, marking,
-  enrolment, conduct) — topics nodes tagged `admin` in the index. Fetch the
-  matching node's JSON and answer from its `body`.
-- **How-to guides** (submitting work, tool setup) — topics nodes tagged
-  `practice`.
+  enrolment, conduct) and **how-to guides** (submitting work, tool setup) —
+  topics nodes tagged `admin` in the index. Fetch the matching node's JSON and
+  answer from its `body`.
 - **What a lecture or week covers** — `lectures` nodes; their `related` edges
   list the topics each deck covers.
 - **Who teaches the course / contact details** — fetch the `/people/` listing
