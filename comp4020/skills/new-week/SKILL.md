@@ -136,4 +136,3 @@ honest answer to "where did this CLAUDE.md come from".
 - "what's due this week?" → **deadline-radar**
 - "am I ready to submit?" → **submission-preflight**
 - "is my machine set up right?" → **doctor**
-</content>
