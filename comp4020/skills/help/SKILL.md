@@ -18,8 +18,8 @@ matches a skill's job.
 | --------------------------------------------------------------------------- | ------------------------ |
 | Deadlines, marking, policies, what a lecture covers, who teaches the course | **course-info**          |
 | Your weekly Claude Code budget — spent, left, when it resets                | **check-balance**        |
-| First-time setup — getting your strproxy key working in Claude Code         | **quickstart**           |
-| Whether your machine is set up right (Git, `gh`, flyctl, Chrome, the proxy) | **doctor**               |
+| First-time setup — your strproxy key, and joining the course GitHub org     | **quickstart**           |
+| Whether your machine is set up right (Git, `gh`, the org, flyctl, Chrome)   | **doctor**               |
 | What's due / what to work on this week                                      | **deadline-radar**       |
 | Cloning this week's prototype repo, carrying your CLAUDE.md forward         | **new-week**             |
 | Whether your work is ready to submit before a deadline                      | **submission-preflight** |

@@ -2,12 +2,13 @@
 name: doctor
 description:
   Checks a COMP4020/COMP8020 student's machine against the course's required
-  software environment — Git, the GitHub CLI (gh), flyctl, Claude Code's proxy
-  config, Chrome, mise — including whether the tools that talk to external
-  services (gh, flyctl, the strproxy key) are actually authenticated and
-  working, and offers to fix what's broken. Use whenever the user asks to check
-  their setup, "is everything installed", "why isn't gh/fly/claude working", or
-  wants a setup/environment health check.
+  software environment — Git, the GitHub CLI (gh), membership of the course
+  GitHub org, flyctl, Claude Code's proxy config, Chrome, mise — including
+  whether the tools that talk to external services (gh, flyctl, the strproxy
+  key) are actually authenticated and working, and offers to fix what's broken.
+  Use whenever the user asks to check their setup, "is everything installed",
+  "why isn't gh/fly/claude working", "am I in the course GitHub org", or wants a
+  setup/environment health check.
 ---
 
 # COMP4020 environment doctor
@@ -62,6 +63,36 @@ recommended tools (mise, package manager) are WARN.
   in. This is the check that matters: an installed-but-unauthenticated `gh`
   fails the moment they try to clone or open a PR. Fix: `gh auth login` (walk
   them through the browser flow; suggest HTTPS + "Login with a web browser").
+
+### Course GitHub org membership (required, hits an external service)
+
+Every weekly prototype and every assignment repo is generated for you inside the
+`comp4020-agentic-coding-studio` org, and you're added to your own as an admin.
+Being an **active member** of that org is what makes that silent — a non-member
+gets an invitation email per repo instead, and, more to the point, the course's
+provisioning refuses to create a repo for anyone who hasn't joined. If this
+check fails, you will have nothing to clone on Monday.
+
+```sh
+gh api /user/memberships/orgs/comp4020-agentic-coding-studio --jq .state
+```
+
+- `active` — PASS.
+- `pending` — FAIL. The invitation is sitting there unaccepted. **Org
+  invitations expire after seven days**, so don't leave it. One call accepts it,
+  and you can offer to run it:
+  ```sh
+  gh api --method PATCH /user/memberships/orgs/comp4020-agentic-coding-studio \
+    -f state=active
+  ```
+- `404` / "Not Found" — FAIL, but work out which kind before advising. If
+  `gh auth status` doesn't list the `read:org` scope, the check itself is blind:
+  `gh auth refresh -h github.com -s read:org` and try again. If the scope is
+  there, then either no invitation was ever sent, or it lapsed. That's the
+  convenor's end, not theirs — comp4020@anu.edu.au.
+
+Never guess between those two. Telling a student to email the convenor about a
+scope problem on their own laptop wastes everyone's week.
 
 ### flyctl (required for the full-stack half, hits an external service)
 

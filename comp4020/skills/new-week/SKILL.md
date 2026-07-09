@@ -93,10 +93,17 @@ before — until then peers can't read your source, your prompts or your harness
 Flipping it is a deliberate act two hours before the crit, and it belongs to
 **ship**, not to this skill.
 
-If the repo isn't there, don't invent one. Either the week hasn't been
-provisioned yet, or you haven't accepted your invitation to the
-`comp4020-agentic-coding-studio` org (check `gh api /user/memberships/orgs`;
-those invitations lapse after seven days). Say which, and stop.
+If the repo isn't there, don't invent one. Check org membership first, because
+that's the common cause and the one the student can fix:
+
+```sh
+gh api /user/memberships/orgs/comp4020-agentic-coding-studio --jq .state
+```
+
+Anything but `active` and the repo was never provisioned for them — hand off to
+**doctor**, which accepts a pending invitation in one call. If they are an
+active member and the repo still isn't there, the week hasn't been provisioned
+yet. Say which of the two it is, and stop.
 
 ## 5. Merge the harness
 

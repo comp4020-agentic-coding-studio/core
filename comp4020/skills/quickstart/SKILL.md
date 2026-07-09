@@ -1,12 +1,13 @@
 ---
 name: quickstart
 description:
-  Walks a new COMP4020/COMP8020 student through configuring their Claude Code
-  strproxy API key end to end — checking whether it's already set, guiding them
-  to the key on Canvas, writing it safely into ~/.claude/settings.json, and
-  verifying the round-trip works. Use for first-time setup, quickstart, "set up
-  my key", "Claude Code isn't using the course proxy", or "how do I get
-  started".
+  Walks a new COMP4020/COMP8020 student through first-time setup end to end —
+  configuring their Claude Code strproxy API key (checking whether it's already
+  set, guiding them to the key on Canvas, writing it safely into
+  ~/.claude/settings.json, verifying the round-trip) and accepting their
+  invitation to the course GitHub org. Use for first-time setup, quickstart,
+  "set up my key", "Claude Code isn't using the course proxy", "join the course
+  GitHub org", or "how do I get started".
 ---
 
 # COMP4020 quickstart: get your key working
@@ -94,8 +95,37 @@ Two independent confirmations:
   canonical smoke test; the current session may need a restart to pick up a
   newly written `settings.json`.
 
-## 5. Hand off
+## 5. Join the course GitHub org
 
-Once the key verifies, offer to run the **doctor** skill to check the rest of
-the environment (Git, `gh`, flyctl, Chrome), and mention **check-balance** for
-"how much budget do I have". Keep it to a sentence — don't over-explain.
+The other thing that must be true before week 1. Your weekly repos are generated
+for you inside `comp4020-agentic-coding-studio`, and until you accept the
+invitation there is nothing to generate them into.
+
+```sh
+gh api /user/memberships/orgs/comp4020-agentic-coding-studio --jq .state
+```
+
+`active` and you're done. `pending` means the invitation is waiting — accept it
+(offer to run this; it's their account, so confirm first):
+
+```sh
+gh api --method PATCH /user/memberships/orgs/comp4020-agentic-coding-studio \
+  -f state=active
+```
+
+Do it now rather than later: **these invitations expire after seven days**, and
+a lapsed one has to be re-sent by the convenor.
+
+A `Not Found` means one of two different things. If `gh auth status` doesn't
+list the `read:org` scope, the check can't see the membership even if it exists
+— `gh auth refresh -h github.com -s read:org`, then re-check. If the scope is
+there, no invitation is outstanding, and that's a convenor issue:
+comp4020@anu.edu.au. Don't send them emailing about a problem on their own
+laptop.
+
+## 6. Hand off
+
+Once the key verifies and the org membership is `active`, offer to run the
+**doctor** skill to check the rest of the environment (Git, `gh`, flyctl,
+Chrome), and mention **check-balance** for "how much budget do I have". Keep it
+to a sentence — don't over-explain.
