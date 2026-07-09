@@ -11,14 +11,14 @@ you subscribe once, and skill updates flow to you automatically.
 From any Claude Code session:
 
 ```
-/plugin marketplace add comp4020-agentic-coding-studio/skills
+/plugin marketplace add comp4020-agentic-coding-studio/core
 /plugin install comp4020@comp4020
 ```
 
 Or from the shell:
 
 ```sh
-claude plugin marketplace add comp4020-agentic-coding-studio/skills
+claude plugin marketplace add comp4020-agentic-coding-studio/core
 claude plugin install comp4020@comp4020
 ```
 
