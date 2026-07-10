@@ -1,0 +1,9 @@
+{
+  "name": "comp4020-statusline",
+  "version": "0.1.0",
+  "description": "Optional companion to the comp4020 plugin: shows your weekly strproxy budget in the Claude Code status line",
+  "author": {
+    "name": "COMP4020 teaching team",
+    "url": "https://comp.anu.edu.au/courses/comp4020-agentic-coding-studio/"
+  }
+}

@@ -19,6 +19,7 @@ matches a skill's job.
 | Deadlines, marking, policies, what a lecture covers, who teaches the course | **course-info**          |
 | Your weekly Claude Code budget — spent, left, when it resets                | **check-balance**        |
 | First-time setup — your strproxy key, and joining the course GitHub org     | **quickstart**           |
+| Showing your budget in the status line (optional, opt-in)                   | **quickstart**, step 6   |
 | Whether your machine is set up right (Git, `gh`, the org, flyctl, Chrome)   | **doctor**               |
 | What's due / what to work on this week                                      | **deadline-radar**       |
 | Cloning this week's prototype repo, carrying your CLAUDE.md forward         | **new-week**             |

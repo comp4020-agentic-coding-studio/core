@@ -158,21 +158,31 @@ nothing to install — that's the WSL2 nudge the **doctor** skill already gives.
 
 To install:
 
-1. Create the opt-in directory and copy in the script the plugin ships:
+1. Install the companion plugin, which ships the script:
+
+   ```sh
+   claude plugin install comp4020-statusline@comp4020
+   ```
+
+   It's deliberately separate from the `comp4020` plugin. This one carries a
+   `SessionStart` hook (that's what keeps the script current across updates),
+   and a student who doesn't want the status line shouldn't be running a hook
+   they never asked for. Installing it is the opt-in.
+
+   The hook copies the script to `~/.claude/comp4020/statusline.sh` at the start
+   of the **next** session. If it isn't there yet, don't hunt for it — carry on
+   to step 2 and tell them it lights up when they restart. To have it now:
 
    ```sh
    mkdir -p ~/.claude/comp4020
-   src=$(ls -t ~/.claude/plugins/cache/*/comp4020/*/scripts/statusline.sh 2>/dev/null | head -1)
+   src=$(ls -t ~/.claude/plugins/cache/*/comp4020-statusline/*/scripts/statusline.sh 2>/dev/null | head -1)
    [ -n "$src" ] && cp "$src" ~/.claude/comp4020/statusline.sh &&
      chmod +x ~/.claude/comp4020/statusline.sh
    ```
 
-   If `src` comes back empty, don't hunt for it — creating the directory is
-   enough. A `SessionStart` hook in this plugin copies the script in on their
-   next session, and keeps it current after every plugin update.
-
 2. Merge this into `~/.claude/settings.json` — **the same merge-never-clobber
-   rule as step 3**:
+   rule as step 3**. Installing the plugin never writes this for them; a plugin
+   cannot set `statusLine`, which is why their consent is needed here:
 
    ```json
    {
@@ -204,10 +214,17 @@ What to say if they ask how it works, or why the number looks stale:
   it managed to fetch. `budget: ?` means it has never reached the proxy — the
   usual cause is being off the VPN, and their Claude sessions still work fine.
 - A key with no cap (rare) shows `$3.50 this week` and no percentage.
+- It prints **nothing at all**, and contacts nobody, unless `ANTHROPIC_BASE_URL`
+  names the strproxy host and `ANTHROPIC_AUTH_TOKEN` holds a virtual key. A
+  student on their own Claude subscription, or pointed at some other gateway,
+  just sees an empty segment: the script won't send a credential to a host it
+  wasn't explicitly given.
 
-To turn it off: delete the `statusLine` block from `~/.claude/settings.json`.
-`rm -rf ~/.claude/comp4020` as well if they want the hook to stop reinstalling
-the script.
+To turn it off: delete the `statusLine` block from `~/.claude/settings.json`. To
+also stop the hook reinstalling the script,
+`claude plugin uninstall comp4020-statusline@comp4020` and
+`rm -rf ~/.claude/comp4020`. The `comp4020` skills plugin is unaffected either
+way.
 
 ## 7. Hand off
 

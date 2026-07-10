@@ -8,9 +8,11 @@
 # `statusLine` at all --- so the script has to live at a stable path, and
 # something has to keep that copy current. This is that something.
 #
-# It is a no-op until the student opts in: quickstart creates the directory and
-# writes settings.json. A status line script materialising in ~/.claude for
-# someone who never asked for one would be a surprise.
+# Installing this plugin is itself the opt-in, which is why it lives apart from
+# the comp4020 plugin: those skills ship no hooks, so nothing runs at session
+# start for a student who wants only those. Copying the script in still shows no
+# status line by itself --- a plugin cannot set `statusLine`, so quickstart has
+# to write settings.json with the student's consent.
 
 set -uo pipefail
 
@@ -18,7 +20,7 @@ src="${CLAUDE_PLUGIN_ROOT:-}/scripts/statusline.sh"
 dest="$HOME/.claude/comp4020/statusline.sh"
 
 [[ -f "$src" ]] || exit 0
-[[ -d "${dest%/*}" ]] || exit 0 # not opted in
+mkdir -p "${dest%/*}" 2>/dev/null || exit 0
 
 cmp -s "$src" "$dest" 2>/dev/null || {
   cp "$src" "$dest" 2>/dev/null && chmod +x "$dest" 2>/dev/null

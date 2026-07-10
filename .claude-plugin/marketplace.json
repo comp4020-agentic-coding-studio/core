@@ -10,6 +10,11 @@
       "name": "comp4020",
       "source": "./comp4020",
       "description": "Claude Code skills for students in COMP4020/COMP8020 Agentic Coding Studio at the ANU"
+    },
+    {
+      "name": "comp4020-statusline",
+      "source": "./comp4020-statusline",
+      "description": "Optional: shows your weekly strproxy budget in the Claude Code status line. Installs a SessionStart hook; install only if you want the status line"
     }
   ]
 }

@@ -80,6 +80,14 @@ Response fields that matter:
   arrange a one-off bump for the cohort. Don't suggest workarounds like sharing
   keys.
 
+## If they keep asking
+
+Someone checking their balance repeatedly wants it ambient, not on demand.
+Mention once — don't push it — that the optional `comp4020-statusline` plugin
+puts the week's spend at the bottom of every session, and that the
+**quickstart** skill (step 6) sets it up. It's an indicator, cached for a
+minute; this skill stays the authoritative figure.
+
 ## Answering rules
 
 - Lead with the headline: spent $X.XX of $Y.YY this week (Z%), resets <weekday>

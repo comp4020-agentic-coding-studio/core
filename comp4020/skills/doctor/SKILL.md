@@ -144,9 +144,11 @@ routed through the course proxy and the key works:
 ### Budget status line (optional)
 
 Opt-in, so **absence is not a failure**. If `~/.claude/settings.json` has no
-`statusLine` block and no `~/.claude/comp4020/` directory, the student never
-asked for it: say nothing and move on. Only diagnose it if they've turned it on,
-or if they're asking why it isn't working.
+`statusLine` block and the `comp4020-statusline` plugin isn't installed, the
+student never asked for it: say nothing and move on. Only diagnose it if they've
+turned it on, or if they're asking why it isn't working. (Don't read
+`~/.claude/comp4020/` as consent — the plugin's hook creates that directory on
+install, before any status line exists.)
 
 Once it _is_ on, the failure modes are quiet — an empty or frozen bar, never an
 error. Check in this order:
@@ -156,15 +158,24 @@ error. Check in this order:
   `budget: needs jq`. WARN, not FAIL. Fix: `brew install jq` (macOS),
   `sudo apt install jq` (Debian/Ubuntu/WSL), or `mise use -g jq` (any platform,
   and mise is already recommended below).
+- **Companion plugin installed?** The script ships in `comp4020-statusline`, a
+  separate opt-in plugin, not in `comp4020`. `claude plugin list` should show
+  it. If not: `claude plugin install comp4020-statusline@comp4020`.
 - **Script installed and executable?**
-  `test -x ~/.claude/comp4020/statusline.sh`. If the directory exists but the
-  script doesn't, the `SessionStart` hook hasn't run yet — restarting Claude
-  Code installs it. If that doesn't fix it, the plugin isn't enabled:
-  `/plugin install comp4020@comp4020`.
+  `test -x ~/.claude/comp4020/statusline.sh`. If the plugin is installed but the
+  script isn't there, its `SessionStart` hook hasn't run yet — restarting Claude
+  Code installs it.
 - **`settings.json` points at it?** The `statusLine.command` should be
-  `$HOME/.claude/comp4020/statusline.sh`. A student who already had their own
-  status line may have it pointing elsewhere — that's fine and deliberate; check
-  whether their script calls ours (see the **quickstart** skill, step 6).
+  `$HOME/.claude/comp4020/statusline.sh`. Installing the plugin does **not**
+  write this (no plugin can set `statusLine`), so this is the step people miss.
+  A student who already had their own status line may have it pointing elsewhere
+  — that's fine and deliberate; check whether their script calls ours (see the
+  **quickstart** skill, step 6).
+- **Routed through strproxy?** The script stays silent unless
+  `ANTHROPIC_BASE_URL` names the strproxy host and `ANTHROPIC_AUTH_TOKEN` holds
+  a virtual key — by design, so it never sends a credential to a host it wasn't
+  given. On someone's own Claude subscription there is nothing to show and an
+  empty segment is correct, not a fault.
 - **Native Windows** — there's no Unix shell to run it in. Not a FAIL; it's the
   same WSL2 story as everything else.
 

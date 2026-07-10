@@ -8,11 +8,11 @@
 # curl (which, on a laptop off the ANU VPN, hangs until it times out) would
 # leave the bar permanently empty.
 #
-# The canonical copy lives in the comp4020 plugin; a SessionStart hook syncs it
-# to ~/.claude/comp4020/statusline.sh, which is what settings.json points at.
-# The plugin's own path is content-hashed and changes on every update, so it
-# can't be named in settings.json. Don't edit the installed copy --- the hook
-# overwrites it.
+# The canonical copy lives in the comp4020-statusline plugin; a SessionStart
+# hook syncs it to ~/.claude/comp4020/statusline.sh, which is what settings.json
+# points at. The plugin's own path is content-hashed and changes on every
+# update, so it can't be named in settings.json. Don't edit the installed copy
+# --- the hook overwrites it.
 #
 # Reads nothing from stdin, so it composes: an existing status line script can
 # append `"$HOME/.claude/comp4020/statusline.sh" </dev/null` to its own output.
@@ -26,8 +26,28 @@ readonly TTL=60 # seconds a cached figure stays fresh
 # it unread risks a broken pipe in the writer.
 cat >/dev/null 2>&1 || true
 
+# Only ever speak to a proxy we were explicitly pointed at, and only with a
+# credential minted for it. Someone on a Claude Max subscription has no
+# ANTHROPIC_AUTH_TOKEN at all; someone on a *different* gateway has a token that
+# is none of strproxy's business. In both cases: print nothing, send nothing.
+# STRPROXY_HOSTS is a space-separated allowlist, overridable for a staging host.
+readonly HOSTS="${STRPROXY_HOSTS:-strproxy.comp.anu.edu.au}"
+
 token="${ANTHROPIC_AUTH_TOKEN:-}"
-[[ -n "$token" ]] || exit 0 # not a course session: print nothing at all
+base="${ANTHROPIC_BASE_URL:-}"
+[[ -n "$token" && -n "$base" ]] || exit 0
+
+# `sk-ant-…` is a real Anthropic key, not a strproxy virtual key. Never send one.
+[[ "$token" == sk-ant-* ]] && exit 0
+
+base="${base%/}"
+host="${base#*://}"
+host="${host%%[:/]*}"
+matched=
+for allowed in $HOSTS; do
+  [[ "$host" == "$allowed" ]] && matched=1
+done
+[[ -n "$matched" ]] || exit 0
 
 dim=$'\e[2m'
 reset=$'\e[0m'
@@ -36,9 +56,6 @@ if ! command -v jq >/dev/null 2>&1 || ! command -v curl >/dev/null 2>&1; then
   printf '%s' "${dim}budget: needs jq${reset}"
   exit 0
 fi
-
-base="${ANTHROPIC_BASE_URL:-https://strproxy.comp.anu.edu.au}"
-base="${base%/}"
 
 dir="${XDG_CACHE_HOME:-$HOME/.cache}/comp4020"
 mkdir -p "$dir" 2>/dev/null || exit 0

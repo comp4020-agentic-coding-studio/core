@@ -52,14 +52,9 @@ Walks a first-time student through getting their strproxy key working in Claude
 Code: checks whether it's already set, points them at the key on Canvas, merges
 it safely into `~/.claude/settings.json` (never clobbering existing settings,
 never echoing the key), and verifies the round-trip. Also joins the course
-GitHub org, and optionally installs the **budget status line** — the week's
-spend against the cap, live at the bottom of every session, coloured as the cap
-approaches. Each step re-runs independently, so `/comp4020:quickstart` later
-with "install the status line" does just that. Or ask to "set up my key".
-
-The status line reads a cached figure and refreshes in the background at most
-once a minute, so it never slows a session down or hammers the proxy. It needs
-`jq`, and a Unix shell — macOS, Linux, WSL.
+GitHub org, and sets up the optional status line (below). Each step re-runs
+independently, so `/comp4020:quickstart` later with "install the status line"
+does just that. Or ask to "set up my key".
 
 ### doctor
 
@@ -104,3 +99,28 @@ submit?".
 
 Lists everything above and routes to the right skill. Invoke with
 `/comp4020:help`.
+
+## The status line (a separate, optional plugin)
+
+`comp4020-statusline` puts your week's spend against the cap at the bottom of
+every Claude Code session — `$41.20/$100 (41%)`, green through amber to red as
+the cap approaches.
+
+```
+claude plugin install comp4020-statusline@comp4020
+```
+
+It's a second plugin rather than part of `comp4020` because it ships a
+`SessionStart` hook (which keeps the script current across updates), and nobody
+should run a hook they didn't ask for. Installing it is the opt-in; the skills
+plugin above ships no hooks at all.
+
+Installing it doesn't switch the status line on by itself — no plugin can set
+`statusLine`. Ask **quickstart** to "install the status line" and it writes the
+one-line `settings.json` block for you, merging rather than clobbering an
+existing status line.
+
+It reads a cached figure and refreshes in the background at most once a minute,
+so it never slows a session down or hammers the proxy — an indicator, not a
+ledger. It needs `jq` and a Unix shell (macOS, Linux, WSL), and it prints
+nothing, and contacts nobody, unless you're actually routed through strproxy.
