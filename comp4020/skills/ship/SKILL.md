@@ -103,9 +103,10 @@ marks, so "the flip worked" is not the finish line — a 2xx at the live URL is.
 - Never flip a repo that isn't the student's own deliverable. Read the owner and
   the name back to them first.
 - Never `--force` anything, and never rewrite history on a public repo.
-- If the cutoff has already passed, lucy's sweep may have flipped the repo
-  already. A repo that is public when you arrive is not an error; skip to the
-  deploy and verify steps.
+- A repo that is already public when you arrive is not an error — the student
+  flipped it earlier; skip to the deploy and verify steps. Nothing in the course
+  flips a student repo automatically: if it is still private, nobody has shipped
+  it.
 - Archived repos are read-only. If `isArchived` is true the student has been
   off-boarded; do not try to work around it, ask them to talk to the convenor.
 
