@@ -25,13 +25,12 @@ spec** (from the course site) with the **student's actual repo state**.
   carries `due`/`week`/`weight`. Quote the real due time from the body, not just
   the ISO date.
 - **Crit cutoffs are group-relative** — two hours before the student's own
-  session, so a different time for each of the six groups. Read
-  `$COMP4020_GROUP` (set during **quickstart**) and resolve the session day/time
-  from the group ↔ session table on the crit agents page
-  (`/api/topics/crit-agents.json`); the cutoff is two hours before that. If the
-  variable is unset, say "two hours before your session", ask which group
-  they're in, and offer to save it (quickstart, step 6) so it's never asked
-  again.
+  session, so a different time for every crit group. Read `$COMP4020_GROUP` (set
+  during **quickstart**) and resolve the session and cutoff from the crit-group
+  data at `/api/crit-groups.json` (one entry per group, keyed by agent name,
+  with `session` and `cutoff` fields). If the variable is unset, say "two hours
+  before your session", ask which group they're in, and offer to save it
+  (quickstart, step 6) so it's never asked again.
 - **The repo**: default to the git repo in the current directory. Confirm it's
   the right one (`gh repo view` / `git remote -v`) before judging it.
 

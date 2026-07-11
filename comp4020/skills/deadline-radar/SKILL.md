@@ -58,11 +58,11 @@ skill hard-codes because the site's API exposes week numbers, not dates.
 
 A crit in week N happens during the week beginning at that Monday. If
 `$COMP4020_GROUP` is set (see **quickstart**), do better than the Monday:
-resolve the student's session day/time from the group ↔ session table on the
-crit agents page (`/api/topics/crit-agents.json`) and quote the deadline that
-actually binds — the cutoff, two hours before that session. If it's unset, give
-the Monday, and mention that setting their group (quickstart, step 6) gets exact
-times.
+resolve the student's session and cutoff from the crit-group data at
+`/api/crit-groups.json` (one entry per group, keyed by agent name, with
+`session` and `cutoff` fields) and quote the deadline that actually binds — the
+cutoff, two hours before the session. If it's unset, give the Monday, and
+mention that setting their group (quickstart, step 6) gets exact times.
 
 ## 4. Order and bucket
 

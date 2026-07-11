@@ -141,11 +141,11 @@ routed through the course proxy and the key works:
   Never nudge toward `--dangerously-skip-permissions`.
 - Never print the key value back to the user.
 
-### Studio group (recommended)
+### Crit group (recommended)
 
 - `COMP4020_GROUP` set — in the environment, backed by `~/.claude/settings.json`
-  under `env` — and equal to one of the six agent names (`shitao`, `bada`,
-  `baishi`, `dachi`, `yunlin`, `liuru`, lowercase)? Missing or misspelled is a
+  under `env` — and equal to one of the group ids (the agent's name, lowercase,
+  e.g. `shitao`) listed at `/api/crit-groups.json`? Missing or misspelled is a
   WARN, not a FAIL: nothing breaks, but the deadline-aware skills
   (**submission-preflight**, **ship**, **deadline-radar**) can only say "two
   hours before your session" instead of quoting the student's actual crit
