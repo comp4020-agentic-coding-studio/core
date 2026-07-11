@@ -22,11 +22,11 @@ need installed and, crucially, whether the ones that hit external services
 
 ## Ground truth: fetch the required-tools list live
 
-The canonical list of required and recommended tools lives on the course site,
-so fetch it rather than trusting this file to stay current:
+The canonical list of required and recommended tools lives on the course site's
+quickstart page, so fetch it rather than trusting this file to stay current:
 
 ```
-https://comp.anu.edu.au/courses/comp4020-agentic-coding-studio/api/topics/software-and-platforms.json
+https://comp.anu.edu.au/courses/comp4020-agentic-coding-studio/api/topics/quickstart.json
 ```
 
 Read its `body`. The checks below cover every tool that page currently lists. If
@@ -44,8 +44,8 @@ Run `uname -s` (and check for WSL). Tailor every check and fix to the result:
 - **WSL** (`Linux` with `microsoft` in `/proc/version`) — treat as Linux; this
   is the supported Windows path.
 - **Native Windows** (no Unix shell) — this is off the supported path. Point at
-  the WSL2 warning on the software-and-platforms page and recommend installing
-  WSL2 before going further; most other checks won't apply cleanly.
+  the WSL2 warning on the quickstart page and recommend installing WSL2 before
+  going further; most other checks won't apply cleanly.
 
 ## Checks
 
