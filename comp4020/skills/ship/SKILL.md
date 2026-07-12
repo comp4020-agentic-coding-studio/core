@@ -2,8 +2,9 @@
 name: ship
 description:
   Ships a COMP4020/COMP8020 deliverable — flips the repo public, enables GitHub
-  Pages, triggers the deploy and checks the live URL actually serves. Use when
-  the user says "ship it", "make my repo public", "flip it public", "publish my
+  Pages, triggers the deploy, checks the live URL actually serves, and in the
+  final-project run (weeks 9–11) tags the crit cutoff state. Use when the user
+  says "ship it", "make my repo public", "flip it public", "publish my
   prototype", "enable Pages", or "deploy for the crit". Not for checking whether
   the work is ready; that's submission-preflight.
 ---
@@ -100,11 +101,38 @@ curl -sf -o /dev/null -w '%{http_code}' <url>
 Report the URL and the status code. A repo that never deployed is worth no
 marks, so "the flip worked" is not the finish line — a 2xx at the live URL is.
 
+## 5. Tag the crit state (final-project run, weeks 9–11)
+
+From week 9 the crits and the final project share one repository (see the
+assessment page's What you submit), so the repo shipped this week is the same
+one that keeps moving next week. A fresh repo per week froze the marked state by
+itself; in the shared repo, a tag does that job. After the deploy verifies, tag
+the deployed commit and push the tag:
+
+```sh
+git tag -a crit-<week> -m "week <week> crit cutoff state" <deployed-sha>
+git push origin crit-<week>
+```
+
+Resolve `<week>` from the deliverable you identified in step 1. This applies
+whether or not a flip happened this week — in weeks 10 and 11 the repo is
+already public and shipping is just deploy, verify, tag. Re-shipping before the
+cutoff moves the tag to the new deploy (`git tag -fa`, then force-push **that
+tag ref only** — the one permitted force in this course, because the cutoff
+hasn't fixed the state yet). Never move a crit tag after its cutoff has passed:
+from then on it records what the tutor marked, and moving it defeats the
+purpose.
+
+Weeks 2–8 don't need this — each of those prototypes is its own repo, which is
+its own frozen record.
+
 ## Notes
 
 - Never flip a repo that isn't the student's own deliverable. Read the owner and
   the name back to them first.
-- Never `--force` anything, and never rewrite history on a public repo.
+- Never `--force` anything, and never rewrite history on a public repo. The sole
+  exception is moving a `crit-<week>` tag before its cutoff, as under step 5 —
+  branches, never.
 - A repo that is already public when you arrive is not an error — the student
   flipped it earlier; skip to the deploy and verify steps. Nothing in the course
   flips a student repo automatically: if it is still private, nobody has shipped

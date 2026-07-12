@@ -34,8 +34,13 @@ Not every week starts a fresh prototype. Before creating anything:
 
 - **weeks 4 and 7** are retro crits — you present the assignment that just
   landed, so there's no new prototype. Say so and stop.
-- **weeks 9–11** run on the in-flight final project. The crit deliverable is A3
-  through that week's lens, in the A3 repo. Say so and stop.
+- **week 9** starts the **final-project repo**: created from that week's starter
+  and carried through to the A3 deadline, with every late-crit week's spec tier
+  shipped in it up front. Run this skill for it as normal — harness carried
+  forward, stack chosen deliberately (this is the stack you'll justify in A3).
+- **weeks 10–11** run in that same repo. The crit deliverable is the in-flight
+  A3 through that week's lens, so there's no new repo and no harness to carry.
+  Say so and stop.
 - **week 12** has no crit.
 
 The template follows the half of the course: the static half (weeks 2–6) uses
