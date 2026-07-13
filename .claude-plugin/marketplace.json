@@ -14,7 +14,7 @@
     {
       "name": "comp4020-statusline",
       "source": "./comp4020-statusline",
-      "description": "Optional: shows your weekly strproxy budget in the Claude Code status line. Installs a SessionStart hook; install only if you want the status line"
+      "description": "Optional: shows which credits each session burns in the Claude Code status line — your weekly strproxy budget on course credits, 'own plan' otherwise. Installs a SessionStart hook; install only if you want the status line"
     }
   ]
 }

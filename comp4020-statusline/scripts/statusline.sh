@@ -1,5 +1,10 @@
 #!/usr/bin/env bash
-# COMP4020 status line: your weekly strproxy budget, e.g. "$12.34/$100 (12%)".
+# COMP4020 status line: which credits this session burns, and how fast. Routed
+# through strproxy it shows the weekly budget, e.g. "comp4020 $12.34/$100
+# (12%)"; on any other auth (a personal Claude subscription, someone's own
+# Anthropic key, a different gateway) it shows a dim "own plan" --- so a
+# student with both can always see which wallet the current session draws
+# from.
 #
 # The render path never touches the network. It prints a cached figure and, if
 # that figure has gone stale, kicks off a detached refresh for the *next*
@@ -26,19 +31,31 @@ readonly TTL=60 # seconds a cached figure stays fresh
 # it unread risks a broken pipe in the writer.
 cat >/dev/null 2>&1 || true
 
+dim=$'\e[2m'
+reset=$'\e[0m'
+
+# Not course credits: say so explicitly. A silent segment would be
+# indistinguishable from a broken install, and the whole point of the tag is
+# that a dual-plan student sees the wallet flip as they move between projects.
+own_plan() {
+  printf '%s' "${dim}own plan${reset}"
+  exit 0
+}
+
 # Only ever speak to a proxy we were explicitly pointed at, and only with a
 # credential minted for it. Someone on a Claude Max subscription has no
 # ANTHROPIC_AUTH_TOKEN at all; someone on a *different* gateway has a token that
-# is none of strproxy's business. In both cases: print nothing, send nothing.
+# is none of strproxy's business. In every such case: print "own plan", send
+# nothing.
 # STRPROXY_HOSTS is a space-separated allowlist, overridable for a staging host.
 readonly HOSTS="${STRPROXY_HOSTS:-strproxy.comp.anu.edu.au}"
 
 token="${ANTHROPIC_AUTH_TOKEN:-}"
 base="${ANTHROPIC_BASE_URL:-}"
-[[ -n "$token" && -n "$base" ]] || exit 0
+[[ -n "$token" && -n "$base" ]] || own_plan
 
 # `sk-ant-…` is a real Anthropic key, not a strproxy virtual key. Never send one.
-[[ "$token" == sk-ant-* ]] && exit 0
+[[ "$token" == sk-ant-* ]] && own_plan
 
 base="${base%/}"
 host="${base#*://}"
@@ -47,13 +64,15 @@ matched=
 for allowed in $HOSTS; do
   [[ "$host" == "$allowed" ]] && matched=1
 done
-[[ -n "$matched" ]] || exit 0
+[[ -n "$matched" ]] || own_plan
 
-dim=$'\e[2m'
-reset=$'\e[0m'
+# Everything from here down is course-credit territory, so every rendering
+# carries the tag --- the tag means "this session burns course credits", even
+# when the figure itself is unavailable.
+tag="${dim}comp4020${reset} "
 
 if ! command -v jq >/dev/null 2>&1 || ! command -v curl >/dev/null 2>&1; then
-  printf '%s' "${dim}budget: needs jq${reset}"
+  printf '%s' "${tag}${dim}budget: needs jq${reset}"
   exit 0
 fi
 
@@ -89,7 +108,7 @@ fi
 
 # First run, or we have never once reached the proxy.
 if [[ ! -s "$json" ]]; then
-  printf '%s' "${dim}budget: ?${reset}"
+  printf '%s' "${tag}${dim}budget: ?${reset}"
   exit 0
 fi
 
@@ -107,9 +126,9 @@ jq -r '[(.current_week_spend | tonumber),
         # Truncate rather than round, so the bar never reads 100% short of the cap.
         pct    = int(spent / cap * 100)
         colour = ((pct >= 90) ? 31 : ((pct >= 70) ? 33 : 32))
-        printf "\033[%dm$%.2f/$%.0f (%d%%)\033[0m", colour, spent, cap, pct
+        printf "\033[2mcomp4020\033[0m \033[%dm$%.2f/$%.0f (%d%%)\033[0m", colour, spent, cap, pct
       } else {
-        printf "$%.2f this week", spent
+        printf "\033[2mcomp4020\033[0m $%.2f this week", spent
       }
     }'
 
