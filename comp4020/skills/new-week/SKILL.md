@@ -77,7 +77,7 @@ deploys to that week's target. Ask once, and make the choice explicit:
   a legitimate answer in the static half.
 
 **Never carry forward** the prototype source (`index.html`, `main.js`,
-`styles.css`, components), the `spec/` directory, `OVERVIEW.md`, or
+`styles.css`, components), the `spec/` directory, `PROCESS.md`, or
 `reflections/`. Each week answers a new provocation, and `spec/` is this week's
 contract with the marker. A student who drags last week's source along ends up
 presenting last week's work.
