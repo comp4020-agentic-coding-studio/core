@@ -7,11 +7,12 @@ description:
   whether the tools that talk to external services (gh, flyctl, the strproxy
   key) are actually authenticated and working, and offers to fix what's broken.
   Inside a course prototype repo it also checks the template's pre-commit key
-  guard is active and that no API key has been committed. Also diagnoses the
-  optional budget status line and its dependencies. Use whenever the user asks
-  to check their setup, "is everything installed", "why isn't gh/fly/claude
-  working", "am I in the course GitHub org", "why is my status line empty /
-  stuck / not showing my budget", or wants a setup/environment health check.
+  guard is active and that no API key has been committed. Also checks the course
+  plugin itself is at the latest version, and diagnoses the optional budget
+  status line and its dependencies. Use whenever the user asks to check their
+  setup, "is everything installed", "why isn't gh/fly/claude working", "am I in
+  the course GitHub org", "why is my status line empty / stuck / not showing my
+  budget", or wants a setup/environment health check.
 ---
 
 # COMP4020 environment doctor
@@ -145,6 +146,20 @@ routed through the course proxy and the key works:
   in default/plan mode, mention auto mode as a flow improvement (not a FAIL).
   Never nudge toward `--dangerously-skip-permissions`.
 - Never print the key value back to the user.
+
+### Course plugin up to date (recommended)
+
+They're running this skill from the `comp4020` plugin, so it's installed — the
+question is whether it's current. Skills get fixed and extended through the
+semester, and a stale copy fails in ways that don't look like a version problem.
+
+- `claude plugin marketplace update comp4020` first, so the comparison is
+  against the marketplace's current state rather than a stale local copy.
+- `claude plugin list --json --available` — compare the installed `comp4020`
+  version against the marketplace's latest. Behind is a WARN. Fix:
+  `claude plugin update comp4020@comp4020`, then restart Claude Code (updates
+  only apply to new sessions). If `comp4020-statusline` is installed, check it
+  the same way.
 
 ### Pre-commit key guard (required, repo-scoped)
 

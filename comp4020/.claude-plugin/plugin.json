@@ -1,6 +1,6 @@
 {
   "name": "comp4020",
-  "version": "0.6.0",
+  "version": "0.7.0",
   "description": "Skills for COMP4020/COMP8020 Agentic Coding Studio students: course info, budget, quickstart and doctor, deadline radar, new week, and submission preflight. Ships no hooks; the optional status line lives in the companion comp4020-statusline plugin",
   "author": {
     "name": "COMP4020 teaching team",
