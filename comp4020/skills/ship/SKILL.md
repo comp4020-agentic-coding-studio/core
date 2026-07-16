@@ -78,7 +78,13 @@ gh repo edit <owner>/<repo> --visibility public --accept-visibility-change-conse
 ```
 
 You are a repo admin on your own repo, so this works. If it 403s, you are not
-admin, or the org has restricted visibility changes — say so, don't retry.
+admin, or the org has restricted visibility changes — say so, don't retry. If it
+dies with `unknown flag` instead, the `gh` is a distro-packaged one older than
+2.46 (doctor checks for this); the API call needs no flag:
+
+```sh
+gh api -X PATCH /repos/<owner>/<repo> -f visibility=public
+```
 
 For the **static half** (weeks 2–6), the flip is what makes Pages available.
 Enable it as a **workflow** site, then dispatch the deploy workflow and wait:
