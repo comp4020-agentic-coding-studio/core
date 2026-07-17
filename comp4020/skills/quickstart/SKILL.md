@@ -58,8 +58,10 @@ If there's no key, the student gets theirs from Canvas (you can't fetch it for
 them — it's behind an access quiz):
 
 1. On [canvas.anu.edu.au](https://canvas.anu.edu.au), in the course, find the
-   **"Claude Code API key"** module.
-2. Take the short access quiz — unlimited attempts, so retake until 100%.
+   **"Start here"** module (it unlocks on Tuesday of week 1 — 28 July).
+2. Work through it in order: tick off the VPN step, submit the pre-course
+   survey, then take the short access quiz — unlimited attempts, so retake until
+   100%.
 3. Passing unlocks the **"Your Claude Code API key"** assignment. Open it and
    read the instructor comment on their submission — the key is the value
    starting with `sk-`.
