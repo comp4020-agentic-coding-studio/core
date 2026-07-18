@@ -55,7 +55,9 @@ not exist — read the HTML page instead.
   number ≠ week number (crits run weeks 2–11, so `01-…` is week 2) — trust
   `meta.week`, not the slug. `due` is an ISO date; the page `body` (per-node
   JSON) states the precise time-of-day and timezone rules, so fetch and quote
-  those rather than assuming.
+  those rather than assuming. If the node's own body doesn't state a time (a
+  draft page often won't), the **assessment** topic's overview table carries the
+  canonical due times — check there before saying the time is unstated.
 - **Policies and course admin** (extensions, academic integrity, marking,
   enrolment, conduct) and **how-to guides** (submitting work, tool setup) —
   topics nodes tagged `admin` in the index. Fetch the matching node's JSON and
@@ -73,6 +75,8 @@ not exist — read the HTML page instead.
 
 - Cite the human-facing page URL (base URL + `/<node-id>/`) in your answer so
   the user can verify.
+- For anything relative to now ("how long until", "is that this week"), anchor
+  to the machine's real date — `date +%Y-%m-%d` — never an assumed today.
 - `meta.draft: true` means the page is placeholder or not-yet-finalised content
   — say so when answering from it ("the site currently lists X, but the page is
   marked draft").
