@@ -31,11 +31,32 @@ Get the real date from the machine (`date +%Y-%m-%d`) — never assume it. Then
 fetch `/api/crit-groups.json` from the course site (base URL
 `https://comp.anu.edu.au/courses/comp4020-agentic-coding-studio`). Its
 `deliverables` array maps every crit and assessment to a `week` and a
-`repoPrefix`; the student's repo for a deliverable is `<repoPrefix>-<handle>`.
-Find the current week's entries, and read the deliverable's own JSON —
-`/api/crits/<slug>.json` for `kind: crit`, `/api/assessments/<slug>.json` for
-`kind: assessment` — for the `spec` (the published contract) and the `body` (the
-full brief).
+`repoPrefix`; its `weeks` array maps each teaching week to the Monday it starts
+(`teachingBreak` is the no-teaching gap between the halves); the student's repo
+for a deliverable is `<repoPrefix>-<handle>`.
+
+**The target is the next deliverable whose deadline is still ahead of now** —
+never a raw "which week is it" match. A deliverable's `week` is when its crit
+session runs; the work happens in the days before the cutoff, so C1 (`week: 2`)
+is the week-1 job, and the thing to set up right after your week-N crit is week
+N+1's. Resolve deadlines concretely:
+
+- a **crit's** deadline is the student's group cutoff in the deliverable's week:
+  the group's `cutoff` day and time (from `groups`, keyed by `$COMP4020_GROUP` —
+  if it's unset, ask which group they're in; quickstart step 6 records it)
+  anchored to that week's Monday from `weeks`.
+- an **assessment's** deadline is its `due` date.
+
+Pick the deliverable with the earliest deadline still ahead. If its repo is
+already cloned and under way, the target is the next one after it. If two lie
+equally ahead (an assignment finishing alongside a crit), say so and ask which
+they're starting. And if the student names a target — "set up week 5", "start
+assignment 2" — that wins over any date arithmetic. If nothing lies ahead at
+all, the course's deliverables are done; say so and stop.
+
+Then read the target's own JSON — `/api/crits/<slug>.json` for `kind: crit`,
+`/api/assessments/<slug>.json` for `kind: assessment` — for the `spec` (the
+published contract) and the `body` (the full brief).
 
 Entries can share a prefix: the retro crits point at the assignment repo they
 demo, and the final project's repo (`comp4020-final`) serves the week 9–11 crits
