@@ -31,6 +31,13 @@ https://comp.anu.edu.au/courses/comp4020-agentic-coding-studio
 | `/llms.txt`                     | Annotated index of every page on the site (including pages not in the API, e.g. people). Draft pages are marked `(draft)`.                                                                                                  |
 | `/llms-full.txt`                | Full text of every page inline (~100 kB). The fallback when you can't route a question to a specific node. Draft pages carry a `_Draft: …_` notice line.                                                                    |
 
+This table is the routing map for course **content** — it isn't exhaustive of
+every live endpoint. Course **logistics** data (crit-group session times and
+cutoffs) lives at `/api/crit-groups.json`, not a content node, and course
+**budget** data lives at strproxy's own `/api/me`, not the course site at all —
+both are handled by other skills (**deadline-radar**, **submission-preflight**,
+**ship**, **new-week**, **doctor**, **check-balance**), not this one.
+
 Node collections in the API: `topics` (concepts, policies, how-to guides),
 `assessments`, `crits`, `lectures`. The **people** collection (convenor, TAs,
 guest lecturers) is _not_ in the API — people pages are plain HTML, not
