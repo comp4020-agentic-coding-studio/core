@@ -54,7 +54,9 @@ token="${ANTHROPIC_AUTH_TOKEN:-}"
 base="${ANTHROPIC_BASE_URL:-}"
 [[ -n "$token" && -n "$base" ]] || own_plan
 
-# `sk-ant-…` is a real Anthropic key, not a strproxy virtual key. Never send one.
+# `sk-ant-…` is a real Anthropic key, not a strproxy virtual key: LiteLLM mints
+# strproxy's keys as `sk-` + ~22 random URL-safe chars, never `sk-ant-*`, so
+# this prefix reliably tells "own key" from "course key". Never send one.
 [[ "$token" == sk-ant-* ]] && own_plan
 
 base="${base%/}"
