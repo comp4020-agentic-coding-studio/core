@@ -325,3 +325,8 @@ points at the course script. Then `claude plugin uninstall comp4020@comp4020`
 `rm -rf ~/.claude/comp4020`. A leftover global config keeps routing every
 session at a proxy that will eventually stop serving them — the classic symptom
 is "Claude Code stopped working after semester".
+
+If they also installed the student-contributed skills
+(`claude plugin marketplace add comp4020-agentic-coding-studio/contrib`), remove
+that too: `claude plugin uninstall contrib@comp4020-contrib` and
+`claude plugin marketplace remove comp4020-contrib`.
