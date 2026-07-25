@@ -6,6 +6,7 @@ description:
   querying the proxy's /api/me endpoint with the key already in the environment.
   Use whenever the user asks about their balance, budget, spend, usage, quota,
   or why their key seems blocked or out of budget.
+allowed-tools: Bash, WebFetch
 ---
 
 # Check my Claude Code balance
