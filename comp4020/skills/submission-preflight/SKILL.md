@@ -7,6 +7,7 @@ description:
   full-stack half) is deployed and reachable. Use before a submission, or when
   the user asks "am I ready to submit", "is my crit/assignment ready", or "did I
   push everything".
+allowed-tools: Bash, Read, WebFetch, Glob, Grep
 ---
 
 # COMP4020 submission preflight
@@ -18,20 +19,23 @@ spec** (from the course site) with the **student's actual repo state**.
 
 ## 1. Which submission, and which repo?
 
-- **The spec**: identify the crit or assessment in question. Ask if it's
-  ambiguous, otherwise infer from context/date. Fetch its details via the same
-  API the **course-info** skill uses (`/api/index.json`, then the node's JSON
-  for the full `body`): the `body` states what to submit and how, and `meta`
-  carries `due`/`week`/`weight`. Quote the real due time from the body, not just
-  the ISO date.
-- **Crit cutoffs are group-relative** — two hours before the student's own
-  session, so a different time for every crit group. Read `$COMP4020_GROUP` (set
-  during **quickstart**) and resolve the session and cutoff from the crit-group
-  data at `/api/crit-groups.json` (`groups` is an array, one entry per group,
-  each with an `agent` field plus `session` and `cutoff` — match `agent` against
-  `$COMP4020_GROUP` to find yours). If the variable is unset, say "two hours
-  before your session", ask which group they're in, and offer to save it
-  (quickstart, step 6) so it's never asked again.
+- **The deadline**:
+
+  ```sh
+  "$CLAUDE_PLUGIN_ROOT/scripts/next-deadline.sh"
+  ```
+
+  The `next` row is normally the submission in question — crit cutoffs are
+  group-relative, and the script resolves the student's own from
+  `$COMP4020_GROUP`. Ask if it's ambiguous; the student naming one wins. If the
+  script reports `ok-no-group`, say "two hours before your session", ask which
+  group they're in, and offer **quickstart** step 5 so it's never asked again.
+  On an assessment row, `time_known no` means the time of day is on the
+  assessment page, not in the data — fetch it rather than assuming end-of-day.
+
+- **The spec**: fetch the node's own JSON (`/api/crits/<slug>.json` or
+  `/api/assessments/<slug>.json`, both linked from the script's `page` column):
+  the `body` states what to submit and how, and `meta` carries `weight`.
 - **The repo**: default to the git repo in the current directory. Confirm it's
   the right one (`gh repo view` / `git remote -v`) before judging it.
 

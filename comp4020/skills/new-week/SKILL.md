@@ -8,6 +8,7 @@ description:
   into tests. Use at the start of a crit week, or for "start this week's
   prototype", "start assignment 1", "set up week N", "clone this week's repo",
   "pull this week's spec", or "carry my CLAUDE.md forward".
+allowed-tools: Bash, Read, Edit, Write, WebFetch, Glob, Grep
 ---
 
 # COMP4020 new week
@@ -27,33 +28,29 @@ purpose, and the week's spec pulled and turned into your own tests.
 
 ## 1. Which week, and which deliverable?
 
-Get the real date from the machine (`date +%Y-%m-%d`) — never assume it. Then
-fetch `/api/crit-groups.json` from the course site (base URL
-`https://comp.anu.edu.au/courses/comp4020-agentic-coding-studio`). Its
-`deliverables` array maps every crit and assessment to a `week` and a
-`repoPrefix`; its `weeks` array maps each teaching week to the Monday it starts
-(`teachingBreak` is the no-teaching gap between the halves); the student's repo
-for a deliverable is `<repoPrefix>-<handle>`.
+```sh
+"$CLAUDE_PLUGIN_ROOT/scripts/next-deadline.sh"
+```
 
-**The target is the next deliverable whose deadline is still ahead of now** —
-never a raw "which week is it" match. A deliverable's `week` is when its crit
-session runs; the work happens in the days before the cutoff, so C1 (`week: 2`)
-is the week-1 job, and the thing to set up right after your week-N crit is week
-N+1's. Resolve deadlines concretely:
+The row marked **`next`** is the target: the deliverable whose deadline is still
+ahead, which is never a raw "which week is it" match. A deliverable's `week` is
+when its crit session runs, but the work happens in the days before the cutoff,
+so C1 (`week: 2`) is the week-1 job, and the thing to set up right after your
+week-N crit is week N+1's. The script does that arithmetic — the week calendar,
+the teaching break, and the group-relative cutoff — so don't re-derive it.
 
-- a **crit's** deadline is the student's group cutoff in the deliverable's week:
-  the group's `cutoff` day and time (`groups` is an array, one entry per group —
-  find yours by matching its `agent` field against `$COMP4020_GROUP`; if it's
-  unset, ask which group they're in; quickstart step 6 records it) anchored to
-  that week's Monday from `weeks`.
-- an **assessment's** deadline is its `due` date.
+Four cases where `next` isn't the answer:
 
-Pick the deliverable with the earliest deadline still ahead. If its repo is
-already cloned and under way, the target is the next one after it. If two lie
-equally ahead (an assignment finishing alongside a crit), say so and ask which
-they're starting. And if the student names a target — "set up week 5", "start
-assignment 2" — that wins over any date arithmetic. If nothing lies ahead at
-all, the course's deliverables are done; say so and stop.
+- the student **names a target** ("set up week 5", "start assignment 2") — that
+  wins over any date arithmetic
+- its repo is **already cloned and under way** — the target is the row after it
+- **two rows share the `next` deadline** (an assignment finishing alongside a
+  crit) — say so and ask which they're starting
+- **no `next` row at all** — the course's deliverables are done; say so and stop
+
+The student's repo for a deliverable is `<repo_prefix>-<handle>`, and
+`$COMP4020_GROUP` being unset shows up as `status ok-no-group`: ask which group
+they're in and offer **quickstart** step 5 so it's never asked again.
 
 Then read the target's own JSON — `/api/crits/<slug>.json` for `kind: crit`,
 `/api/assessments/<slug>.json` for `kind: assessment` — for the `spec` (the
@@ -65,8 +62,8 @@ demo, and the final project's repo prefix (`comp4020-final` — the actual repo 
 the week 9–11 crits _and_ the A3 submission. Sharing a prefix means sharing a
 repo, so:
 
-- a crit whose `repoPrefix` matches an assessment's is a **retro crit** (weeks 4
-  and 7): the student presents the assignment that just landed, so there's no
+- a crit whose `repo_prefix` matches an assessment's is a **retro crit** (weeks
+  4 and 7): the student presents the assignment that just landed, so there's no
   new prototype and no harness merge. Offer the retro prep instead — confirm
   which repo they're presenting, run **submission-preflight** against it, and
   check its deployed URL still serves — then stop.
@@ -136,17 +133,11 @@ before — until then peers can't read your source, your prompts or your harness
 Flipping it is a deliberate act two hours before the crit, and it belongs to
 **ship**, not to this skill.
 
-If the repo isn't there, don't invent one. Check org membership first, because
-that's the common cause and the one the student can fix:
-
-```sh
-gh api /user/memberships/orgs/comp4020-agentic-coding-studio --jq .state
-```
-
-Anything but `active` and the repo was never provisioned for them — hand off to
-**doctor**, which accepts a pending invitation in one call. If they are an
-active member and the repo still isn't there, the week hasn't been provisioned
-yet. Say which of the two it is, and stop.
+If the repo isn't there, don't invent one. Run **doctor** and read its `org`
+row, because inactive membership is the common cause and the one the student can
+fix — the course's provisioning refuses to create a repo for anyone who hasn't
+joined. If they are an active member and the repo still isn't there, the week
+hasn't been provisioned yet. Say which of the two it is, and stop.
 
 ## 5. Merge the harness
 

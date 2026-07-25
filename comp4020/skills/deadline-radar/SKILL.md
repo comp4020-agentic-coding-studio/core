@@ -6,75 +6,64 @@ description:
   reading today's date and the live course schedule. Use for "what's due", "what
   should I be working on", "what's coming up", "when's my next deadline", or a
   start-of-week check-in.
+allowed-tools: Bash, WebFetch
 ---
 
 # COMP4020 deadline radar
 
 Turn the course schedule into "here's what to work on now". This is the
-proactive framing of the same data the **course-info** skill answers reactively:
-instead of "when is assignment 2 due", it's "given today, what's next".
+proactive framing of the same data **course-info** answers reactively: instead
+of "when is assignment 2 due", it's "given today, what's next".
 
-## 1. Anchor to today
+## 1. Resolve the deadlines
 
-Get the real current date from the machine — `date +%Y-%m-%d` — never assume it.
-Everything downstream is relative to this.
+```sh
+"$CLAUDE_PLUGIN_ROOT/scripts/next-deadline.sh"
+```
 
-## 2. Pull the schedule
+One call gives you today's date, the teaching week, the student's group and
+session, and every deliverable ordered by deadline with `past` / `next` /
+`upcoming` already marked. It owns the arithmetic — the week calendar, the
+teaching break, and the group-relative cutoff — so don't re-derive any of it.
+Read the header rows before the deliverable rows; they carry the framing.
 
-Fetch `/api/index.json` from the course site (base URL
-`https://comp.anu.edu.au/courses/comp4020-agentic-coding-studio`). Collect every
-node with a deadline or a week:
+Two rows to respect:
 
-- **assessments** — `meta.due` (ISO date), `meta.weight` (% of grade),
-  `meta.week`.
-- **crits** — `meta.week` (weekly studio critiques; `meta.week` is
-  authoritative, since the crit slug number is not the week number).
+- **`time_known no`** — the date is real but the time is a sort key. For a crit
+  that means `$COMP4020_GROUP` is unset (say "two hours before your session",
+  and offer **quickstart** step 5 to fix it permanently). For an assessment it
+  always means the time of day lives on the assessment page: fetch
+  `/api/assessments/<slug>.json` and quote the `body`, never end-of-day.
+- **`in_teaching_break yes`** — nothing is due this week; look to the
+  resumption.
 
-For precise due _times_ (not just the date) and exactly what each item asks for,
-fetch the node's own JSON (`/api/<collection>/<slug>.json`) and read the `body`
-— quote the real time-of-day/timezone rather than assuming end-of-day.
+If the script reports `needs-jq`, offer to install it (one command, and the
+status line wants it too). If they decline, fetch `/api/crit-groups.json` and
+work it out directly — but say that's what you're doing.
 
-## 3. Turn week numbers into dates
+## 2. Add weight and detail
 
-Crits carry a `meta.week`, not a date. Fetch `/api/crit-groups.json`: its
-`weeks` array maps every teaching week to the Monday it starts, and
-`teachingBreak` gives the mid-term break's bounds. Use that mapping — never
-`week × 7` arithmetic from the term start, which the break silently breaks.
+The script deliberately carries no weights, because they live with the
+assessment. Fetch `/api/index.json` for `meta.weight` on the assessments in
+range, and skip anything `meta.draft: true` from firm claims, or flag it as
+not-yet-finalised.
 
-A crit in week N happens during the week beginning at that Monday. If
-`$COMP4020_GROUP` is set (see **quickstart**), do better than the Monday: the
-same file's `groups` array has one entry per group, each carrying an `agent`
-field, a `session`, and a `cutoff` — find yours by matching `agent` against
-`$COMP4020_GROUP`, so you can quote the deadline that actually binds: the
-cutoff, two hours before the session. If it's unset, give the Monday, and
-mention that setting their group (quickstart, step 6) gets exact times.
-
-## 4. Order and bucket
-
-Sort by due date ascending (crits by their week's Monday, assessments by
-`meta.due`). Bucket relative to today:
-
-- **overdue** — past due (flag gently; they may already have submitted, or have
-  an extension — don't assume they've missed it).
-- **this week** / **next week** / **later**.
-
-If today falls inside `teachingBreak`, say so — nothing is due _this_ week; look
-to the resumption in week 7. Skip anything marked `meta.draft: true` from firm
-claims, or flag it as not-yet-finalised.
-
-## 5. Report
+## 3. Report
 
 - Lead with the single most urgent thing: "Next up: **<title>**, due <date/time>
   (<weight>%)."
-- Then a short dated list of what's in range (this week + next), each with its
-  weight and the page URL (`base + /<node-id>/`) so they can open the spec.
-- Keep it a radar, not a full schedule dump — surface the near horizon, and
-  offer "want the whole term's deadlines?" rather than pasting everything.
-- If a piece is close and high-weight, it's fair to say so; don't editorialise
+- Then a short dated list of what's in range — this week and next — each with
+  its weight and its page URL so they can open the spec.
+- Flag anything `past` gently. They may have submitted already, or have an
+  extension; don't assume they've missed it.
+- Keep it a radar, not a schedule dump. Surface the near horizon and offer "want
+  the whole term's deadlines?" rather than pasting all thirteen rows.
+- If a piece is close and high-weight, it's fair to say so. Don't editorialise
   beyond what the dates and weights support.
 
 ## Hand off
 
-- "Am I ready to submit this?" → the **submission-preflight** skill.
-- Detail on a specific policy, extension rule, or what a deadline entails →
-  **course-info**.
+- "am I ready to submit this?" → **submission-preflight**
+- detail on a policy, an extension rule, or what a deadline entails →
+  **course-info**
+- "start this week's prototype" → **new-week**

@@ -7,6 +7,7 @@ description:
   says "ship it", "make my repo public", "flip it public", "publish my
   prototype", "enable Pages", or "deploy for the crit". Not for checking whether
   the work is ready; that's submission-preflight.
+allowed-tools: Bash, Read, WebFetch, Glob, Grep
 ---
 
 # COMP4020 ship
@@ -29,12 +30,16 @@ the `comp4020-agentic-coding-studio` org — a repo under a personal account is
 not the one your tutor marks, and shipping it publishes work to a place nobody
 is looking.
 
-Then identify the deliverable and quote its real cutoff from the course site
-(the same `/api/index.json` route **course-info** uses). For a crit the cutoff
-is group-relative — resolve it from `$COMP4020_GROUP` and the `groups` entries
-in `/api/crit-groups.json`, exactly as **submission-preflight** does. Shipping
-after the cutoff is allowed and shipping early costs nothing, but the student
-should hear the actual time out loud before anything becomes public.
+Then identify the deliverable and quote its real cutoff:
+
+```sh
+"$CLAUDE_PLUGIN_ROOT/scripts/next-deadline.sh"
+```
+
+The `next` row carries the deadline, the week, and the repo prefix, with crit
+cutoffs already resolved against the student's own group. Shipping after the
+cutoff is allowed and shipping early costs nothing, but the student should hear
+the actual time out loud before anything becomes public.
 
 ## 2. Is it even ready?
 
