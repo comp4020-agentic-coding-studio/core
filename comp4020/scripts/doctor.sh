@@ -109,8 +109,10 @@ if [ -n "$fly_bin" ]; then
       row PASS flyctl-auth "logged in"
 
       # Each student gets their own linked org (comp4020-<uid>), so there is no
-      # single name to assert — just that something beyond `personal` is there.
-      orgs=$($fly_bin orgs list 2>/dev/null | grep -viE '^\s*(name|personal|-+)\s*$' | grep -c '[A-Za-z]')
+      # single name to assert — just that a non-personal one is there. The Type
+      # column is the discriminator; the personal org is named after the person,
+      # so matching on the name would not work.
+      orgs=$($fly_bin orgs list 2>/dev/null | grep -c 'SHARED')
       if [ "${orgs:-0}" -gt 0 ]; then
         row PASS flyctl-orgs "member of an org beyond personal"
       else

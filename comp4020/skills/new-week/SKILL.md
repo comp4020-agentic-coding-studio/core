@@ -58,9 +58,9 @@ published contract) and the `body` (the full brief).
 
 Entries can share a prefix: the retro crits point at the assignment repo they
 demo, and the final project's repo prefix (`comp4020-final` — the actual repo is
-`comp4020-final-<handle>`, per the `<prefix>-<handle>` convention above) serves
-the week 9–11 crits _and_ the A3 submission. Sharing a prefix means sharing a
-repo, so:
+`comp4020-final-<handle>`, per the `<repo_prefix>-<handle>` convention above)
+serves the week 9–11 crits _and_ the A3 submission. Sharing a prefix means
+sharing a repo, so:
 
 - a crit whose `repo_prefix` matches an assessment's is a **retro crit** (weeks
   4 and 7): the student presents the assignment that just landed, so there's no

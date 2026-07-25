@@ -71,9 +71,9 @@ Most rows say what they mean. These are the ones that need judgement:
   no CLI check for that.
 - **`flyctl-orgs` WARN** — each student's app lives in their own per-student
   linked Fly org (`comp4020-<uid>`), not one shared course org, so there is no
-  single org name to assert. What matters is that the account shows _some_ org
-  beyond `personal`; seeing only `personal` means the invitation hasn't been
-  accepted, and those go out ahead of the full-stack half.
+  single org name to assert. What matters is that the account shows a `SHARED`
+  org at all; only a `PERSONAL` one means the invitation hasn't been accepted,
+  and those go out ahead of the full-stack half.
 - **`crit-group` WARN** — nothing breaks, but **deadline-radar**,
   **submission-preflight** and **ship** can only say "two hours before your
   session" instead of naming the real cutoff.
