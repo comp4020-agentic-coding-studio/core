@@ -107,11 +107,22 @@ if [ -n "$fly_bin" ]; then
   if [ "$NETWORK" = "1" ]; then
     if $fly_bin auth whoami >/dev/null 2>&1; then
       row PASS flyctl-auth "logged in"
+
+      # Each student gets their own linked org (comp4020-<uid>), so there is no
+      # single name to assert — just that something beyond `personal` is there.
+      orgs=$($fly_bin orgs list 2>/dev/null | grep -viE '^\s*(name|personal|-+)\s*$' | grep -c '[A-Za-z]')
+      if [ "${orgs:-0}" -gt 0 ]; then
+        row PASS flyctl-orgs "member of an org beyond personal"
+      else
+        row WARN flyctl-orgs "only a personal org — the course invitation isn't accepted yet"
+      fi
     else
       row WARN flyctl-auth "not logged in"
+      row SKIP flyctl-orgs "not logged in"
     fi
   else
     row SKIP flyctl-auth "network checks disabled"
+    row SKIP flyctl-orgs "network checks disabled"
   fi
 else
   row WARN flyctl "not installed (needed from the full-stack half, week 8)"
