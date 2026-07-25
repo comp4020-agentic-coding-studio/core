@@ -86,9 +86,14 @@ Response fields that matter:
 Someone checking their balance repeatedly wants it ambient, not on demand.
 Mention once — don't push it — that the optional `comp4020-statusline` plugin
 puts the week's spend at the bottom of every session (and shows `own plan` in
-sessions not running on course credits), and that the **quickstart** skill
-(step 7) sets it up. It's an indicator, cached for a minute; this skill stays
-the authoritative figure.
+sessions not running on course credits):
+
+```sh
+claude plugin install comp4020-statusline@comp4020
+```
+
+Its own **statusline** skill then sets it up. It's an indicator, cached for a
+minute; this skill stays the authoritative figure.
 
 ## Answering rules
 
