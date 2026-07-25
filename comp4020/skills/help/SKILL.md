@@ -5,6 +5,7 @@ description:
   to the right skill. Use when the user asks "what can you help with", "what
   does the comp4020 plugin do", invokes /comp4020:help, or asks a course-related
   question that doesn't clearly match one specific skill.
+allowed-tools: Bash, WebFetch
 ---
 
 # COMP4020 plugin — what's here
@@ -18,10 +19,9 @@ matches a skill's job.
 | --------------------------------------------------------------------------- | ------------------------ |
 | Deadlines, marking, policies, what a lecture covers, who teaches the course | **course-info**          |
 | Your weekly Claude Code budget — spent, left, when it resets                | **check-balance**        |
-| First-time setup — your strproxy key, and joining the course GitHub org     | **quickstart**           |
-| Using course credits alongside your own Claude subscription                 | **quickstart**, step 3   |
-| Showing your budget in the status line (optional, opt-in)                   | **quickstart**, step 7   |
-| Whether your machine is set up right (Git, `gh`, the org, flyctl, Chrome)   | **doctor**               |
+| First-time setup: your strproxy key, the course GitHub org, your crit group | **quickstart**           |
+| Using course credits alongside your own Claude subscription                 | **quickstart**, step 2   |
+| Whether your machine is set up right, and why a tool isn't working          | **doctor**               |
 | What's due / what to work on this week                                      | **deadline-radar**       |
 | Starting this week's prototype or an assignment, carrying CLAUDE.md forward | **new-week**             |
 | Whether your work is ready to submit before a deadline                      | **submission-preflight** |
@@ -29,6 +29,20 @@ matches a skill's job.
 
 A natural first-week path is **quickstart** → **doctor**; a natural crit-week
 path is **deadline-radar** → **new-week** → **submission-preflight** → **ship**.
+
+The split worth knowing: **doctor** diagnoses, **quickstart** changes settings.
+If something looks wrong, doctor first — it prints the whole picture in one
+call.
+
+Showing your weekly budget in the status line is a separate, optional plugin, so
+it's only there if you asked for it:
+
+```sh
+claude plugin install comp4020-statusline@comp4020
+```
+
+Then ask it to set the status line up. It carries its own **statusline** skill
+for installing, diagnosing and removing it.
 
 All course facts come from the live site
 (`https://comp.anu.edu.au/courses/comp4020-agentic-coding-studio`) and the

@@ -48,33 +48,35 @@ it directly with `/comp4020:check-balance`.
 
 ### quickstart
 
-Walks a first-time student through getting their strproxy key working in Claude
-Code: checks whether it's already set, points them at the key on Canvas, merges
-it safely into settings (never clobbering existing settings, never echoing the
-key), and verifies the round-trip. Students with their own Claude subscription
-or API key get the dual-plan setup instead: the course key is scoped to course
-repos via `.claude/settings.local.json`, so course work runs on course credits
-and everything else stays on their own plan. Also joins the course GitHub org,
-and sets up the optional status line (below). Each step re-runs independently,
-so `/comp4020:quickstart` later with "install the status line" or "use my course
+The setup **fixer**: points a first-time student at their key on Canvas, merges
+it safely into settings (never clobbering what's there, never echoing the key),
+joins the course GitHub org, and records their crit group. Students with their
+own Claude subscription or API key get the dual-plan setup instead — the course
+key scoped to course repos via `.claude/settings.local.json`, so course work
+runs on course credits and everything else stays on their own plan. Each step
+re-runs independently, so `/comp4020:quickstart` later with "use my course
 credits in this repo" does just that. Or ask to "set up my key".
 
 ### doctor
 
-A smart setup check. Reads the course's required-tools list live from the site,
-then checks the student's machine — Git, the GitHub CLI (`gh`) and its auth,
-flyctl and its auth/org membership, the Claude Code proxy config and a live
-`/api/me` probe (which doubles as an "am I on the VPN?" check), Chrome version,
-mise, whether the plugin itself is up to date, and the budget status line and
-its dependencies — and **offers to fix** what's broken, confirming each step.
-Invoke with `/comp4020:doctor` or ask "is my setup right?" / "why is my status
-line empty?".
+The setup **diagnostician**, and quickstart's counterpart: one
+`scripts/doctor.sh` run reports Git, the GitHub CLI and its auth, course org
+membership, flyctl, the proxy config and a live `/api/me` probe (which doubles
+as an "am I on the VPN?" check), the crit group, the template's pre-commit key
+guard, Chrome, `jq` and mise. The script gathers facts on any machine — no `jq`,
+no configuration, macOS or Linux or WSL — and the skill interprets them,
+cross-checks the site's own required-tools list, and **offers to fix** what's
+broken, confirming each step. Invoke with `/comp4020:doctor` or ask "is my setup
+right?".
 
 ### deadline-radar
 
-The proactive view of the schedule: reads today's date and the live course
-schedule and tells the student what's due this week and next, sorted by date
-with weights, leading with the single most urgent thing. Invoke with
+The proactive view of the schedule: what's due this week and next, sorted by
+date with weights, leading with the single most urgent thing. The cutoff
+arithmetic — the teaching-week calendar, the mid-semester break, and the crit
+cutoff two hours before _your_ group's session — lives in
+`scripts/next-deadline.sh`, which **new-week**, **submission-preflight** and
+**ship** call too, so every skill quotes the same deadline. Invoke with
 `/comp4020:deadline-radar` or ask "what's due?" / "what should I work on?".
 
 ### new-week
@@ -114,6 +116,27 @@ run (weeks 9–11) it also tags the crit-cutoff state. Invoke with
 Lists everything above and routes to the right skill. Invoke with
 `/comp4020:help`.
 
+## Working on this repo
+
+Two conventions hold the skills together, and both are enforced in CI
+(`python3 .github/validate.py`, which needs nothing installed):
+
+- **one owner per mechanic.** A fact or procedure that more than one skill needs
+  lives in exactly one place, and the others point at it: the setup checks in
+  `scripts/doctor.sh`, the deadline arithmetic in `scripts/next-deadline.sh`,
+  settings changes in **quickstart**, diagnosis in **doctor**, the status line
+  in the companion plugin. Restating one in a second skill is how they drift.
+- **the site is ground truth.** Course facts — dates, weights, groups, tool
+  lists, policies — are fetched from
+  `comp.anu.edu.au/courses/comp4020-agentic-coding-studio`, never hardcoded
+  here. Skills carry routing knowledge, not course data.
+
+Scripts stay dependency-light so they run on a student's unprepared laptop:
+POSIX-ish bash that works on macOS's bash 3.2 and on Linux, `shellcheck`-clean,
+no `jq` in `doctor.sh` (the machine being diagnosed may have nothing installed),
+and `jq` in `next-deadline.sh` only with a clean fallback message when it's
+missing.
+
 ## The status line (a separate, optional plugin)
 
 `comp4020-statusline` shows which credits every Claude Code session is burning,
@@ -133,9 +156,12 @@ should run a hook they didn't ask for. Installing it is the opt-in; the skills
 plugin above ships no hooks at all.
 
 Installing it doesn't switch the status line on by itself — no plugin can set
-`statusLine`. Ask **quickstart** to "install the status line" and it writes the
-one-line `settings.json` block for you, merging rather than clobbering an
-existing status line.
+`statusLine`. It ships its own **statusline** skill for that: ask it to install
+the status line and it writes the one-line `settings.json` block for you,
+merging rather than clobbering an existing one. The same skill diagnoses an
+empty, stale, or `own plan` segment, and removes the whole thing when semester
+ends. Keeping it here rather than in `comp4020` means students who never install
+the status line never carry its instructions.
 
 It reads a cached figure and refreshes in the background at most once a minute,
 so it never slows a session down or hammers the proxy — an indicator, not a
