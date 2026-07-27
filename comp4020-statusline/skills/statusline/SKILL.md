@@ -28,9 +28,9 @@ plan, that flip is the main reason to want it.
 ## Install
 
 **It needs `jq`** (and `curl`, which every supported platform already has).
-Check with `command -v jq`; if it's missing, install it first: `brew install jq`
-on macOS, `sudo apt install jq` on Debian/Ubuntu/WSL, or `mise use -g jq`
-anywhere. Without `jq` the segment just reads `comp4020 budget: needs jq`.
+Check with `command -v jq`; if it's missing, install it first with
+`mise use -g jq` (the course's install path — see quickstart step 2). Without
+`jq` the segment just reads `comp4020 budget: needs jq`.
 
 It's a Unix shell script, so macOS, Linux and WSL. On native Windows there is
 nothing to install — that's the WSL2 nudge `/comp4020:doctor` already gives.

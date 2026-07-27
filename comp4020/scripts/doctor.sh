@@ -73,7 +73,7 @@ if have gh; then
   if gh repo edit --help 2>/dev/null | grep -q accept-visibility-change-consequences; then
     row PASS gh-visibility-flag "new enough to flip a repo public"
   else
-    row FAIL gh-visibility-flag "too old for the ship flip (distro build); needs GitHub's own apt repo or Homebrew"
+    row FAIL gh-visibility-flag "too old for the ship flip (distro build); replace it with mise use -g gh"
   fi
 
   if [ "$NETWORK" = "1" ]; then
@@ -275,30 +275,18 @@ else
   row FAIL pnpm "not installed — starter templates need pnpm 11"
 fi
 
-# --- recommended tooling ----------------------------------------------------
+# --- supporting tooling -----------------------------------------------------
 
 if have jq; then
   row PASS jq "$(jq --version 2>/dev/null)"
 else
-  row WARN jq "not installed — the deadline and status-line scripts need it"
+  row WARN jq "not installed — the deadline and status-line scripts need it; mise use -g jq"
 fi
 
 if have mise; then
   row PASS mise "$(mise --version 2>/dev/null | head -1)"
 else
-  row WARN mise "not installed — the course's supported runtime path; another manager is fine if it supplies the template's Node and pnpm versions"
-fi
-
-if [ "$os" = "Darwin" ]; then
-  if have brew; then
-    row PASS pkg-manager "$(brew --version 2>/dev/null | head -1)"
-  else
-    row WARN pkg-manager "Homebrew not installed"
-  fi
-elif have apt; then
-  row PASS pkg-manager "apt available"
-else
-  row WARN pkg-manager "no apt (fine if this distro uses another package manager)"
+  row WARN mise "not installed — how the course installs its command-line tools; another manager is fine if it supplies the template's Node and pnpm versions"
 fi
 
 # --- summary ----------------------------------------------------------------

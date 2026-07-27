@@ -65,8 +65,8 @@ membership, flyctl, the proxy config and a live `/api/me` probe (which doubles
 as an "am I on the VPN?" check), the crit group, the template's pre-commit key
 guard, Chrome, `jq` and mise. The script gathers facts on any machine — no `jq`,
 no configuration, macOS or Linux or WSL — and the skill interprets them,
-cross-checks the site's own required-tools list, and **offers to fix** what's
-broken, confirming each step. Invoke with `/comp4020:doctor` or ask "is my setup
+cross-checks the site's own tool list, and **offers to fix** what's broken,
+confirming each step. Invoke with `/comp4020:doctor` or ask "is my setup
 right?".
 
 ### deadline-radar

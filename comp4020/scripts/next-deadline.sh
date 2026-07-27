@@ -57,7 +57,7 @@ done
 
 if ! command -v jq >/dev/null 2>&1; then
   printf 'status\tneeds-jq\n'
-  printf 'hint\tinstall jq: brew install jq (macOS) | sudo apt install jq (Debian/Ubuntu/WSL) | mise use -g jq\n'
+  printf 'hint\tinstall jq: mise use -g jq\n'
   printf 'hint\tor fetch %s and work the deadline out directly\n' "$API"
   exit 3
 fi
