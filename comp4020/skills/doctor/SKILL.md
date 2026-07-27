@@ -3,9 +3,9 @@ name: doctor
 description:
   Checks a COMP4020/COMP8020 student's machine against the course's required
   environment — Git, the GitHub CLI (gh), course GitHub org membership, flyctl,
-  Claude Code's proxy config, Chrome, mise — including whether the tools that
-  hit external services are actually authenticated, then offers to fix what's
-  broken. Use for "check my setup", "is everything installed", "why isn't
+  Claude Code's proxy config, Chrome, Node, pnpm and mise — including whether
+  the tools that hit external services are actually authenticated, then offers
+  to fix what's broken. Use for "check my setup", "is everything installed", "why isn't
   gh/fly/claude working", "am I in the course GitHub org", or any
   setup/environment health check.
 allowed-tools: Bash, Read, Edit, Write, WebFetch
@@ -80,6 +80,12 @@ Most rows say what they mean. These are the ones that need judgement:
 - **`committed-key` FAIL** — report the file and line **only, never the matched
   value**. The key has to come out of the file; if the commit was ever pushed,
   treat it as leaked and get it rotated via a private Ed thread.
+- **`mise` WARN** — mise is the course's supported runtime path, and every
+  starter template pins its Node and pnpm versions in `mise.toml`. Do not call a
+  student off piste merely for using nvm, Volta, asdf or system installers:
+  `node` and `pnpm` working at the template's versions is sufficient. Explain
+  that tutor support reproduces runtime problems with mise; offer `mise install`
+  from the repo root if they want the supported path.
 
 Two things the script deliberately doesn't check. **Permission mode**: if you
 can see they're in default or plan mode, mention auto mode as a flow improvement

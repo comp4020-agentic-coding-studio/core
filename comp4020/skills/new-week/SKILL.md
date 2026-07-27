@@ -185,10 +185,13 @@ green are exactly the process evidence `PROCESS.md` wants to cite.
 
 ## 7. Land it
 
-- install dependencies and run the checks (`pnpm check` in the static template).
-  The invariants and everything carried forward should be green before the
-  student starts — a red check later is then theirs, not inherited. Their fresh
-  spec tests are the exception: red is their starting state.
+- from the repo root, run `mise install` then install dependencies and run the
+  checks (`pnpm check` in the static template). Mise is the supported runtime
+  path and the template pins its tested Node and pnpm versions there. Another
+  runtime manager is fine if it provides those versions; do not treat that alone
+  as off piste. The invariants and everything carried forward should be green
+  before the student starts — a red check later is then theirs, not inherited.
+  Their fresh spec tests are the exception: red is their starting state.
 - read them the week's spec and brief from the site, and stop there. Building
   the prototype is their work, not yours.
 - remind them of the two things the checks can't enforce: commit as you go, and

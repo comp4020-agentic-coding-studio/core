@@ -253,6 +253,28 @@ else
   row WARN chrome "not found in the usual place (you may have it installed elsewhere)"
 fi
 
+# --- local development toolchain --------------------------------------------
+
+if have node; then
+  node_version=$(node --version 2>/dev/null)
+  case "$node_version" in
+  v24.*) row PASS node "$node_version" ;;
+  *) row WARN node "$node_version (starter templates expect Node 24)" ;;
+  esac
+else
+  row FAIL node "not installed — starter templates need Node 24"
+fi
+
+if have pnpm; then
+  pnpm_version=$(pnpm --version 2>/dev/null)
+  case "$pnpm_version" in
+  11.*) row PASS pnpm "$pnpm_version" ;;
+  *) row WARN pnpm "$pnpm_version (starter templates expect pnpm 11)" ;;
+  esac
+else
+  row FAIL pnpm "not installed — starter templates need pnpm 11"
+fi
+
 # --- recommended tooling ----------------------------------------------------
 
 if have jq; then
@@ -264,7 +286,7 @@ fi
 if have mise; then
   row PASS mise "$(mise --version 2>/dev/null | head -1)"
 else
-  row WARN mise "not installed (recommended)"
+  row WARN mise "not installed — the course's supported runtime path; another manager is fine if it supplies the template's Node and pnpm versions"
 fi
 
 if [ "$os" = "Darwin" ]; then
