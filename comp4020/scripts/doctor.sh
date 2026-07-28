@@ -84,8 +84,8 @@ if have gh; then
       pending) row FAIL org "invitation to $ORG is unaccepted (they expire after 7 days)" ;;
       *) row WARN org "unexpected membership state: $org_state" ;;
       esac
-    elif gh auth status 2>&1 | grep -q "read:org"; then
-      row FAIL org "no membership found, and gh has read:org — so no invitation is outstanding (convenor's end)"
+    elif gh auth status 2>&1 | grep -Eq "read:org|admin:org"; then
+      row FAIL org "no membership found, and gh can read org membership — so no invitation is outstanding (convenor's end)"
     else
       row FAIL org "cannot read membership: gh is missing the read:org scope, so this check is blind"
     fi
@@ -175,12 +175,12 @@ if [ "$NETWORK" = "1" ] && [ -n "$token" ]; then
     -H "Authorization: Bearer $token" "$probe" 2>/dev/null)
   curl_rc=$?
   if [ "$curl_rc" != "0" ]; then
-    row WARN proxy-probe "cannot reach $probe — usually means not on the ANU VPN; model traffic is unaffected"
+    row WARN proxy-probe "cannot reach $probe — usually means not on the ANU VPN; course-key model traffic needs the same network path"
   else
     case "$code" in
     200) row PASS proxy-probe "key accepted (200)" ;;
     401) row FAIL proxy-probe "key rejected (401) — wrong, mistyped or revoked" ;;
-    403) row WARN proxy-probe "403 — /api/* is ANU-network only; model traffic is unaffected" ;;
+    403) row WARN proxy-probe "403 — reconnect the ANU VPN; all strproxy traffic, including model calls, is ANU-network only" ;;
     *) row WARN proxy-probe "unexpected HTTP $code" ;;
     esac
   fi
@@ -234,8 +234,14 @@ if [ "$os" = "Darwin" ]; then
   mac_chrome="/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
   [ -x "$mac_chrome" ] && chrome_raw=$("$mac_chrome" --version 2>/dev/null)
 else
+  if [ "$platform" = "WSL" ] && have powershell.exe; then
+    chrome_version=$(powershell.exe -NoProfile -Command \
+      "\$paths = @('C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe', 'C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe'); \$chrome = \$paths | Where-Object { Test-Path \$_ } | Select-Object -First 1; if (\$chrome) { (Get-Item \$chrome).VersionInfo.ProductVersion }" \
+      2>/dev/null | tr -d '\r' | head -1)
+    [ -n "$chrome_version" ] && chrome_raw="Google Chrome $chrome_version (Windows host)"
+  fi
   for c in google-chrome google-chrome-stable chromium chromium-browser; do
-    if have "$c"; then
+    if [ -z "$chrome_raw" ] && have "$c"; then
       chrome_raw=$("$c" --version 2>/dev/null)
       break
     fi

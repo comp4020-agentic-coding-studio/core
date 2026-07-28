@@ -46,7 +46,9 @@ The student gets theirs from Canvas — you can't fetch it for them, it's behind
 an access quiz:
 
 1. On [canvas.anu.edu.au](https://canvas.anu.edu.au), in the course, find the
-   **"Start here"** module (it unlocks on Wednesday of week 1 — 29 July).
+   **"Start here"** module (it unlocks on Wednesday of week 1; the
+   [course access page](https://comp.anu.edu.au/courses/comp4020-agentic-coding-studio/topics/llm-access/#step-2-get-your-key)
+   carries the current release detail).
 2. Work through it in order: tick off the VPN step, submit the pre-course
    survey, then take the short access quiz — unlimited attempts, so retake until
    100%.
@@ -106,12 +108,15 @@ Notes:
   common cause of a "revoked-looking" key that's actually fine.
 - **Never echo the key back**, and never suggest sending it anywhere except the
   strproxy host.
-- **The key never goes in a repo.** `~/.claude/settings.json` sits outside every
-  repo, which is the point. The course templates also ship a pre-commit hook
-  (activated by `pnpm install`) that blocks any commit containing something
-  key-shaped — if a student hits that block, the fix is to take the key out of
-  the file, never `git commit --no-verify`. A key that has already been pushed
-  is leaked: private Ed thread to the teaching team to get it rotated.
+- **The key never goes in a tracked file.** Most students use
+  `~/.claude/settings.json`, outside every repo. The dual-plan branch uses only
+  the template's explicitly ignored `.claude/settings.local.json`, after
+  `git check-ignore` proves it is protected. The templates also ship a
+  pre-commit hook (activated by `pnpm install`) that blocks any commit
+  containing something key-shaped — if a student hits that block, the fix is to
+  take the key out of the file, never `git commit --no-verify`. A key that has
+  already been pushed is leaked: private Ed thread to the teaching team to get
+  it rotated.
 
 ## 3. Verify the round-trip
 
@@ -119,10 +124,9 @@ Two independent confirmations:
 
 - **The proxy accepts the key** — `doctor`'s `proxy-probe` check does exactly
   this, so run doctor rather than hand-rolling a curl. A connection failure or
-  403 usually just means they're off the VPN: the `/api/*` endpoints are
-  ANU-network-only, but _model traffic isn't_, so Claude Code still works. Don't
-  block setup on it. A 401 means the key didn't take — recheck the paste, then
-  Canvas.
+  403 usually means they're off the VPN: **all strproxy traffic, model calls
+  included, is ANU-network-only**. Reconnect before continuing. A 401 means the
+  key didn't take — recheck the paste, then Canvas.
 - **Claude Code itself routes through the proxy** — settings take effect for
   _new_ sessions, so `claude --print "say hi"` in a fresh shell is the canonical
   smoke test. On the dual-plan setup, run it **from the course repo's root**;
@@ -143,8 +147,8 @@ gh api --method PATCH /user/memberships/orgs/comp4020-agentic-coding-studio \
 
 Do it now rather than later: **these invitations expire after seven days**, and
 a lapsed one has to be re-sent by the convenor. A `Not Found` needs the triage
-doctor does — a missing `read:org` scope and a never-sent invitation look
-identical from here and have different fixes.
+doctor does — a missing org-readable scope (`read:org` or `admin:org`) and a
+never-sent invitation look identical from here and have different fixes.
 
 ## 5. Record your crit group
 

@@ -52,25 +52,29 @@ WARNs are the student's call. Show them, ask, continue only on a clear yes.
 
 ## 3. Scan for secrets, before the flip
 
-This is the step that cannot be done afterwards. Look through the working tree
-**and the history** — the history is the part people forget:
+This is the step that cannot be done afterwards. Run the bundled scanner from
+the repo root:
 
 ```sh
-git log --all -p | rg -i 'api[_-]?key|secret|token|password|BEGIN [A-Z ]*PRIVATE KEY|sk-[A-Za-z0-9]{20,}'
-gh api /repos/{owner}/{repo}/actions/runs --jq '.workflow_runs[].id'   # logs go public too
+node "$CLAUDE_PLUGIN_ROOT/scripts/secret-scan.mjs"
 ```
 
-Also check for the things a course repo specifically accumulates: an
-`ANTHROPIC_API_KEY` pasted into a `.env` that got committed once and deleted
-later, a `.claude/settings.local.json`, a fly.io deploy token in a script.
+It fetches remote refs, scans the current tracked and untracked worktree, every
+reachable Git diff, and the logs of every GitHub Actions run. It knows the
+course-key, Anthropic, GitHub, Fly.io, AWS and private-key shapes, plus
+credential assignments; it also verifies that a repo-local
+`.claude/settings.local.json` is ignored. It never prints a matched value — only
+the file, history, or Actions run where a match exists.
 
 Anything you find is a **stop**. Removing a secret from the tip commit does not
 remove it from history, and rewriting history on a repo that has never been
 public is easy while doing it afterwards is not. Tell them to rotate the
 credential regardless, because a leaked key must be assumed leaked.
 
-If it's clean, say what you searched for and what you did not. You are not a
-secret scanner, and a green result here is not a guarantee.
+An incomplete scan is also a **stop**: missing `git`, `gh` or Node, a fetch
+failure, an unreadable file, or an Actions run whose logs cannot be retrieved
+must not fall through to the visibility flip. If it exits cleanly, report the
+surfaces it covered while being clear that pattern scanning is not a guarantee.
 
 ## 4. Flip, deploy, verify
 
@@ -96,7 +100,7 @@ Enable it as a **workflow** site, then dispatch the deploy workflow and wait:
 
 ```sh
 gh api -X POST /repos/{owner}/{repo}/pages -f build_type=workflow
-gh workflow run <deploy workflow> && gh run watch
+gh workflow run checks && gh run watch
 ```
 
 `build_type=workflow` is load-bearing, and the tempting alternative
@@ -116,7 +120,7 @@ Pages. The flip triggers no push event, so dispatch the workflow and wait,
 exactly as above:
 
 ```sh
-gh workflow run <deploy workflow> && gh run watch
+gh workflow run checks && gh run watch
 ```
 
 That single run builds and checks the app, then — once `check` passes — deploys

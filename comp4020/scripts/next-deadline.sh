@@ -16,8 +16,8 @@
 #   DEADLINE    YYYY-MM-DDTHH:MM in the course timezone
 #   TIME_KNOWN  yes  — the time is real, quote it
 #               no   — the date is real but the time is a sort key only. Crits
-#                      need $COMP4020_GROUP for a real time; assessments state
-#                      their time of day on the assessment page, not here.
+#                      need $COMP4020_GROUP for a real time. Current assessment
+#                      entries carry their real local due time in the API.
 #
 # Usage:
 #   next-deadline.sh [--group <id>] [--today YYYY-MM-DD] [--json <file>]
@@ -117,7 +117,13 @@ printf '%s' "$payload" | jq -r \
                  {deadline: ($monday + "T00:00"), known: "no"}
                end)
             else
-              {deadline: ($d.due + "T23:59"), known: "no"}
+              (if ($d.dueLocal // "") != "" then
+                 {deadline: $d.dueLocal, known: "yes"}
+               elif ($d.due | test("T")) then
+                 {deadline: ($d.due | sub("(\\.000)?Z$"; "")), known: "yes"}
+               else
+                 {deadline: ($d.due + "T23:59"), known: "no"}
+               end)
             end) as $dl
          | {kind: $d.kind, slug: $d.slug, title: $d.title, week: $d.week,
             prefix: $d.repoPrefix, reflection: ($d | reflection($root)),

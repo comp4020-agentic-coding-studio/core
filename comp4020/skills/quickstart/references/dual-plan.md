@@ -33,13 +33,18 @@ Project settings override user settings, so inside the repo every session runs
 on course credits; everywhere else Claude Code falls back to their own
 subscription or key, untouched.
 
-Claude Code keeps `settings.local.json` out of version control automatically,
-and the template's pre-commit key guard backstops it — but it is still a file
-inside a repo, so confirm it's ignored before writing a key into it:
+The course templates explicitly ignore this path, and the pre-commit key guard
+backstops it. Do not assume that protection in any other repo: **before writing
+the file**, prove Git ignores it:
 
 ```sh
 git check-ignore .claude/settings.local.json
 ```
+
+The command must print the path and exit successfully. If it does not, add the
+exact path to that repo's `.gitignore`, run the check again, and only then write
+the key. Never display the key while copying the settings from another course
+repo.
 
 ## It repeats every week
 
