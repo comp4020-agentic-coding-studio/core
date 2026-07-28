@@ -3,11 +3,11 @@ name: doctor
 description:
   Checks a COMP4020/COMP8020 student's machine against the course's required
   environment — Git, the GitHub CLI (gh), course GitHub org membership, flyctl,
-  Claude Code's proxy config, Chrome, Node, pnpm and mise — including whether
-  the tools that hit external services are actually authenticated, then offers
-  to fix what's broken. Use for "check my setup", "is everything installed",
-  "why isn't gh/fly/claude working", "am I in the course GitHub org", or any
-  setup/environment health check.
+  Claude Code's proxy config, Chrome, Node, pnpm, mise and jq — including
+  whether the tools that hit external services are actually authenticated, then
+  offers to fix what's broken. Use for "check my setup", "is everything
+  installed", "why isn't gh/fly/claude working", "am I in the course GitHub
+  org", or any setup/environment health check.
 allowed-tools: Bash, Read, Edit, Write, WebFetch
 ---
 

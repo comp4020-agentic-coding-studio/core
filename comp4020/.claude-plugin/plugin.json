@@ -1,6 +1,6 @@
 {
   "name": "comp4020",
-  "version": "0.9.2",
+  "version": "0.9.3",
   "description": "Skills for COMP4020/COMP8020 Agentic Coding Studio students: setting up the course environment, tracking budget and deadlines, and getting each week's deliverable started, checked and shipped. Ships no hooks; the optional status line lives in the companion comp4020-statusline plugin",
   "author": {
     "name": "COMP4020 teaching team",

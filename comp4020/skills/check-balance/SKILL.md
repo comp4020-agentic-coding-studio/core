@@ -75,7 +75,8 @@ Response fields that matter:
 - The budget comes back at `week_resets_at` — say when that is in local time.
 - If the course has a local-model fallback, they can keep working now:
   `export ANTHROPIC_MODEL=<the course's local model name>` in the shell that
-  runs Claude Code. (The 90%/100% warning emails name the model.)
+  runs Claude Code. (The 90%/100% warnings — private Ed DMs, not email — name
+  the model.)
 - If a deadline makes the cap a real problem, the fix is human: email the course
   support address (for COMP4020 that's comp4020@anu.edu.au) — convenors can
   arrange a one-off bump for the cohort. Don't suggest workarounds like sharing
