@@ -10,7 +10,7 @@
 # Output is TAB-separated. Header rows are `key<TAB>value`; then one row per
 # deliverable, earliest deadline first:
 #
-#   deliverable  STATE  KIND  SLUG  TITLE  WEEK  DEADLINE  TIME_KNOWN  REPO_PREFIX  PAGE
+#   deliverable  STATE  KIND  SLUG  TITLE  WEEK  DEADLINE  TIME_KNOWN  REPO_PREFIX  REFLECTION  PAGE
 #
 #   STATE       past | next | upcoming   (`next` is the first deadline still ahead)
 #   DEADLINE    YYYY-MM-DDTHH:MM in the course timezone
@@ -88,6 +88,19 @@ printf '%s' "$payload" | jq -r \
   --arg group "$group" --arg now "$now" --arg today "$today" --arg base "$BASE" '
   def dayoffset: {"Mon":0,"Tue":1,"Wed":2,"Thu":3,"Fri":4}[.];
 
+  # A reflection is named for the deliverable it answers, so the number in the
+  # filename is the number in the repo name. A retro crit has none of its own:
+  # it reads the entry the assignment sharing its repo prefix already submitted.
+  def reflection($root):
+    . as $d
+    | if $d.kind != "crit" then $d.slug + ".md"
+      elif ($d.slug | endswith("-retro")) then
+        (($root.deliverables
+          | map(select(.kind == "assessment" and .repoPrefix == $d.repoPrefix))
+          | first | .slug) + ".md")
+      else "crit-" + ($d.slug | split("-") | .[0] | tonumber | tostring) + ".md"
+      end;
+
   . as $root
   | ($root.weeks | map({key: (.week|tostring), value: .monday}) | from_entries) as $weeks
   | ($root.groups | map(select(.agent == $group)) | first) as $g
@@ -107,7 +120,8 @@ printf '%s' "$payload" | jq -r \
               {deadline: ($d.due + "T23:59"), known: "no"}
             end) as $dl
          | {kind: $d.kind, slug: $d.slug, title: $d.title, week: $d.week,
-            prefix: $d.repoPrefix, deadline: $dl.deadline, known: $dl.known,
+            prefix: $d.repoPrefix, reflection: ($d | reflection($root)),
+            deadline: $dl.deadline, known: $dl.known,
             page: ($base + (if $d.kind == "crit" then "/crits/" else "/assessments/" end)
                    + $d.slug + "/")}
        )
@@ -137,6 +151,7 @@ printf '%s' "$payload" | jq -r \
          (if .deadline < $now then "past"
           elif $next != null and .deadline == $next.deadline then "next"
           else "upcoming" end),
-         .kind, .slug, .title, (.week|tostring), .deadline, .known, .prefix, .page]))
+         .kind, .slug, .title, (.week|tostring), .deadline, .known, .prefix,
+         .reflection, .page]))
   | .[] | @tsv
 '

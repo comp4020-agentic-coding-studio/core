@@ -117,6 +117,14 @@ with the template; the week tests answer last week's contract), `PROCESS.md`, or
 `reflections/`. Each week answers a new provocation. A student who drags last
 week's source along ends up presenting last week's work.
 
+Tell the student the reflection filename for this deliverable while you're here
+— it's the `reflection` column of the row you picked in step 1, and it is what
+the marker reads. It's named for the deliverable, so the number in it matches
+the number in the repo name (`crit-1.md` in `comp4020-crit1-<handle>`); the one
+to say out loud is the assignment repo, where the entry is `assignment-1.md` and
+the week-4 retro crit reads that rather than asking for a second one.
+`pnpm check:evidence` fails on any other name.
+
 ## 4. Clone the repo
 
 Your repo already exists. The course generates one per student per deliverable,

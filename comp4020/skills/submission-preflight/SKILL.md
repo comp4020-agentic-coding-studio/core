@@ -62,9 +62,11 @@ Classify each PASS / WARN / FAIL:
   rather than guessing pass/fail on prose requirements.
 - **Process evidence** — run `pnpm check:evidence` if the script exists. It
   verifies the every-submission artefacts: `PROCESS.md` with its boilerplate
-  replaced and every cited commit resolving, a reflection entry in
-  `reflections/`, and `CLAUDE.md`. A failure here is a FAIL — these are read by
-  the marker on every deliverable.
+  replaced and every cited commit resolving, a correctly named reflection entry
+  in `reflections/` (the `reflection` column of the row from step 1 — the marker
+  reads that exact name, so a misnamed one reads as no reflection at all), and
+  `CLAUDE.md`. A failure here is a FAIL — these are read by the marker on every
+  deliverable.
 
 ## 3. Deploy checks (when a live URL is expected)
 

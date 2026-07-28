@@ -145,17 +145,20 @@ itself; in the shared repo, a tag does that job. After the deploy verifies, tag
 the deployed commit and push the tag:
 
 ```sh
-git tag -a crit-<week> -m "week <week> crit cutoff state" <deployed-sha>
-git push origin crit-<week>
+git tag -a crit-<n> -m "crit <n> cutoff state" <deployed-sha>
+git push origin crit-<n>
 ```
 
-Resolve `<week>` from the deliverable you identified in step 1. This applies
-whether or not a flip happened this week — in weeks 10 and 11 the repo is
-already public and shipping is just deploy, verify, tag. Re-shipping before the
-cutoff moves the tag to the new deploy (`git tag -fa`, then force-push **that
-tag ref only** — the one permitted force in this course, because the cutoff
-hasn't fixed the state yet). Never move a crit tag after its cutoff has passed:
-from then on it records what the tutor marked, and moving it defeats the
+`<n>` is the **crit number**, not the week: the three final-project crits are
+crits 8, 9 and 10, in weeks 9, 10 and 11. Take it from the deliverable you
+identified in step 1 — it's the number leading the crit's slug, and the same
+number your reflection for that crit carries (`reflections/crit-8.md`). This
+applies whether or not a flip happened this week — in weeks 10 and 11 the repo
+is already public and shipping is just deploy, verify, tag. Re-shipping before
+the cutoff moves the tag to the new deploy (`git tag -fa`, then force-push
+**that tag ref only** — the one permitted force in this course, because the
+cutoff hasn't fixed the state yet). Never move a crit tag after its cutoff has
+passed: from then on it records what the tutor marked, and moving it defeats the
 purpose.
 
 Weeks 2–8 don't need this — each of those prototypes is its own repo, which is
@@ -166,7 +169,7 @@ its own frozen record.
 - Never flip a repo that isn't the student's own deliverable. Read the owner and
   the name back to them first.
 - Never `--force` anything, and never rewrite history on a public repo. The sole
-  exception is moving a `crit-<week>` tag before its cutoff, as under step 5 —
+  exception is moving a `crit-<n>` tag before its cutoff, as under step 5 —
   branches, never.
 - A repo that is already public when you arrive is not an error — the student
   flipped it earlier; skip to the deploy and verify steps. Nothing in the course
