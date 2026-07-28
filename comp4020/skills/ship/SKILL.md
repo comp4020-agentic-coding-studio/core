@@ -59,22 +59,33 @@ the repo root:
 node "$CLAUDE_PLUGIN_ROOT/scripts/secret-scan.mjs"
 ```
 
-It fetches remote refs, scans the current tracked and untracked worktree, every
-reachable Git diff, and the logs of every GitHub Actions run. It knows the
-course-key, Anthropic, GitHub, Fly.io, AWS and private-key shapes, plus
-credential assignments; it also verifies that a repo-local
-`.claude/settings.local.json` is ignored. It never prints a matched value — only
-the file, history, or Actions run where a match exists.
+It fetches remote refs, then scans the current tracked and untracked worktree
+and every reachable Git diff. It knows the course-key, Anthropic, GitHub,
+Fly.io, AWS and private-key shapes, plus a broad credential-assignment
+heuristic; it also verifies that a repo-local `.claude/settings.local.json` is
+ignored. It never prints a matched value — only the file or surface where a
+match exists. (Actions logs aren't scanned: course repos configure no CI
+secrets, and anything a workflow file could echo is already in the tree.)
 
-Anything you find is a **stop**. Removing a secret from the tip commit does not
-remove it from history, and rewriting history on a repo that has never been
-public is easy while doing it afterwards is not. Tell them to rotate the
-credential regardless, because a leaked key must be assumed leaked.
+Read a finding before reacting, because the kinds mean different things:
 
-An incomplete scan is also a **stop**: missing `git`, `gh` or Node, a fetch
-failure, an unreadable file, or an Actions run whose logs cannot be retrieved
-must not fall through to the visibility flip. If it exits cleanly, report the
-surfaces it covered while being clear that pattern scanning is not a guarantee.
+- **A concrete key shape** (course key, Anthropic, GitHub, Fly.io, AWS, private
+  key) is a **stop**, not a judgement call. Removing it from the tip commit does
+  not remove it from history, and rewriting history on a repo that has never
+  been public is easy while doing it afterwards is not. Tell them to rotate the
+  credential regardless, because a key in an about-to-be-public repo must be
+  assumed leaked.
+- **`credential assignment`** is a heuristic, not a verdict: it fires on
+  anything shaped like `password = "..."` — which includes test fixtures,
+  placeholder values and session-token code this course teaches. Find the
+  matching line, read it, and judge. A real secret is the stop above; a dummy
+  value or an identifier is fine to ship — tell them what you found and why it's
+  benign.
+
+An incomplete scan is also a **stop**: missing `git` or Node, a fetch failure,
+or an unreadable file must not fall through to the visibility flip. If it exits
+cleanly, report the surfaces it covered while being clear that pattern scanning
+is not a guarantee.
 
 ## 4. Flip, deploy, verify
 

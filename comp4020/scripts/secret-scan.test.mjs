@@ -5,7 +5,7 @@ import { findSecretKinds, safeLabel } from "./secret-scan.mjs";
 
 test("detects course, vendor, and private-key credential shapes", () => {
   const samples = [
-    ["sk-abcdefghijklmnopqrstuvwxyz", "COMP4020 course key"],
+    ["sk-abcDefghijklmnopqrstUvwxyz", "COMP4020 course key"],
     ["sk-ant-abcdefghijklmnopqrstuvwxyz", "Anthropic API key"],
     ["ghp_abcdefghijklmnopqrstuvwxyz1234", "GitHub token"],
     ["github_pat_abcdefghijklmnopqrstuvwxyz", "GitHub token"],
@@ -27,6 +27,9 @@ test("does not flag the placeholders used in course documentation", () => {
     "ANTHROPIC_AUTH_TOKEN",
     "password: replace-me",
     "token = <token>",
+    // lowercase kebab-case identifiers must not read as course keys
+    ".sk-loading-placeholder-wrapper",
+    ".sk-shimmer_block_secondary_variant",
   ];
 
   for (const placeholder of placeholders) {

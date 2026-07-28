@@ -11,3 +11,4 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - run: python3 .github/validate.py
+      - run: node --test comp4020/scripts/*.test.mjs

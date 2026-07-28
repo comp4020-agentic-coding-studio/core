@@ -216,8 +216,11 @@ if [ -n "$repo_root" ] && [ -f "$repo_root/.githooks/pre-commit" ]; then
     row FAIL key-guard "core.hooksPath is '${hooks_path:-unset}' — the key guard is off; run pnpm install"
   fi
 
-  # file:line only — never the matched text
-  committed=$(git grep --cached -nE 'sk-[A-Za-z0-9_-]{20,}' 2>/dev/null | cut -d: -f1,2 | head -5)
+  # file:line only — never the matched text. Real keys are random base64url
+  # and always carry an uppercase letter; requiring one spares lowercase
+  # kebab-case identifiers (CSS classes and the like).
+  committed=$(git grep --cached -nE 'sk-[A-Za-z0-9_-]{20,}' 2>/dev/null \
+    | grep -E 'sk-[A-Za-z0-9_-]*[A-Z]' | cut -d: -f1,2 | head -5)
   if [ -n "$committed" ]; then
     row FAIL committed-key "key-shaped string already committed at: $(printf '%s' "$committed" | tr '\n' ' ')"
   else
@@ -236,7 +239,7 @@ if [ "$os" = "Darwin" ]; then
 else
   if [ "$platform" = "WSL" ] && have powershell.exe; then
     chrome_version=$(powershell.exe -NoProfile -Command \
-      "\$paths = @('C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe', 'C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe'); \$chrome = \$paths | Where-Object { Test-Path \$_ } | Select-Object -First 1; if (\$chrome) { (Get-Item \$chrome).VersionInfo.ProductVersion }" \
+      "\$paths = @('C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe', 'C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe', \"\$env:LOCALAPPDATA\\Google\\Chrome\\Application\\chrome.exe\"); \$chrome = \$paths | Where-Object { Test-Path \$_ } | Select-Object -First 1; if (\$chrome) { (Get-Item \$chrome).VersionInfo.ProductVersion }" \
       2>/dev/null | tr -d '\r' | head -1)
     [ -n "$chrome_version" ] && chrome_raw="Google Chrome $chrome_version (Windows host)"
   fi

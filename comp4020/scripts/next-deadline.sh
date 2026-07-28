@@ -119,10 +119,8 @@ printf '%s' "$payload" | jq -r \
             else
               (if ($d.dueLocal // "") != "" then
                  {deadline: $d.dueLocal, known: "yes"}
-               elif ($d.due | test("T")) then
-                 {deadline: ($d.due | sub("(\\.000)?Z$"; "")), known: "yes"}
                else
-                 {deadline: ($d.due + "T23:59"), known: "no"}
+                 {deadline: (($d.due | split("T")[0]) + "T23:59"), known: "no"}
                end)
             end) as $dl
          | {kind: $d.kind, slug: $d.slug, title: $d.title, week: $d.week,

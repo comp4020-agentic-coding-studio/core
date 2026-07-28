@@ -14,8 +14,13 @@ const MAX_OUTPUT = 128 * 1024 * 1024;
 
 const PATTERNS = [
   {
+    // Real keys are random base64url and always carry an uppercase letter;
+    // requiring one (case-sensitively) spares lowercase kebab-case identifiers
+    // like CSS's .sk-loading-placeholder-wrapper. The pre-commit hook and
+    // doctor apply the same rule.
     name: "COMP4020 course key",
-    source: String.raw`\bsk-(?!ant-)[A-Za-z0-9_-]{20,}\b`,
+    source: String.raw`\bsk-(?!ant-)(?=[A-Za-z0-9_-]*[A-Z])[A-Za-z0-9_-]{20,}\b`,
+    flags: "",
   },
   {
     name: "Anthropic API key",
@@ -44,9 +49,9 @@ const PATTERNS = [
 ];
 
 export function findSecretKinds(text) {
-  return PATTERNS.filter(({ source }) => new RegExp(source, "i").test(text)).map(
-    ({ name }) => name,
-  );
+  return PATTERNS.filter(({ source, flags = "i" }) =>
+    new RegExp(source, flags).test(text),
+  ).map(({ name }) => name);
 }
 
 export function safeLabel(text) {
@@ -141,72 +146,6 @@ function scanHistory(findings, root) {
   scanText(findings, history, "reachable Git history");
 }
 
-function scanActions(findings, root) {
-  const repository = command(
-    "gh",
-    ["repo", "view", "--json", "nameWithOwner", "--jq", ".nameWithOwner"],
-    root,
-  ).stdout.trim();
-  if (!repository.includes("/")) {
-    throw new ScanError("could not resolve the GitHub repository");
-  }
-
-  const runs = command(
-    "gh",
-    [
-      "api",
-      "--paginate",
-      `repos/${repository}/actions/runs?per_page=100`,
-      "--jq",
-      ".workflow_runs[] | [.id, .status] | @tsv",
-    ],
-    root,
-  ).stdout
-    .split("\n")
-    .filter(Boolean)
-    .map((line) => line.split("\t"));
-
-  for (const [runId, status] of runs) {
-    if (!/^\d+$/.test(runId)) {
-      throw new ScanError("GitHub returned an invalid Actions run id");
-    }
-    if (status !== "completed") {
-      throw new ScanError(`Actions run ${runId} is still ${safeLabel(status)}`);
-    }
-
-    const log = command(
-      "gh",
-      ["run", "view", runId, "--repo", repository, "--log"],
-      root,
-      [0, 1],
-    );
-    if (log.status !== 0) {
-      const nonSkippedJobs = command(
-        "gh",
-        [
-          "run",
-          "view",
-          runId,
-          "--repo",
-          repository,
-          "--json",
-          "jobs",
-          "--jq",
-          '[.jobs[] | select(.conclusion != "skipped")] | length',
-        ],
-        root,
-      ).stdout.trim();
-      if (nonSkippedJobs !== "0") {
-        throw new ScanError(`could not retrieve logs for Actions run ${runId}`);
-      }
-      continue;
-    }
-    scanText(findings, log.stdout, `GitHub Actions run ${runId}`);
-  }
-
-  return runs.length;
-}
-
 function main() {
   const root = command(
     "git",
@@ -226,8 +165,6 @@ function main() {
   scanWorktree(findings, root);
   process.stdout.write("secret-scan: scanning all reachable Git history\n");
   scanHistory(findings, root);
-  process.stdout.write("secret-scan: scanning every GitHub Actions log\n");
-  const runCount = scanActions(findings, root);
 
   if (findings.length > 0) {
     process.stderr.write(
@@ -242,9 +179,7 @@ function main() {
     return;
   }
 
-  process.stdout.write(
-    `secret-scan: clean — worktree, reachable history, and ${runCount} Actions run(s) scanned\n`,
-  );
+  process.stdout.write("secret-scan: clean — worktree and reachable history scanned\n");
 }
 
 if (resolve(process.argv[1] ?? "") === fileURLToPath(import.meta.url)) {
