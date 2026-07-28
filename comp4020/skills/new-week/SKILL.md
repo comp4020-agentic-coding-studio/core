@@ -136,6 +136,11 @@ can't create repos in the org.
 gh repo clone comp4020-agentic-coding-studio/<prefix>-<handle>
 ```
 
+`gh repo clone` writes into the current directory, so `cd` to wherever they keep
+the course first — one folder holding every course repo, `~/comp4020/` or their
+own choice. Offer to create it on the first run. By November there are a dozen
+repos, and scattered ones make step 2 harder than it needs to be.
+
 **Private, always.** It arrives private and goes public at the cutoff, not
 before — until then peers can't read your source, your prompts or your harness.
 Flipping it is a deliberate act two hours before the crit, and it belongs to
