@@ -62,8 +62,8 @@ demo, and the final project's repo prefix (`comp4020-final` — the actual repo 
 serves the week 9–11 crits _and_ the A3 submission. Sharing a prefix means
 sharing a repo, so:
 
-- a crit whose `repoPrefix` matches an assessment's is a **retro crit** (weeks
-  4 and 7): the student presents the assignment that just landed, so there's no
+- a crit whose `repoPrefix` matches an assessment's is a **retro crit** (weeks 4
+  and 7): the student presents the assignment that just landed, so there's no
   new prototype and no harness merge. Offer the retro prep instead — confirm
   which repo they're presenting, run **submission-preflight** against it, and
   check its deployed URL still serves — then stop.
@@ -89,18 +89,17 @@ choose a template: the course provisioned your repo from the right one.
 The previous prototype repo is where `CLAUDE.md` and `AGENTS.md` come from. Use
 the ordered deliverable rows from step 1, not GitHub creation time: starting
 immediately before the selected target, walk backwards to the first row with a
-**different `repoPrefix`** whose exact
-`<repoPrefix>-<current-handle>` repository exists. Resolve the current handle
-with `gh api /user --jq .login` and check an exact name with `gh repo view`.
-Skip repeated rows for the same repo (retros and the shared final-project
-crits), and never select the target repo itself. This stays deterministic when
-the course provisions several future repos in one batch or GitHub reports equal
-creation times.
+**different `repoPrefix`** whose exact `<repoPrefix>-<current-handle>`
+repository exists. Resolve the current handle with `gh api /user --jq .login`
+and check an exact name with `gh repo view`. Skip repeated rows for the same
+repo (retros and the shared final-project crits), and never select the target
+repo itself. This stays deterministic when the course provisions several future
+repos in one batch or GitHub reports equal creation times.
 
 **Confirm that exact prior repo with the student before reading it** — a harness
 carried forward from the wrong repo is worse than no harness. Do not fall back
-to “the most recently created repo”; if none of the earlier published rows has
-a repository, treat this as their first prototype and say so.
+to “the most recently created repo”; if none of the earlier published rows has a
+repository, treat this as their first prototype and say so.
 
 If this is their first prototype, there's nothing to carry. The template's
 boilerplate is the starting point; say so and skip to step 4.
@@ -189,24 +188,10 @@ crit. Turning it into automated backpressure is the student's work — the
 template deliberately ships only the invariants (`spec/invariants.test.ts`, true
 of any good website) and leaves the week's contract to them.
 
-First write the target row into `.comp4020/deliverable.json`, creating the
-directory if needed. This is a small tracked cache, not a second source of
-truth: copy these four values exactly from the published/API-derived row and
-never infer or rename them:
-
-```json
-{
-  "kind": "crit",
-  "slug": "08-example",
-  "repoPrefix": "comp4020-final",
-  "reflection": "crit-8.md"
-}
-```
-
-Use the target's real values, including `kind: "assessment"` where applicable.
-On weeks 10–11 and at the final submission, overwrite the same cache in the
-shared final-project repo. `pnpm check:evidence` reads it so an old but
-well-named reflection cannot accidentally satisfy the current deliverable.
+There is nothing to record locally about which deliverable this is:
+`pnpm check:evidence` works the current deliverable out live, from the repo's
+name and the course API, so an old but well-named reflection cannot accidentally
+satisfy the current one.
 
 Walk the spec with the student, line by line, and sort it:
 
@@ -234,9 +219,6 @@ green are exactly the process evidence `PROCESS.md` wants to cite.
   Their fresh spec tests are the exception: red is their starting state.
 - read them the week's spec and brief from the site, and stop there. Building
   the prototype is their work, not yours.
-- commit `.comp4020/deliverable.json` with the pulled spec tests. In a shared
-  final-project repo, its diff is the explicit handover from one deliverable to
-  the next.
 - remind them of the two things the checks can't enforce: commit as you go, and
   the repo stays private until the cutoff.
 
