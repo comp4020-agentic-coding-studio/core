@@ -49,9 +49,10 @@ an access quiz:
    **"Start here"** module (it unlocks on Wednesday of week 1; the
    [course access page](https://comp.anu.edu.au/courses/comp4020-agentic-coding-studio/topics/llm-access/#step-2-get-your-key)
    carries the current release detail).
-2. Work through it in order: tick off the VPN step, submit the pre-course
-   survey, then take the short access quiz — unlimited attempts, so retake until
-   100%.
+2. Work through it in order: tick off the VPN step, submit the pre-course survey
+   (not assessed — no right answers, and nothing in it affects their key), then
+   take the short access quiz, which is the step that gates it — unlimited
+   attempts, so retake until 100%.
 3. Passing unlocks the **"Your Claude Code API key"** assignment. Open it and
    read the instructor comment on their submission — the key is the value
    starting with `sk-`.
