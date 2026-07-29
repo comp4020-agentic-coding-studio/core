@@ -3,7 +3,7 @@ name: doctor
 description:
   Checks a COMP4020/COMP8020 student's machine against the course's required
   environment — Git, the GitHub CLI (gh), course GitHub org membership, flyctl,
-  Claude Code's proxy config, Chrome, Node, pnpm, mise and jq — including
+  Claude Code and its proxy config, Chrome, Node, pnpm, mise and jq — including
   whether the tools that hit external services are actually authenticated and
   whether the course plugins are on their latest versions, then offers to fix
   what's broken. Use for "check my setup", "is everything installed", "why isn't
@@ -58,6 +58,22 @@ Most rows say what they mean. These are the ones that need judgement:
   with their own Claude plan who has scoped the course key to course repos. The
   vars being absent _outside_ a course repo is that setup working. Ask which
   before routing them anywhere.
+- **`model-pin` WARN** — the highest-stakes row for a student's credits. An API
+  key with `ANTHROPIC_MODEL` unset defaults to Opus, which burns the weekly
+  budget several times faster than the course expects, and nothing visibly
+  breaks until they're out. Fix it as part of the `env` block in **onboard**
+  rather than as a standalone edit, so the pin lands beside the key it applies
+  to. A student on their own plan can ignore it: the pin only binds sessions
+  going through the course key.
+- **`key-guard` FAIL** — the template repos ship a pre-commit hook that stops a
+  key being committed, and `core.hooksPath` isn't pointing at it, so the guard
+  is off. `pnpm install` in the repo restores it. Read this together with
+  `committed-key`: the guard being off is why a key could get in.
+- **`claude-code` WARN** — the session is running but `claude` isn't on PATH.
+  Nothing is broken in front of them, which is exactly the problem: the status
+  line and anything else that shells out to `claude` fail quietly. Usually a
+  shell that starts without the install's `bin` directory, so check the login
+  shell's profile rather than reinstalling.
 - **`gh-visibility-flag` FAIL** — a distro-packaged `gh` (Ubuntu still ships
   2.45) can't flip a repo public, and it fails at the cutoff, which is the worst
   possible moment to find out. Worth fixing now even though nothing is broken

@@ -264,10 +264,14 @@ fi
 
 # --- local development toolchain --------------------------------------------
 
+# A version manager's shim is on PATH whether or not a version is selected: mise
+# installed-but-unset writes its error to stderr and nothing to stdout, so an
+# empty version here means "shim, no version", not "no runtime".
 if have node; then
   node_version=$(node --version 2>/dev/null)
   case "$node_version" in
   v24.*) row PASS node "$node_version" ;;
+  "") row WARN node "on PATH but reports no version — a version manager shim with nothing selected; mise use -g node@24" ;;
   *) row WARN node "$node_version (starter templates expect Node 24)" ;;
   esac
 else
@@ -278,10 +282,28 @@ if have pnpm; then
   pnpm_version=$(pnpm --version 2>/dev/null)
   case "$pnpm_version" in
   11.*) row PASS pnpm "$pnpm_version" ;;
+  "") row WARN pnpm "on PATH but reports no version — a version manager shim with nothing selected; mise use -g pnpm@11" ;;
   *) row WARN pnpm "$pnpm_version (starter templates expect pnpm 11)" ;;
   esac
 else
   row FAIL pnpm "not installed — starter templates need pnpm 11"
+fi
+
+# --- claude code ------------------------------------------------------------
+#
+# This usually runs inside a Claude Code session, so "is it installed" is close
+# to tautological — but `claude` missing from PATH is a separate, real failure:
+# the status-line hook and anything else that shells out to it break while the
+# session itself keeps working, which is a confusing way to find out. No
+# freshness check to match the plugin rows below: Claude Code updates itself,
+# and the course states no minimum version.
+
+if have claude; then
+  row PASS claude-code "$(claude --version 2>/dev/null | head -1)"
+elif [ -n "${CLAUDECODE:-}" ]; then
+  row WARN claude-code "session running, but claude is not on PATH — the status line and scripts that shell out to it will fail"
+else
+  row FAIL claude-code "not installed — onboard step 3 on the site"
 fi
 
 # --- course plugins ---------------------------------------------------------
