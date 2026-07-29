@@ -1,5 +1,5 @@
 ---
-name: deadline-radar
+name: radar
 description:
   Tells a COMP4020/COMP8020 student what's coming up — which crits and
   assessments are due this week and next, sorted by date, with weights — by
@@ -12,7 +12,7 @@ allowed-tools: Bash, WebFetch
 # COMP4020 deadline radar
 
 Turn the course schedule into "here's what to work on now". This is the
-proactive framing of the same data **course-info** answers reactively: instead
+proactive framing of the same data **handbook** answers reactively: instead
 of "when is assignment 2 due", it's "given today, what's next".
 
 ## 1. Resolve the deadlines
@@ -63,7 +63,7 @@ not-yet-finalised.
 
 ## Hand off
 
-- "am I ready to submit this?" → **submission-preflight**
+- "am I ready to submit this?" → **preflight**
 - detail on a policy, an extension rule, or what a deadline entails →
-  **course-info**
+  **handbook**
 - "start this week's prototype" → **start**

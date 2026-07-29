@@ -6,7 +6,7 @@ description:
   final-project run (weeks 9–11) tags the crit cutoff state. Use when the user
   says "ship it", "make my repo public", "flip it public", "publish my
   prototype", "enable Pages", or "deploy for the crit". Not for checking whether
-  the work is ready; that's submission-preflight.
+  the work is ready; that's preflight.
 allowed-tools: Bash, Read, WebFetch, Glob, Grep
 ---
 
@@ -43,7 +43,7 @@ the actual time out loud before anything becomes public.
 
 ## 2. Is it even ready?
 
-Run **submission-preflight** and read its verdict. If it reports any FAIL, stop
+Run **preflight** and read its verdict. If it reports any FAIL, stop
 and say so. Do not offer to flip anyway: a public repo with uncommitted work in
 the tree is worse than a private repo with the same, because now the gap is
 permanent and visible.
@@ -195,6 +195,6 @@ its own frozen record.
 
 ## Hand off
 
-- "am I ready to submit?" → **submission-preflight**
-- "what's due this week?" → **deadline-radar**
+- "am I ready to submit?" → **preflight**
+- "what's due this week?" → **radar**
 - "start next week's prototype" → **start**

@@ -1,5 +1,5 @@
 ---
-name: submission-preflight
+name: preflight
 description:
   Checks that a COMP4020/COMP8020 student's work is actually submittable before
   a crit or assignment deadline — the local repo is committed and pushed to
@@ -113,6 +113,6 @@ spec asks for a live URL; otherwise skip.
 ## Hand off
 
 - "ready — now ship it" → **ship**
-- "what's due this week?" → **deadline-radar**
+- "what's due this week?" → **radar**
 - "start this week's prototype" → **start**
 - "is my machine set up right?" → **doctor**

@@ -102,8 +102,8 @@ Most rows say what they mean. These are the ones that need judgement:
   row compares against the marketplace's `origin`, not the local checkout, so a
   student who has never run `claude plugin marketplace update` still gets a true
   answer.
-- **`crit-group` WARN** — nothing breaks, but **deadline-radar**,
-  **submission-preflight** and **ship** can only say "two hours before your
+- **`crit-group` WARN** — nothing breaks, but **radar**,
+  **preflight** and **ship** can only say "two hours before your
   session" instead of naming the real cutoff.
 - **`committed-key` FAIL** — report the file and line **only, never the matched
   value**. The key has to come out of the file; if the commit was ever pushed,
@@ -145,8 +145,8 @@ is the exception that already works either way: it's looked up through
 
 - Anything needing a settings change, a key, or an org invitation accepted → the
   **onboard** skill
-- "how much budget do I have" / over budget → **check-balance**
+- "how much budget do I have" / over budget → **balance**
 - Status line empty, stale, or saying `own plan` → the **statusline** skill in
   the companion `comp4020-statusline` plugin (it's opt-in: its absence is never
   a failure, so don't raise it unprompted)
-- Course rules, deadlines, or what a tool is _for_ → **course-info**
+- Course rules, deadlines, or what a tool is _for_ → **handbook**

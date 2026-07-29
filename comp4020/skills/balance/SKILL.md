@@ -1,5 +1,5 @@
 ---
-name: check-balance
+name: balance
 description:
   Checks the user's Claude Code budget on the COMP4020 proxy (strproxy) — how
   much of the weekly allowance is spent, what's left, and when it resets — by

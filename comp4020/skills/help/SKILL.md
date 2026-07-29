@@ -15,20 +15,20 @@ automatically on the right kind of question; this is the menu and the router.
 Point the student at the one that fits, or just answer if their question already
 matches a skill's job.
 
-| Ask about…                                                                  | Skill                    |
-| --------------------------------------------------------------------------- | ------------------------ |
-| Deadlines, marking, policies, what a lecture covers, who teaches the course | **course-info**          |
-| Your weekly Claude Code budget — spent, left, when it resets                | **check-balance**        |
-| First-time setup: your strproxy key, the course GitHub org, your crit group | **onboard**              |
-| Using course credits alongside your own Claude subscription                 | **onboard**, step 2      |
-| Whether your machine is set up right, and why a tool isn't working          | **doctor**               |
-| What's due / what to work on this week                                      | **deadline-radar**       |
-| Starting this week's prototype or an assignment, carrying CLAUDE.md forward | **start**                |
-| Whether your work is ready to submit before a deadline                      | **submission-preflight** |
-| Making your repo public and getting it deployed at the cutoff               | **ship**                 |
+| Ask about…                                                                  | Skill               |
+| --------------------------------------------------------------------------- | ------------------- |
+| Deadlines, marking, policies, what a lecture covers, who teaches the course | **handbook**        |
+| Your weekly Claude Code budget — spent, left, when it resets                | **balance**         |
+| First-time setup: your strproxy key, the course GitHub org, your crit group | **onboard**         |
+| Using course credits alongside your own Claude subscription                 | **onboard**, step 2 |
+| Whether your machine is set up right, and why a tool isn't working          | **doctor**          |
+| What's due / what to work on this week                                      | **radar**           |
+| Starting this week's prototype or an assignment, carrying CLAUDE.md forward | **start**           |
+| Whether your work is ready to submit before a deadline                      | **preflight**       |
+| Making your repo public and getting it deployed at the cutoff               | **ship**            |
 
 A natural first-week path is **onboard** → **doctor**; a natural crit-week path
-is **deadline-radar** → **start** → **submission-preflight** → **ship**.
+is **radar** → **start** → **preflight** → **ship**.
 
 The split worth knowing: **doctor** diagnoses, **onboard** changes settings. If
 something looks wrong, doctor first — it prints the whole picture in one call.
@@ -46,5 +46,5 @@ for installing, diagnosing and removing it.
 All course facts come from the live site
 (`https://comp.anu.edu.au/courses/comp4020-agentic-coding-studio`) and the
 course proxy, so answers stay current. If nothing here fits and it's a
-course-admin question, fall back to **course-info**; if it's a
-personal/enrolment matter, the answer is a human — comp4020@anu.edu.au.
+course-admin question, fall back to **handbook**; if it's a personal/enrolment
+matter, the answer is a human — comp4020@anu.edu.au.

@@ -1,5 +1,5 @@
 ---
-name: course-info
+name: handbook
 description:
   Answers questions about COMP4020/COMP8020 Agentic Coding Studio (ANU) course
   admin and content — assignment due dates and weights, marking, policies,
@@ -36,8 +36,8 @@ This table is the routing map for course **content** — it isn't exhaustive of
 every live endpoint. Course **logistics** data (crit-group session times and
 cutoffs) lives at `/api/crit-groups.json`, not a content node, and course
 **budget** data lives at strproxy's own `/api/me`, not the course site at all —
-both are handled by other skills (**deadline-radar**, **submission-preflight**,
-**ship**, **start**, **doctor**, **check-balance**), not this one.
+both are handled by other skills (**radar**, **preflight**,
+**ship**, **start**, **doctor**, **balance**), not this one.
 
 Node collections in the API: `topics` (concepts, policies, how-to guides),
 `assessments`, `crits`, `lectures`. The **people** collection (convenor, TAs,

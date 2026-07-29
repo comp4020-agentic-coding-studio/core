@@ -26,7 +26,7 @@ To pick up updates later: `/plugin marketplace update comp4020`.
 
 ## What's in the plugin
 
-### course-info
+### handbook
 
 Answers course-admin questions — "when is assignment 3 due and how much is it
 worth?", "what's the extension policy?", "what does the week 4 lecture cover?" —
@@ -34,9 +34,9 @@ by querying the live course website (its JSON content-graph API and `llms.txt`
 endpoints). The skill holds no course facts itself, only knowledge of where to
 look, so its answers are always as current as the site. It triggers
 automatically on questions about the course, or invoke it directly with
-`/comp4020:course-info`.
+`/comp4020:handbook`.
 
-### check-balance
+### balance
 
 Answers "check my balance", "how much budget do I have left?", "why is my key
 not working?" by querying the course proxy's `/api/me` endpoint with the same
@@ -44,7 +44,7 @@ key Claude Code is already using — no extra setup or login. Reports weekly spe
 against the cap and when the budget resets, explains the common failure modes
 (off-campus without the ANU VPN, revoked key), and knows what to suggest when
 the budget runs out. Triggers automatically on budget/usage questions, or invoke
-it directly with `/comp4020:check-balance`.
+it directly with `/comp4020:balance`.
 
 ### onboard
 
@@ -69,15 +69,15 @@ them, cross-checks the site's own tool list, and **offers to fix** what's
 broken, confirming each step. Invoke with `/comp4020:doctor` or ask "is my setup
 right?".
 
-### deadline-radar
+### radar
 
 The proactive view of the schedule: what's due this week and next, sorted by
 date with weights, leading with the single most urgent thing. The cutoff
 arithmetic — the teaching-week calendar, the mid-semester break, and the crit
 cutoff two hours before _your_ group's session — lives in
-`scripts/next-deadline.sh`, which **start**, **submission-preflight** and
+`scripts/next-deadline.sh`, which **start**, **preflight** and
 **ship** call too, so every skill quotes the same deadline. Invoke with
-`/comp4020:deadline-radar` or ask "what's due?" / "what should I work on?".
+`/comp4020:radar` or ask "what's due?" / "what should I work on?".
 
 ### start
 
@@ -92,20 +92,20 @@ their own tests. Knows which weeks don't start a fresh prototype (the retro
 crits, and weeks 9–11, which run on the final-project repo). Invoke with
 `/comp4020:start` or ask to "start this week's prototype".
 
-### submission-preflight
+### preflight
 
 Checks that work is actually submittable before a crit or assignment deadline:
 cross-references the assessment spec (from the site) with the local repo — clean
 tree, everything pushed to GitHub, marker can see it, required structure present
 — and, in the full-stack half, that the deploy is healthy and reachable. Offers
 to run the safe fixes (commit, push), but leaves the actual submission to the
-student. Invoke with `/comp4020:submission-preflight` or ask "am I ready to
+student. Invoke with `/comp4020:preflight` or ask "am I ready to
 submit?".
 
 ### ship
 
 The one irreversible act in the course, treated accordingly: re-runs
-submission-preflight, scans the working tree **and history** for secrets, then —
+preflight, scans the working tree **and history** for secrets, then —
 with explicit confirmation — flips the repo public, enables GitHub Pages (as a
 workflow site), and verifies the live URL actually serves. In the final-project
 run (weeks 9–11) it also tags the crit-cutoff state. Invoke with

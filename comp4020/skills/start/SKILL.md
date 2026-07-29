@@ -65,7 +65,7 @@ sharing a repo, so:
 - a crit whose `repoPrefix` matches an assessment's is a **retro crit** (weeks 4
   and 7): the student presents the assignment that just landed, so there's no
   new prototype and no harness merge. Offer the retro prep instead — confirm
-  which repo they're presenting, run **submission-preflight** against it, and
+  which repo they're presenting, run **preflight** against it, and
   check its deployed URL still serves — then stop.
 - **week 9** starts the **final-project repo**: created once and carried through
   to the A3 deadline. Run this skill for it as normal — harness carried forward,
@@ -236,7 +236,7 @@ green are exactly the process evidence `PROCESS.md` wants to cite.
 
 ## Hand off
 
-- "what's due this week?" → **deadline-radar**
-- "am I ready to submit?" → **submission-preflight**
+- "what's due this week?" → **radar**
+- "am I ready to submit?" → **preflight**
 - "make it public and deploy it" → **ship**
 - "is my machine set up right?" → **doctor**

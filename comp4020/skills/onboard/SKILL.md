@@ -189,5 +189,5 @@ the plugin does. Keep it to a sentence — don't over-explain.
 Two things worth offering once, never installing unasked: the optional
 `comp4020-statusline` plugin, which keeps the week's spend at the bottom of
 every session (offer it more strongly to a dual-plan student — it's the ambient
-"which wallet is this?" indicator), and **check-balance** for the authoritative
+"which wallet is this?" indicator), and **balance** for the authoritative
 figure on demand.
