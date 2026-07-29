@@ -75,7 +75,10 @@ three states they're in. Work down in this order:
   script is missing, its `SessionStart` hook hasn't run yet — restarting Claude
   Code installs it); and `statusLine.command` in `~/.claude/settings.json`
   actually points at that path. That last one is the step people miss, because
-  installing the plugin does not write it.
+  installing the plugin does not write it. An `enabledPlugins` entry naming the
+  plugin while `claude plugin list` doesn't show it means it was never
+  installed: enabling is not installing, and only
+  `claude plugin install comp4020-statusline@comp4020` fetches it.
 - **`own plan`** — the script works, but the session isn't routed through
   strproxy. It shows the budget only when `ANTHROPIC_BASE_URL` names the
   strproxy host and `ANTHROPIC_AUTH_TOKEN` holds a virtual key, by design, so it
