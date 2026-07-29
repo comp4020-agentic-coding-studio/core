@@ -16,7 +16,7 @@ halves have to be in place, which is the source of nearly every "it isn't
 working" report.
 
 ```
-comp4020 $41.20/$100 (41%)
+Opus · comp4020 $41.20/$100 (41%)
 ```
 
 Green through amber to red as the weekly cap approaches. In a session that
@@ -24,6 +24,9 @@ _isn't_ running on course credits — a personal subscription or key, or no key 
 all — it shows a dim `own plan` instead, so which wallet a session draws from is
 always visible. For a student running the course key alongside their own Claude
 plan, that flip is the main reason to want it.
+
+The model leads either rendering (`Opus · own plan`), since which model a
+session is on is the other thing that moves what it costs.
 
 ## Install
 
@@ -54,13 +57,16 @@ nothing to install — that's the WSL2 nudge `/comp4020:doctor` already gives.
    }
    ```
 
-   If they **already have a `statusLine`**, leave it alone and say so. The
-   script reads nothing from stdin, so their existing one can append its output
-   instead:
+   If they **already have a `statusLine`**, leave it alone and say so — their
+   existing one can append this one's output instead:
 
    ```sh
-   printf ' %s' "$("$HOME/.claude/comp4020/statusline.sh" </dev/null)"
+   printf ' %s' "$(printf '%s' "$input" | "$HOME/.claude/comp4020/statusline.sh")"
    ```
+
+   where `$input` is the session JSON their script has already read from stdin.
+   Feeding it `</dev/null` instead is also fine and prints everything but the
+   model name — which a hand-rolled status line usually shows already.
 
 3. Tell them it appears in **new** sessions, not this one.
 
@@ -93,6 +99,10 @@ three states they're in. Work down in this order:
   ANU VPN; a number that won't move is the 60-second cache, which off the VPN
   sits on the last figure it fetched indefinitely. Their Claude sessions are
   unaffected either way.
+- **the right tag but no model name** — the script isn't being handed the
+  session JSON. Nearly always a status line of their own calling ours with
+  `</dev/null`; the append recipe above pipes it through instead. Everything
+  else works without it, by design.
 
 A student who already had their own status line may have it pointing elsewhere —
 that's fine and deliberate; check whether their script calls ours (the append

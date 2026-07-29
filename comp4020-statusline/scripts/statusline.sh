@@ -19,26 +19,48 @@
 # update, so it can't be named in settings.json. Don't edit the installed copy
 # --- the hook overwrites it.
 #
-# Reads nothing from stdin, so it composes: an existing status line script can
-# append `"$HOME/.claude/comp4020/statusline.sh" </dev/null` to its own output.
+# The only thing it takes from stdin is the model name, and it works without it,
+# so it still composes: an existing status line script can append
+# `"$HOME/.claude/comp4020/statusline.sh" </dev/null` to its own output and get
+# everything but the model, or pipe the session JSON through to get that too.
 
 set -uo pipefail
 export LC_ALL=C # keep printf's decimal separator a dot under any locale
 
 readonly TTL=60 # seconds a cached figure stays fresh
 
-# Drain the session JSON Claude Code pipes in: we want none of it, but leaving
-# it unread risks a broken pipe in the writer.
-cat >/dev/null 2>&1 || true
+# Read the session JSON Claude Code pipes in --- unconditionally, so an unread
+# pipe never breaks the writer, and so a caller that hands us nothing (the
+# compose recipe above) just falls through with an empty string.
+input=$(cat 2>/dev/null || true)
 
 dim=$'\e[2m'
 reset=$'\e[0m'
+
+# The model, as `.model.display_name` --- "Opus", "Sonnet". Prefer jq, but fall
+# back to a regex so the name still shows on a machine without it: jq is needed
+# for the budget figure, not for this. `"model"[^}]*` keeps the match inside the
+# model object, so a display_name added elsewhere in the payload can't shadow it.
+model=
+if [[ -n "$input" ]]; then
+  if command -v jq >/dev/null 2>&1; then
+    model=$(printf '%s' "$input" | jq -r '.model.display_name // empty' 2>/dev/null)
+  elif [[ "$input" =~ \"model\"[^}]*\"display_name\"[[:space:]]*:[[:space:]]*\"([^\"]*)\" ]]; then
+    model="${BASH_REMATCH[1]}"
+  fi
+fi
+
+# One line, whatever the payload said: a stray newline would push the rest of
+# the bar onto a row of its own.
+model="${model//[$'\n\r\t']/ }"
+prefix=
+[[ -n "$model" ]] && prefix="${dim}${model} · ${reset}"
 
 # Not course credits: say so explicitly. A silent segment would be
 # indistinguishable from a broken install, and the whole point of the tag is
 # that a dual-plan student sees the wallet flip as they move between projects.
 own_plan() {
-  printf '%s' "${dim}own plan${reset}"
+  printf '%s' "${prefix}${dim}own plan${reset}"
   exit 0
 }
 
@@ -71,7 +93,7 @@ done
 # Everything from here down is course-credit territory, so every rendering
 # carries the tag --- the tag means "this session burns course credits", even
 # when the figure itself is unavailable.
-tag="${dim}comp4020${reset} "
+tag="${prefix}${dim}comp4020${reset} "
 
 if ! command -v jq >/dev/null 2>&1 || ! command -v curl >/dev/null 2>&1; then
   printf '%s' "${tag}${dim}budget: needs jq${reset}"
@@ -119,7 +141,7 @@ fi
 jq -r '[(.current_week_spend | tonumber),
         (.max_budget | if . == null then 0 else tonumber end)] | @tsv' \
   "$json" 2>/dev/null |
-  awk -F'\t' '
+  awk -F'\t' -v pre="$prefix" '
     NF < 2 { exit }
     {
       spent = $1 + 0
@@ -128,9 +150,9 @@ jq -r '[(.current_week_spend | tonumber),
         # Truncate rather than round, so the bar never reads 100% short of the cap.
         pct    = int(spent / cap * 100)
         colour = ((pct >= 90) ? 31 : ((pct >= 70) ? 33 : 32))
-        printf "\033[2mcomp4020\033[0m \033[%dm$%.2f/$%.0f (%d%%)\033[0m", colour, spent, cap, pct
+        printf "%s\033[2mcomp4020\033[0m \033[%dm$%.2f/$%.0f (%d%%)\033[0m", pre, colour, spent, cap, pct
       } else {
-        printf "\033[2mcomp4020\033[0m $%.2f this week", spent
+        printf "%s\033[2mcomp4020\033[0m $%.2f this week", pre, spent
       }
     }'
 
