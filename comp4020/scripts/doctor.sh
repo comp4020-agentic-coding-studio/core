@@ -322,7 +322,7 @@ if have claude; then
 elif [ -n "${CLAUDECODE:-}" ]; then
   row WARN claude-code "session running, but claude is not on PATH — the status line and scripts that shell out to it will fail"
 else
-  row FAIL claude-code "not installed — onboard step 3 on the site"
+  row FAIL claude-code "not installed — onboard step 2 on the site"
 fi
 
 # --- course plugins ---------------------------------------------------------
