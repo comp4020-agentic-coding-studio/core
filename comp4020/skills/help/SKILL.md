@@ -19,20 +19,19 @@ matches a skill's job.
 | --------------------------------------------------------------------------- | ------------------------ |
 | Deadlines, marking, policies, what a lecture covers, who teaches the course | **course-info**          |
 | Your weekly Claude Code budget — spent, left, when it resets                | **check-balance**        |
-| First-time setup: your strproxy key, the course GitHub org, your crit group | **quickstart**           |
-| Using course credits alongside your own Claude subscription                 | **quickstart**, step 2   |
+| First-time setup: your strproxy key, the course GitHub org, your crit group | **onboard**              |
+| Using course credits alongside your own Claude subscription                 | **onboard**, step 2      |
 | Whether your machine is set up right, and why a tool isn't working          | **doctor**               |
 | What's due / what to work on this week                                      | **deadline-radar**       |
-| Starting this week's prototype or an assignment, carrying CLAUDE.md forward | **new-week**             |
+| Starting this week's prototype or an assignment, carrying CLAUDE.md forward | **start**                |
 | Whether your work is ready to submit before a deadline                      | **submission-preflight** |
 | Making your repo public and getting it deployed at the cutoff               | **ship**                 |
 
-A natural first-week path is **quickstart** → **doctor**; a natural crit-week
-path is **deadline-radar** → **new-week** → **submission-preflight** → **ship**.
+A natural first-week path is **onboard** → **doctor**; a natural crit-week path
+is **deadline-radar** → **start** → **submission-preflight** → **ship**.
 
-The split worth knowing: **doctor** diagnoses, **quickstart** changes settings.
-If something looks wrong, doctor first — it prints the whole picture in one
-call.
+The split worth knowing: **doctor** diagnoses, **onboard** changes settings. If
+something looks wrong, doctor first — it prints the whole picture in one call.
 
 Showing your weekly budget in the status line is a separate, optional plugin, so
 it's only there if you asked for it:

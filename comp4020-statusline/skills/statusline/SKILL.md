@@ -29,8 +29,8 @@ plan, that flip is the main reason to want it.
 
 **It needs `jq`** (and `curl`, which every supported platform already has).
 Check with `command -v jq`; if it's missing, install it first with
-`mise use -g jq` (the course's install path — see quickstart step 2). Without
-`jq` the segment just reads `comp4020 budget: needs jq`.
+`mise use -g jq` (the course's install path — see onboard step 2). Without `jq`
+the segment just reads `comp4020 budget: needs jq`.
 
 It's a Unix shell script, so macOS, Linux and WSL. On native Windows there is
 nothing to install — that's the WSL2 nudge `/comp4020:doctor` already gives.
@@ -84,7 +84,7 @@ three states they're in. Work down in this order:
   it's exactly right, and for a student running both plans it's right everywhere
   _except_ inside a course repo. Seeing it there means the repo's
   `.claude/settings.local.json` is missing — usually a fresh weekly clone. Fix:
-  `/comp4020:quickstart`, the dual-plan branch.
+  `/comp4020:onboard`, the dual-plan branch.
 - **`comp4020` with a stale or missing figure** — not a broken setup.
   `budget: ?` means the script has never reached `/api/me`, nearly always the
   ANU VPN; a number that won't move is the 60-second cache, which off the VPN

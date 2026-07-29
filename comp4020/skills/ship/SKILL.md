@@ -197,4 +197,4 @@ its own frozen record.
 
 - "am I ready to submit?" → **submission-preflight**
 - "what's due this week?" → **deadline-radar**
-- "start next week's prototype" → **new-week**
+- "start next week's prototype" → **start**

@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # SessionStart hook: keep the installed status line script in step with the one
 # shipped in this plugin, so a fix ships to students on their next session
-# rather than waiting for them to re-run quickstart.
+# rather than waiting for them to re-run onboard.
 #
 # settings.json can't point into the plugin directly (its path is content-hashed
 # and changes on every update), and a plugin's bundled settings.json cannot set
@@ -11,7 +11,7 @@
 # Installing this plugin is itself the opt-in, which is why it lives apart from
 # the comp4020 plugin: those skills ship no hooks, so nothing runs at session
 # start for a student who wants only those. Copying the script in still shows no
-# status line by itself --- a plugin cannot set `statusLine`, so quickstart has
+# status line by itself --- a plugin cannot set `statusLine`, so onboard has
 # to write settings.json with the student's consent.
 
 set -uo pipefail

@@ -1,5 +1,5 @@
 ---
-name: new-week
+name: start
 description:
   Sets up a COMP4020/COMP8020 student's repo for a new deliverable — a weekly
   crit prototype or an assignment. Clones the repo the course provisioned for
@@ -11,7 +11,7 @@ description:
 allowed-tools: Bash, Read, Edit, Write, WebFetch, Glob, Grep
 ---
 
-# COMP4020 new week
+# COMP4020 start
 
 Each weekly prototype is its own repo, generated for you from the course starter
 template and waiting in the course org. The isolation is deliberate: a clean
@@ -50,7 +50,7 @@ Four cases where `next` isn't the answer:
 
 The student's repo for a deliverable is `<repoPrefix>-<handle>`, and
 `$COMP4020_GROUP` being unset shows up as `status ok-no-group`: ask which group
-they're in and offer **quickstart** step 5 so it's never asked again.
+they're in and offer **onboard** step 5 so it's never asked again.
 
 Then read the target's own JSON — `/api/crits/<slug>.json` for `kind: crit`,
 `/api/assessments/<slug>.json` for `kind: assessment` — for the `spec` (the

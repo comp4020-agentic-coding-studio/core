@@ -29,9 +29,9 @@ spec** (from the course site) with the **student's actual repo state**.
   group-relative, and the script resolves the student's own from
   `$COMP4020_GROUP`. Ask if it's ambiguous; the student naming one wins. If the
   script reports `ok-no-group`, say "two hours before your session", ask which
-  group they're in, and offer **quickstart** step 5 so it's never asked again.
-  On an assessment row, `time_known no` means the time of day is on the
-  assessment page, not in the data — fetch it rather than assuming end-of-day.
+  group they're in, and offer **onboard** step 5 so it's never asked again. On
+  an assessment row, `time_known no` means the time of day is on the assessment
+  page, not in the data — fetch it rather than assuming end-of-day.
 
 - **The spec**: fetch the node's own JSON (`/api/crits/<slug>.json` or
   `/api/assessments/<slug>.json`, both linked from the script's `page` column):
@@ -114,5 +114,5 @@ spec asks for a live URL; otherwise skip.
 
 - "ready — now ship it" → **ship**
 - "what's due this week?" → **deadline-radar**
-- "start this week's prototype" → **new-week**
+- "start this week's prototype" → **start**
 - "is my machine set up right?" → **doctor**

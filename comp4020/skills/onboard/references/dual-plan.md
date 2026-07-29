@@ -1,7 +1,7 @@
 # The dual-plan setup: course key scoped to course repos
 
 For a student who already has their own Claude subscription (Pro or Max) or a
-personal Anthropic API key. Read this from step 2 of the quickstart skill.
+personal Anthropic API key. Read this from step 2 of the onboard skill.
 
 ## Why not user-global
 

@@ -1,5 +1,5 @@
 ---
-name: quickstart
+name: onboard
 description:
   Sets up a new COMP4020/COMP8020 student — the Claude Code strproxy API key
   (from Canvas, written safely into settings, verified with a live call),
@@ -12,7 +12,7 @@ description:
 allowed-tools: Bash, Read, Edit, Write, WebFetch
 ---
 
-# COMP4020 quickstart: get your key working
+# COMP4020 onboard: get your key working
 
 Take a student from nothing to a working, proxy-routed Claude Code. The end
 state is settings carrying the course proxy base URL and their `sk-…` key — in

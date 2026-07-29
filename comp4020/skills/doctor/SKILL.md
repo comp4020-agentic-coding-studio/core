@@ -14,8 +14,8 @@ allowed-tools: Bash, Read, Edit, Write, WebFetch
 # COMP4020 environment doctor
 
 Diagnose the student's local setup, then **offer to fix** what's wrong. This
-skill owns the diagnosis; **quickstart** owns the fixes, so findings here hand
-off there rather than restating the setup steps.
+skill owns the diagnosis; **onboard** owns the fixes, so findings here hand off
+there rather than restating the setup steps.
 
 ## 1. Run the check script
 
@@ -34,11 +34,11 @@ fact; the judgement below is yours.
 
 ## 2. Ground truth: the site's tool list
 
-The canonical tool list is the course site's quickstart page, so fetch it and
+The canonical tool list is the course site's onboarding page, so fetch it and
 cross-check:
 
 ```
-https://comp.anu.edu.au/courses/comp4020-agentic-coding-studio/api/topics/quickstart.json
+https://comp.anu.edu.au/courses/comp4020-agentic-coding-studio/api/topics/onboard.json
 ```
 
 If the page names a tool the script doesn't check, report it as "listed on the
@@ -67,7 +67,7 @@ Most rows say what they mean. These are the ones that need judgement:
   the convenor about a scope problem on their own laptop wastes everyone's week.
 - **`flyctl` WARN** — only matters from the full-stack half: checked at the week
   7 crit, used from week 8. Say so rather than presenting it as an outstanding
-  failure in week 3; quickstart step 7 on the site is the whole job
+  failure in week 3; onboard step 7 on the site is the whole job
   (`mise use -g flyctl`, `flyctl auth login`, accept the org invite). The course
   covers Fly billing, so also remind them not to add a payment method; there's
   no CLI check for that.
@@ -93,15 +93,15 @@ Two things the script deliberately doesn't check. **Permission mode**: if you
 can see they're in default or plan mode, mention auto mode as a flow improvement
 — never nudge toward `--dangerously-skip-permissions`. **Native Windows**: no
 Unix shell means most of this doesn't apply; point at the WSL2 warning on the
-quickstart page.
+onboarding page.
 
 ## 4. Report, then offer to fix
 
 1. A compact per-check summary, FAILs first, one line of reason each.
 2. For each non-PASS, the fix. Config edits (the `env` block, `COMP4020_GROUP`)
-   belong to **quickstart** — name the step rather than re-deriving it.
-   Interactive logins (`gh auth login`, `flyctl auth login`) open a browser and
-   can't be fully automated: run them for the student, or hand them the command.
+   belong to **onboard** — name the step rather than re-deriving it. Interactive
+   logins (`gh auth login`, `flyctl auth login`) open a browser and can't be
+   fully automated: run them for the student, or hand them the command.
 3. **Confirm every fix before running it.** Never run one without an explicit
    yes.
 4. If everything's green, say so plainly and stop. No busywork.
@@ -109,7 +109,7 @@ quickstart page.
 ## Handing off
 
 - Anything needing a settings change, a key, or an org invitation accepted → the
-  **quickstart** skill
+  **onboard** skill
 - "how much budget do I have" / over budget → **check-balance**
 - Status line empty, stale, or saying `own plan` → the **statusline** skill in
   the companion `comp4020-statusline` plugin (it's opt-in: its absence is never

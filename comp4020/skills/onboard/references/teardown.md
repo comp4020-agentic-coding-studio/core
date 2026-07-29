@@ -1,7 +1,7 @@
 # Removing the course setup
 
 For a student who asks to remove the course setup, or is handing back a machine,
-at the end of semester. Read this from step 0 of the quickstart skill.
+at the end of semester. Read this from step 0 of the onboard skill.
 
 A leftover global config keeps routing every session at a proxy that will
 eventually stop serving them. The classic symptom is "Claude Code stopped

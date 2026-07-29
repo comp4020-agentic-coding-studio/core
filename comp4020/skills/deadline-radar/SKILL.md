@@ -31,7 +31,7 @@ Two rows to respect:
 
 - **`time_known no`** — the date is real but the time is a sort key. For a crit
   that means `$COMP4020_GROUP` is unset (say "two hours before your session",
-  and offer **quickstart** step 5 to fix it permanently). For an assessment it
+  and offer **onboard** step 5 to fix it permanently). For an assessment it
   always means the time of day lives on the assessment page: fetch
   `/api/assessments/<slug>.json` and quote the `body`, never end-of-day.
 - **`in_teaching_break yes`** — nothing is due this week; look to the
@@ -66,4 +66,4 @@ not-yet-finalised.
 - "am I ready to submit this?" → **submission-preflight**
 - detail on a policy, an extension rule, or what a deadline entails →
   **course-info**
-- "start this week's prototype" → **new-week**
+- "start this week's prototype" → **start**

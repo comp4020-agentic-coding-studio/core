@@ -37,7 +37,7 @@ every live endpoint. Course **logistics** data (crit-group session times and
 cutoffs) lives at `/api/crit-groups.json`, not a content node, and course
 **budget** data lives at strproxy's own `/api/me`, not the course site at all —
 both are handled by other skills (**deadline-radar**, **submission-preflight**,
-**ship**, **new-week**, **doctor**, **check-balance**), not this one.
+**ship**, **start**, **doctor**, **check-balance**), not this one.
 
 Node collections in the API: `topics` (concepts, policies, how-to guides),
 `assessments`, `crits`, `lectures`. The **people** collection (convenor, TAs,

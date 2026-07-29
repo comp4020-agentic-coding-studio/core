@@ -46,7 +46,7 @@ against the cap and when the budget resets, explains the common failure modes
 the budget runs out. Triggers automatically on budget/usage questions, or invoke
 it directly with `/comp4020:check-balance`.
 
-### quickstart
+### onboard
 
 The setup **fixer**: points a first-time student at their key on Canvas, merges
 it safely into settings (never clobbering what's there, never echoing the key),
@@ -54,20 +54,19 @@ joins the course GitHub org, and records their crit group. Students with their
 own Claude subscription or API key get the dual-plan setup instead — the course
 key scoped to course repos via `.claude/settings.local.json`, so course work
 runs on course credits and everything else stays on their own plan. Each step
-re-runs independently, so `/comp4020:quickstart` later with "use my course
-credits in this repo" does just that. Or ask to "set up my key".
+re-runs independently, so `/comp4020:onboard` later with "use my course credits
+in this repo" does just that. Or ask to "set up my key".
 
 ### doctor
 
-The setup **diagnostician**, and quickstart's counterpart: one
-`scripts/doctor.sh` run reports Git, the GitHub CLI and its auth, course org
-membership, flyctl, the proxy config and a live `/api/me` probe (which doubles
-as an "am I on the VPN?" check), the crit group, the template's pre-commit key
-guard, Chrome, `jq` and mise. The script gathers facts on any machine — no `jq`,
-no configuration, macOS or Linux or WSL — and the skill interprets them,
-cross-checks the site's own tool list, and **offers to fix** what's broken,
-confirming each step. Invoke with `/comp4020:doctor` or ask "is my setup
-right?".
+The setup **diagnostician**, and onboard's counterpart: one `scripts/doctor.sh`
+run reports Git, the GitHub CLI and its auth, course org membership, flyctl, the
+proxy config and a live `/api/me` probe (which doubles as an "am I on the VPN?"
+check), the crit group, the template's pre-commit key guard, Chrome, `jq` and
+mise. The script gathers facts on any machine — no `jq`, no configuration, macOS
+or Linux or WSL — and the skill interprets them, cross-checks the site's own
+tool list, and **offers to fix** what's broken, confirming each step. Invoke
+with `/comp4020:doctor` or ask "is my setup right?".
 
 ### deadline-radar
 
@@ -75,11 +74,11 @@ The proactive view of the schedule: what's due this week and next, sorted by
 date with weights, leading with the single most urgent thing. The cutoff
 arithmetic — the teaching-week calendar, the mid-semester break, and the crit
 cutoff two hours before _your_ group's session — lives in
-`scripts/next-deadline.sh`, which **new-week**, **submission-preflight** and
+`scripts/next-deadline.sh`, which **start**, **submission-preflight** and
 **ship** call too, so every skill quotes the same deadline. Invoke with
 `/comp4020:deadline-radar` or ask "what's due?" / "what should I work on?".
 
-### new-week
+### start
 
 Sets up the repo for a new weekly crit prototype or an assignment. The course
 provisions each repo (private, from the starter template); this skill clones it,
@@ -90,7 +89,7 @@ keeping their stack or switching, refuses to carry the prototype source or
 reflections across, and pulls the week's spec so the student can turn it into
 their own tests. Knows which weeks don't start a fresh prototype (the retro
 crits, and weeks 9–11, which run on the final-project repo). Invoke with
-`/comp4020:new-week` or ask to "start this week's prototype".
+`/comp4020:start` or ask to "start this week's prototype".
 
 ### submission-preflight
 
@@ -124,8 +123,8 @@ Two conventions hold the skills together, and both are enforced in CI
 - **one owner per mechanic.** A fact or procedure that more than one skill needs
   lives in exactly one place, and the others point at it: the setup checks in
   `scripts/doctor.sh`, the deadline arithmetic in `scripts/next-deadline.sh`,
-  settings changes in **quickstart**, diagnosis in **doctor**, the status line
-  in the companion plugin. Restating one in a second skill is how they drift.
+  settings changes in **onboard**, diagnosis in **doctor**, the status line in
+  the companion plugin. Restating one in a second skill is how they drift.
 - **the site is ground truth.** Course facts — dates, weights, groups, tool
   lists, policies — are fetched from
   `comp.anu.edu.au/courses/comp4020-agentic-coding-studio`, never hardcoded
