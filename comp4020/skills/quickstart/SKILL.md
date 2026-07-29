@@ -46,13 +46,17 @@ The student gets theirs from Canvas — you can't fetch it for them, it's behind
 an access quiz:
 
 1. On [canvas.anu.edu.au](https://canvas.anu.edu.au), in the course, find the
-   **"Start here"** module (it unlocks on Wednesday of week 1; the
+   **"Start here"** module (open from 10am Wednesday of week 1; the
    [course access page](https://comp.anu.edu.au/courses/comp4020-agentic-coding-studio/topics/llm-access/#step-2-get-your-key)
    carries the current release detail).
-2. Work through it in order: tick off the VPN step, submit the pre-course survey
-   (not assessed — no right answers, and nothing in it affects their key), then
-   take the short access quiz, which is the step that gates it — unlimited
-   attempts, so retake until 100%.
+2. Work through it in order — Canvas unlocks each item only as the one before it
+   is finished, so a step that looks locked is usually just waiting on the
+   previous one. Tick off the VPN step. Next is a **research participation**
+   page: that one is voluntary, carries no completion requirement, and gates
+   nothing — taking it or skipping it leaves the rest of the module unaffected.
+   Then submit the pre-course survey (not assessed — no right answers, and
+   nothing in it affects their key), and take the short access quiz, which is
+   the step that gates the key — unlimited attempts, so retake until 100%.
 3. Passing unlocks the **"Your Claude Code API key"** assignment. Open it and
    read the instructor comment on their submission — the key is the value
    starting with `sk-`.
