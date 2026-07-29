@@ -46,10 +46,27 @@ have() { command -v "$1" >/dev/null 2>&1; }
 
 os=$(uname -s 2>/dev/null || echo unknown)
 platform=$os
-if [ "$os" = "Linux" ] && grep -qi microsoft /proc/version 2>/dev/null; then
-  platform="WSL"
+windows_shell=0
+case "$os" in
+Linux)
+  grep -qi microsoft /proc/version 2>/dev/null && platform="WSL"
+  ;;
+MINGW* | MSYS* | CYGWIN*)
+  # Git for Windows ships Git Bash and the course requires git, so a Windows
+  # student can end up running this despite the site's WSL2 steer. Report
+  # rather than refuse: every row below is a true fact about *this* shell. The
+  # trap worth naming is that a WSL toolchain is invisible from here and vice
+  # versa, so a student straddling both sees each half as broken from the other.
+  windows_shell=1
+  platform="Windows ($os)"
+  ;;
+esac
+
+if [ "$windows_shell" = 1 ]; then
+  row WARN platform "$platform — the course expects WSL2; these rows describe this shell only, so tools installed inside WSL won't show up here"
+else
+  row INFO platform "$platform"
 fi
-row INFO platform "$platform"
 
 # --- git --------------------------------------------------------------------
 
@@ -237,7 +254,9 @@ if [ "$os" = "Darwin" ]; then
   mac_chrome="/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
   [ -x "$mac_chrome" ] && chrome_raw=$("$mac_chrome" --version 2>/dev/null)
 else
-  if [ "$platform" = "WSL" ] && have powershell.exe; then
+  # Git Bash reaches the Windows host exactly as WSL does, and on both the
+  # browser is a Windows install that no Unix binary name will find.
+  if { [ "$platform" = "WSL" ] || [ "$windows_shell" = 1 ]; } && have powershell.exe; then
     chrome_version=$(powershell.exe -NoProfile -Command \
       "\$paths = @('C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe', 'C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe', \"\$env:LOCALAPPDATA\\Google\\Chrome\\Application\\chrome.exe\"); \$chrome = \$paths | Where-Object { Test-Path \$_ } | Select-Object -First 1; if (\$chrome) { (Get-Item \$chrome).VersionInfo.ProductVersion }" \
       2>/dev/null | tr -d '\r' | head -1)

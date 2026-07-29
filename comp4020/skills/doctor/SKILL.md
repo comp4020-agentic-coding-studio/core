@@ -115,11 +115,20 @@ Most rows say what they mean. These are the ones that need judgement:
   sufficient. Explain that tutor support reproduces runtime problems with mise;
   offer `mise install` from the repo root if they want the supported path.
 
-Two things the script deliberately doesn't check. **Permission mode**: if you
-can see they're in default or plan mode, mention auto mode as a flow improvement
-— never nudge toward `--dangerously-skip-permissions`. **Native Windows**: no
-Unix shell means most of this doesn't apply; point at the WSL2 warning on the
-onboarding page.
+One thing the script deliberately doesn't check: **permission mode**. If you can
+see they're in default or plan mode, mention auto mode as a flow improvement —
+never nudge toward `--dangerously-skip-permissions`.
+
+**Windows.** The script runs on macOS, Linux, WSL and Git Bash, and says which
+in the `platform` row. Don't assume a Windows student has no Unix shell: Git for
+Windows ships Git Bash, and the course requires git, so it's the likeliest way
+they land here. On Git Bash the `platform` row is a WARN naming the shell, and
+every row below it is true of _that shell only_ — which is the failure worth
+explaining, because a student running WSL alongside it sees each half report the
+other's tools as missing. Steer them to WSL2 per the onboarding page and get
+them checking from one place, rather than debugging rows one at a time. Chrome
+is the exception that already works either way: it's looked up through
+`powershell.exe` on the Windows host from both WSL and Git Bash.
 
 ## 4. Report, then offer to fix
 

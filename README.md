@@ -62,11 +62,12 @@ in this repo" does just that. Or ask to "set up my key".
 The setup **diagnostician**, and onboard's counterpart: one `scripts/doctor.sh`
 run reports Git, the GitHub CLI and its auth, course org membership, flyctl, the
 proxy config and a live `/api/me` probe (which doubles as an "am I on the VPN?"
-check), the crit group, the template's pre-commit key guard, Chrome, `jq` and
-mise. The script gathers facts on any machine — no `jq`, no configuration, macOS
-or Linux or WSL — and the skill interprets them, cross-checks the site's own
-tool list, and **offers to fix** what's broken, confirming each step. Invoke
-with `/comp4020:doctor` or ask "is my setup right?".
+check), the crit group, the template's pre-commit key guard, Claude Code,
+Chrome, `jq` and mise. The script gathers facts on any machine — no `jq`, no
+configuration, macOS or Linux or WSL or Git Bash — and the skill interprets
+them, cross-checks the site's own tool list, and **offers to fix** what's
+broken, confirming each step. Invoke with `/comp4020:doctor` or ask "is my setup
+right?".
 
 ### deadline-radar
 
