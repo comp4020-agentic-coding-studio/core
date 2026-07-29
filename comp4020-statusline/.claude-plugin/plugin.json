@@ -1,6 +1,6 @@
 {
   "name": "comp4020-statusline",
-  "version": "0.3.2",
+  "version": "0.3.3",
   "description": "Optional companion to the comp4020 plugin: shows which credits each session burns — your weekly strproxy budget on course credits, a dim 'own plan' tag otherwise",
   "author": {
     "name": "COMP4020 teaching team",
