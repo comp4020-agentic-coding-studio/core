@@ -114,14 +114,16 @@ Notes:
 - **Never echo the key back**, and never suggest sending it anywhere except the
   strproxy host.
 - **The key never goes in a tracked file.** Most students use
-  `~/.claude/settings.json`, outside every repo. The dual-plan branch uses only
-  the template's explicitly ignored `.claude/settings.local.json`, after
-  `git check-ignore` proves it is protected. The templates also ship a
-  pre-commit hook (activated by `pnpm install`) that blocks any commit
-  containing something key-shaped — if a student hits that block, the fix is to
-  take the key out of the file, never `git commit --no-verify`. A key that has
-  already been pushed is leaked: private Ed thread to the teaching team to get
-  it rotated.
+  `~/.claude/settings.json` — the file in their home directory, outside every
+  repo. Don't confuse it with a `.claude/settings.json` _inside_ a repo, which
+  git tracks. The dual-plan branch uses only `.claude/settings.local.json`,
+  after `git check-ignore` proves it is protected; the templates ignore the
+  whole `.claude/` directory, so both names are covered there. The templates
+  also ship a pre-commit hook (activated by `pnpm install`) that blocks any
+  commit containing something key-shaped — if a student hits that block, the fix
+  is to take the key out of the file, never `git commit --no-verify`. A key that
+  has already been pushed is leaked: private Ed thread to the teaching team to
+  get it rotated.
 
 ## 3. Verify the round-trip
 
@@ -189,5 +191,5 @@ the plugin does. Keep it to a sentence — don't over-explain.
 Two things worth offering once, never installing unasked: the optional
 `comp4020-statusline` plugin, which keeps the week's spend at the bottom of
 every session (offer it more strongly to a dual-plan student — it's the ambient
-"which wallet is this?" indicator), and **balance** for the authoritative
-figure on demand.
+"which wallet is this?" indicator), and **balance** for the authoritative figure
+on demand.
