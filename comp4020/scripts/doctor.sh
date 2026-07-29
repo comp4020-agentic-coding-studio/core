@@ -284,6 +284,68 @@ else
   row FAIL pnpm "not installed — starter templates need pnpm 11"
 fi
 
+# --- course plugins ---------------------------------------------------------
+#
+# These churn early in the semester, and a stale copy answers with last week's
+# facts rather than failing loudly. The marketplace is a git clone, so with the
+# network up compare against origin: the checkout itself only moves on
+# `claude plugin marketplace update`, and a student who has never run that would
+# otherwise be told they're current.
+
+MARKET="$HOME/.claude/plugins/marketplaces/comp4020"
+REGISTRY="$HOME/.claude/plugins/installed_plugins.json"
+
+# First "version": "..." on stdin. Every manifest puts the plugin's own version
+# first, which is what both callers want.
+json_version() {
+  sed -n 's/.*"version"[[:space:]]*:[[:space:]]*"\([^"]*\)".*/\1/p' | head -1
+}
+
+# The version the registry records for $1, or empty if it isn't installed. The
+# file's top-level "version": 2 is skipped by keying on the plugin id first.
+installed_version() {
+  [ -f "$REGISTRY" ] || return 0
+  awk -v want="\"$1@comp4020\"" '
+    index($0, want) > 0 { found = 1; next }
+    found && /"version"[[:space:]]*:/ {
+      sub(/.*"version"[[:space:]]*:[[:space:]]*"/, "")
+      sub(/".*/, "")
+      print
+      exit
+    }' "$REGISTRY"
+}
+
+for plug in comp4020 comp4020-statusline; do
+  manifest="$plug/.claude-plugin/plugin.json"
+  installed=$(installed_version "$plug")
+
+  if [ -z "$installed" ]; then
+    # The status line is opt-in, so its absence is a fact, not a fault.
+    if [ "$plug" = "comp4020-statusline" ]; then
+      row INFO "plugin-$plug" "not installed (optional status line)"
+    else
+      row FAIL "plugin-$plug" "not installed — claude plugin install $plug@comp4020"
+    fi
+    continue
+  fi
+
+  latest=""
+  if [ "$NETWORK" = "1" ] && [ -d "$MARKET/.git" ]; then
+    git -C "$MARKET" fetch --quiet origin 2>/dev/null &&
+      latest=$(git -C "$MARKET" show "origin/main:$manifest" 2>/dev/null | json_version)
+  fi
+  [ -z "$latest" ] && [ -f "$MARKET/$manifest" ] &&
+    latest=$(json_version <"$MARKET/$manifest")
+
+  if [ -z "$latest" ]; then
+    row INFO "plugin-$plug" "$installed installed (could not check for a newer one)"
+  elif [ "$installed" = "$latest" ]; then
+    row PASS "plugin-$plug" "$installed"
+  else
+    row WARN "plugin-$plug" "$installed installed, $latest available — claude plugin update $plug@comp4020"
+  fi
+done
+
 # --- supporting tooling -----------------------------------------------------
 
 if have jq; then

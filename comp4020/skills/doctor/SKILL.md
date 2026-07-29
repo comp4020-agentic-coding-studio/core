@@ -4,10 +4,11 @@ description:
   Checks a COMP4020/COMP8020 student's machine against the course's required
   environment — Git, the GitHub CLI (gh), course GitHub org membership, flyctl,
   Claude Code's proxy config, Chrome, Node, pnpm, mise and jq — including
-  whether the tools that hit external services are actually authenticated, then
-  offers to fix what's broken. Use for "check my setup", "is everything
-  installed", "why isn't gh/fly/claude working", "am I in the course GitHub
-  org", or any setup/environment health check.
+  whether the tools that hit external services are actually authenticated and
+  whether the course plugins are on their latest versions, then offers to fix
+  what's broken. Use for "check my setup", "is everything installed", "why isn't
+  gh/fly/claude working", "am I in the course GitHub org", "are my course
+  plugins up to date", or any setup/environment health check.
 allowed-tools: Bash, Read, Edit, Write, WebFetch
 ---
 
@@ -76,6 +77,15 @@ Most rows say what they mean. These are the ones that need judgement:
   single org name to assert. What matters is that the account shows a `SHARED`
   org at all; only a `PERSONAL` one means the invitation hasn't been accepted,
   and those go out ahead of the full-stack half.
+- **`plugin-comp4020` WARN** — the course skills churn early in the semester, so
+  a stale copy answers with last week's facts instead of failing loudly. The fix
+  is `claude plugin update comp4020@comp4020` and a restart, which is why it's
+  worth raising even mid-week. If the update says the plugin isn't installed at
+  that scope, it was installed for one repo rather than the machine: re-run it
+  with the matching `--scope local` (or `project`) from inside that repo. The
+  row compares against the marketplace's `origin`, not the local checkout, so a
+  student who has never run `claude plugin marketplace update` still gets a true
+  answer.
 - **`crit-group` WARN** — nothing breaks, but **deadline-radar**,
   **submission-preflight** and **ship** can only say "two hours before your
   session" instead of naming the real cutoff.
