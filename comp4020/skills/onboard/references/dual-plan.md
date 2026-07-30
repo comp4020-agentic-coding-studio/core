@@ -33,9 +33,9 @@ Project settings override user settings, so inside the repo every session runs
 on course credits; everywhere else Claude Code falls back to their own
 subscription or key, untouched.
 
-The course templates explicitly ignore this path, and the pre-commit key guard
-backstops it. Do not assume that protection in any other repo: **before writing
-the file**, prove Git ignores it:
+The course templates ignore the whole `.claude/` directory, this path included,
+and the pre-commit key guard backstops it. Do not assume that protection in any
+other repo: **before writing the file**, prove Git ignores it:
 
 ```sh
 git check-ignore .claude/settings.local.json

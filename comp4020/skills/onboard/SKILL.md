@@ -113,17 +113,20 @@ Notes:
   common cause of a "revoked-looking" key that's actually fine.
 - **Never echo the key back**, and never suggest sending it anywhere except the
   strproxy host.
-- **The key never goes in a tracked file.** Most students use
-  `~/.claude/settings.json` — the file in their home directory, outside every
-  repo. Don't confuse it with a `.claude/settings.json` _inside_ a repo, which
-  git tracks. The dual-plan branch uses only `.claude/settings.local.json`,
-  after `git check-ignore` proves it is protected; the templates ignore the
-  whole `.claude/` directory, so both names are covered there. The templates
-  also ship a pre-commit hook (activated by `pnpm install`) that blocks any
-  commit containing something key-shaped — if a student hits that block, the fix
-  is to take the key out of the file, never `git commit --no-verify`. A key that
-  has already been pushed is leaked: private Ed thread to the teaching team to
-  get it rotated.
+- **The key never goes in a tracked file.** `~/.claude/settings.json` — the file
+  in their home directory, outside every repo — satisfies that by construction,
+  and is where most students' key belongs. A student asking whether a key there
+  is unsafe, or should be moved or deleted, has misread the warning: the answer
+  is no, leave it. What git tracks is a `.claude/settings.json` _inside_ a repo,
+  which is a different file. The dual-plan branch writes
+  `.claude/settings.local.json`, and only after `git check-ignore` proves that
+  path is ignored — which the course templates guarantee by ignoring the whole
+  `.claude/` directory, and which no other repo guarantees. The templates also
+  ship a pre-commit hook (activated by `pnpm install`) that blocks any commit
+  containing something key-shaped — if a student hits that block, the fix is to
+  take the key out of the file, never `git commit --no-verify`. A key that has
+  already been pushed is leaked: private Ed thread to the teaching team to get
+  it rotated.
 
 ## 3. Verify the round-trip
 
