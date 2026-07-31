@@ -66,7 +66,9 @@ Classify each PASS / WARN / FAIL:
   in `reflections/` (the `reflection` column of the row from step 1 — the marker
   reads that exact name, so a misnamed one reads as no reflection at all), and
   `CLAUDE.md`. A failure here is a FAIL — these are read by the marker on every
-  deliverable.
+  deliverable, and on a crit the reflection is part of the shipped mark itself:
+  the cutoff sweep looks for that exact filename, so a live prototype with no
+  reflection beside it scores 0 for shipping.
 
 ## 3. Deploy checks (when a live URL is expected)
 
