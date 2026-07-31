@@ -68,7 +68,10 @@ Classify each PASS / WARN / FAIL:
   `CLAUDE.md`. A failure here is a FAIL — these are read by the marker on every
   deliverable, and on a crit the reflection is part of the shipped mark itself:
   the cutoff sweep looks for that exact filename, so a live prototype with no
-  reflection beside it scores 0 for shipping.
+  reflection beside it scores 0 for shipping. The same sweep reads CI, and green
+  checks are worth the other half of that mark --- so on a crit, a red or
+  still-running build is worth flagging as a WARN even when everything else
+  passes, with the reason stated: the sweep fires cutoff+15 and won't wait.
 
 ## 3. Deploy checks (when a live URL is expected)
 
