@@ -102,9 +102,9 @@ Most rows say what they mean. These are the ones that need judgement:
   row compares against the marketplace's `origin`, not the local checkout, so a
   student who has never run `claude plugin marketplace update` still gets a true
   answer.
-- **`crit-group` WARN** — nothing breaks, but **radar**,
-  **preflight** and **ship** can only say "two hours before your
-  session" instead of naming the real cutoff.
+- **`crit-group` WARN** — nothing breaks, but **radar**, **preflight** and
+  **ship** can only say "two hours before your session" instead of naming the
+  real cutoff.
 - **`committed-key` FAIL** — report the file and line **only, never the matched
   value**. The key has to come out of the file; if the commit was ever pushed,
   treat it as leaked and get it rotated via a private Ed thread.
