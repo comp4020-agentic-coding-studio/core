@@ -36,8 +36,8 @@ This table is the routing map for course **content** — it isn't exhaustive of
 every live endpoint. Course **logistics** data (crit-group session times and
 cutoffs) lives at `/api/crit-groups.json`, not a content node, and course
 **budget** data lives at strproxy's own `/api/me`, not the course site at all —
-both are handled by other skills (**radar**, **preflight**,
-**ship**, **start**, **doctor**, **balance**), not this one.
+both are handled by other skills (**radar**, **preflight**, **ship**, **start**,
+**doctor**, **balance**), not this one.
 
 Node collections in the API: `topics` (concepts, policies, how-to guides),
 `assessments`, `crits`, `lectures`. The **people** collection (convenor, TAs,
@@ -70,6 +70,14 @@ not exist — read the HTML page instead.
   enrolment, conduct) and **how-to guides** (submitting work, tool setup) —
   topics nodes tagged `admin` in the index. Fetch the matching node's JSON and
   answer from its `body`.
+- **What to hand in, and how long it should be** — the artefact bundle
+  (`PROCESS.md`, `reflections/`, `CLAUDE.md`, the checks) and every indicative
+  word count live on `topics/assessment`, at `#what-you-submit` and
+  `#word-counts`. Route there for any "how much detail / how long / what exactly
+  do I submit" question, whatever the deliverable. A crit or assessment node's
+  `spec` names the artefacts but carries no lengths, and
+  `topics/studio-crit-model` covers only how a crit week is marked — neither
+  answers a length question on its own.
 - **What a lecture or week covers** — `lectures` nodes; their `related` edges
   list the topics each deck covers.
 - **Who teaches the course / contact details** — fetch the `/people/` listing
