@@ -79,9 +79,15 @@ Most rows say what they mean. These are the ones that need judgement:
   possible moment to find out. Worth fixing now even though nothing is broken
   today: `mise use -g gh` shadows the old build with a current one.
 - **`org` FAIL** — read the detail. A pending invitation, a missing `read:org`
-  scope, and no invitation at all have three different fixes, and the script
-  says which one it found. Never guess between them: telling a student to email
-  the convenor about a scope problem on their own laptop wastes everyone's week.
+  scope (fix: `gh auth refresh -h github.com -s read:org`), a rejected token and
+  no invitation at all have four different fixes, and the script says which one
+  it found. Never guess between them: telling a student to email the convenor
+  about a scope problem on their own laptop wastes everyone's week. Only the
+  detail naming the convenor's end is a reason to contact us.
+- **`org` WARN** — the check couldn't see a membership either way: the API was
+  unreachable, or answered with something unexpected. That is not evidence they
+  aren't a member — students who can already clone and push their repo are
+  living proof. Have them re-run it before anyone acts on it.
 - **`flyctl` WARN** — only matters from the full-stack half: checked at the week
   7 crit, used from week 8. Say so rather than presenting it as an outstanding
   failure in week 3; onboard step 7 on the site is the whole job

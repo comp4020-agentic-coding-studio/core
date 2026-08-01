@@ -94,17 +94,39 @@ if have gh; then
   fi
 
   if [ "$NETWORK" = "1" ]; then
-    org_state=$(gh api "/user/memberships/orgs/$ORG" --jq .state 2>/dev/null)
-    if [ -n "$org_state" ]; then
+    # Keep the headers: the HTTP status is the fact worth reading. An empty body
+    # means "a 404, a 403, a rate limit or a dropped connection" — indistinguishable
+    # once it's gone, and calling all of them "not a member" points a student at
+    # the convenor for a problem on their own laptop. The response also carries
+    # the token's scopes, so the same request answers whether the check was even
+    # able to see a membership (`gh auth status` can't be grepped for that: its
+    # missing-scope error names `read:org` too).
+    org_out=$(gh api -i "/user/memberships/orgs/$ORG" 2>/dev/null)
+    org_status=$(printf '%s\n' "$org_out" | head -1 | awk '{print $2}')
+    org_scopes=$(printf '%s\n' "$org_out" | grep -i '^x-oauth-scopes:' | head -1)
+
+    case "$org_scopes" in
+    *read:org* | *admin:org*) org_scope_ok=1 ;;
+    *) org_scope_ok=0 ;;
+    esac
+
+    if [ "$org_status" = "200" ]; then
+      org_state=$(printf '%s' "$org_out" | tr ',' '\n' | grep -o '"state":"[a-z]*"' | head -1 | cut -d'"' -f4)
       case "$org_state" in
       active) row PASS org "active member of $ORG" ;;
       pending) row FAIL org "invitation to $ORG is unaccepted (they expire after 7 days)" ;;
-      *) row WARN org "unexpected membership state: $org_state" ;;
+      *) row WARN org "unexpected membership state: ${org_state:-none reported}" ;;
       esac
-    elif gh auth status 2>&1 | grep -Eq "read:org|admin:org"; then
+    elif [ -z "$org_status" ]; then
+      row WARN org "couldn't reach the GitHub API, so membership is unknown — re-run before reading anything into it"
+    elif [ "$org_scope_ok" = 0 ]; then
+      row FAIL org "cannot read membership (HTTP $org_status): the gh token has no read:org scope, so this check is blind"
+    elif [ "$org_status" = "404" ]; then
       row FAIL org "no membership found, and gh can read org membership — so no invitation is outstanding (convenor's end)"
+    elif [ "$org_status" = "401" ]; then
+      row FAIL org "GitHub rejected the gh token (401), so membership is unknown"
     else
-      row FAIL org "cannot read membership: gh is missing the read:org scope, so this check is blind"
+      row WARN org "membership check returned HTTP $org_status, so membership is unknown"
     fi
   else
     row SKIP org "network checks disabled"
