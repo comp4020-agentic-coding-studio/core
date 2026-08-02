@@ -1,12 +1,10 @@
 ---
 name: preflight
-description:
-  Checks that a COMP4020/COMP8020 student's work is actually submittable before
+description: Checks that a COMP4020/COMP8020 student's work is actually submittable before
   a crit or assignment deadline — the local repo is committed and pushed to
-  GitHub, matches the assessment spec's required structure, and (in the
-  full-stack half) is deployed and reachable. Use before a submission, or when
-  the user asks "am I ready to submit", "is my crit/assignment ready", or "did I
-  push everything".
+  GitHub, matches the published brief and spec, and (in the full-stack half) is
+  deployed and reachable. Use before a submission, or when the user asks "am I
+  ready to submit", "is my crit/assignment ready", or "did I push everything".
 allowed-tools: Bash, Read, WebFetch, Glob, Grep
 ---
 
@@ -14,8 +12,8 @@ allowed-tools: Bash, Read, WebFetch, Glob, Grep
 
 Catch the things that cost marks for no good reason — uncommitted work, an
 unpushed branch, a private repo the marker can't see, a deploy that 500s —
-before a crit or assignment deadline, not after. This crosses the **assessment
-spec** (from the course site) with the **student's actual repo state**.
+before a crit or assignment deadline, not after. This crosses the published
+**brief and spec** with the **student's actual repo state**.
 
 ## 1. Which submission, and which repo?
 
@@ -33,9 +31,10 @@ spec** (from the course site) with the **student's actual repo state**.
   an assessment row, `time_known no` means the time of day is on the assessment
   page, not in the data — fetch it rather than assuming end-of-day.
 
-- **The spec**: fetch the node's own JSON (`/api/crits/<slug>.json` or
-  `/api/assessments/<slug>.json`, both linked from the script's `page` column):
-  the `body` states what to submit and how, and `meta` carries `weight`.
+- **The brief and spec**: fetch the node's own JSON
+  (`/api/crits/<slug>.json` or `/api/assessments/<slug>.json`, both linked from
+  the script's `page` column). The `body` is the full brief, `spec` is the fixed
+  contract, and `meta` carries `weight`.
 - **The repo**: default to the git repo in the current directory. Confirm it's
   the right one (`gh repo view` / `git remote -v`) before judging it.
 
@@ -56,10 +55,11 @@ Classify each PASS / WARN / FAIL:
   close to the cutoff is a WARN, not a FAIL: it's the normal state right up
   until the student ships. Point them at **ship** rather than flipping it
   yourself.
-- **Required structure** — read the spec `body` for anything concrete it demands
-  (a README, a specific entry point, a licence, a particular directory). Check
-  what's mechanically checkable and present the rest as a short manual checklist
-  rather than guessing pass/fail on prose requirements.
+- **Required structure** — read the brief `body` and fixed `spec` lines for
+  anything concrete they demand (a README, a specific entry point, a licence, a
+  particular directory). Check what's mechanically checkable and present the
+  rest as a short manual checklist rather than guessing pass/fail on prose
+  requirements.
 - **Process evidence** — run `pnpm check:evidence` if the script exists. It
   verifies the every-submission artefacts: `PROCESS.md` with its boilerplate
   replaced and every cited commit resolving, a correctly named reflection entry
@@ -98,7 +98,7 @@ spec asks for a live URL; otherwise skip.
 - List blockers (FAIL) first with the exact fix, then WARNs, then the manual
   checklist for anything you couldn't verify mechanically.
 - Restate the due date/time and how much the piece is worth, and cite the
-  assessment page URL so they can double-check the spec themselves.
+  assessment page URL so they can double-check the brief and spec themselves.
 - Offer to run the fixes you can (commit, push), confirming each. Don't submit
   _for_ them — submission is their deliberate act; you get them to the point
   where it's a single clean step.

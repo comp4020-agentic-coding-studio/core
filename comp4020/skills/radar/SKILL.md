@@ -1,7 +1,6 @@
 ---
 name: radar
-description:
-  Tells a COMP4020/COMP8020 student what's coming up — which crits and
+description: Tells a COMP4020/COMP8020 student what's coming up — which crits and
   assessments are due this week and next, sorted by date, with weights — by
   reading today's date and the live course schedule. Use for "what's due", "what
   should I be working on", "what's coming up", "when's my next deadline", or a
@@ -53,7 +52,7 @@ not-yet-finalised.
 - Lead with the single most urgent thing: "Next up: **<title>**, due <date/time>
   (<weight>%)."
 - Then a short dated list of what's in range — this week and next — each with
-  its weight and its page URL so they can open the spec.
+  its weight and its page URL so they can open the brief and spec.
 - Flag anything `past` gently. They may have submitted already, or have an
   extension; don't assume they've missed it.
 - Keep it a radar, not a schedule dump. Surface the near horizon and offer "want

@@ -1,7 +1,6 @@
 ---
 name: start
-description:
-  Sets up a COMP4020/COMP8020 student's repo for a new deliverable — a weekly
+description: Sets up a COMP4020/COMP8020 student's repo for a new deliverable — a weekly
   crit prototype or an assignment. Clones the repo the course provisioned for
   them, carries their CLAUDE.md / AGENTS.md harness forward from last week,
   pulls the spec from the course API, and helps them turn its checkable lines
@@ -55,6 +54,12 @@ they're in and offer **onboard** step 5 so it's never asked again.
 Then read the target's own JSON — `/api/crits/<slug>.json` for `kind: crit`,
 `/api/assessments/<slug>.json` for `kind: assessment` — for the `spec` (the
 published contract) and the `body` (the full brief).
+
+Keep that course vocabulary intact when speaking to the student: the **brief**
+poses the problem and leaves room for their response; the **spec** is the fixed
+contract every response must satisfy. Their prompt, plan and task list record
+their decisions. Do not call any of those a "working spec" or create a second
+spec document in the repo.
 
 Entries can share a prefix: the retro crits point at the assignment repo they
 demo, and the final project's repo prefix (`comp4020-final` — the actual repo is
@@ -181,7 +186,7 @@ before any prototype work, with a message that says where it came from
 (`harness: carry forward from week N`). The first commit in the repo is then an
 honest answer to "where did this CLAUDE.md come from".
 
-## 6. Turn the spec into tests
+## 6. Turn the checkable spec lines into tests
 
 The week's published `spec` (step 1) is the contract the tutor verifies at the
 crit. Turning it into automated backpressure is the student's work — the
@@ -193,7 +198,7 @@ There is nothing to record locally about which deliverable this is:
 name and the course API, so an old but well-named reflection cannot accidentally
 satisfy the current one.
 
-Walk the spec with the student, line by line, and sort it:
+Walk the fixed spec with the student, line by line, and sort it:
 
 - **mechanically checkable** — "deployed and live", "the core flow persists
   across a reload", "a navigation landmark". Write tests for these in their own
@@ -217,8 +222,10 @@ green are exactly the process evidence `PROCESS.md` wants to cite.
   as off piste. The invariants and everything carried forward should be green
   before the student starts — a red check later is then theirs, not inherited.
   Their fresh spec tests are the exception: red is their starting state.
-- read them the week's spec and brief from the site, and stop there. Building
-  the prototype is their work, not yours.
+- read them the week's brief and spec from the site, name what is open in the
+  brief and what is fixed in the spec, and stop there. Their next step is to
+  interrogate both and agree a plan with the agent. Do not supply that plan or
+  begin building inside **start**.
 - remind them of the two things the checks can't enforce: commit as you go, and
   the repo stays private until the cutoff.
 
