@@ -101,7 +101,10 @@ if have gh; then
     # the token's scopes, so the same request answers whether the check was even
     # able to see a membership (`gh auth status` can't be grepped for that: its
     # missing-scope error names `read:org` too).
-    org_out=$(gh api -i "/user/memberships/orgs/$ORG" 2>/dev/null)
+    # `gh api` accepts a relative REST endpoint.  Keeping it relative avoids
+    # Git Bash/MSYS translating a leading slash into a Windows filesystem path
+    # before gh sees it.
+    org_out=$(gh api -i "user/memberships/orgs/$ORG" 2>/dev/null)
     org_status=$(printf '%s\n' "$org_out" | head -1 | awk '{print $2}')
     org_scopes=$(printf '%s\n' "$org_out" | grep -i '^x-oauth-scopes:' | head -1)
 

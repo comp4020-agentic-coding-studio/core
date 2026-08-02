@@ -151,7 +151,7 @@ the state; if it's `pending`, one call accepts it (their account, so confirm
 first):
 
 ```sh
-gh api --method PATCH /user/memberships/orgs/comp4020-agentic-coding-studio \
+gh api --method PATCH user/memberships/orgs/comp4020-agentic-coding-studio \
   -f state=active
 ```
 
