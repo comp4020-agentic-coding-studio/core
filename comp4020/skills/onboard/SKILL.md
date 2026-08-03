@@ -65,6 +65,11 @@ They only ever see their own key. If the assignment stays locked, the comment is
 missing, or it says "revoked", that's a convenor issue — not Anthropic support,
 not the strproxy maintainers — so point them at comp4020@anu.edu.au.
 
+An error from Claude Code naming a revoked **OAuth** token is not that case, and
+not a convenor issue: the proxy never emits one, so a leftover claude.ai login
+is taking precedence over the course key. Fix it in place — `/logout`, restart,
+and check the step-2 `env` block landed.
+
 Ask them to paste the key when they have it.
 
 ## 2. Write it into settings safely
