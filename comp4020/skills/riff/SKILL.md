@@ -82,12 +82,15 @@ the exercise.
 Don't restart the prototype. The point is to take this one somewhere, and a
 rewrite throws away the thing that made the starting point worth having.
 
-## 5. Push early
+## 5. Push early, and keep `main` green
 
-A push runs the checks and deploys to the Pages URL, so the share-back is the
-live site. Push something within the first ten minutes — a comment, the failing
-test — so the pod finds out the path works while there's still time to fix it,
-rather than at the share-back. Then keep pushing as you go.
+A push to `main` runs `pnpm check` and then deploys to the Pages URL, so the
+share-back is the live site with nothing to set up. Push something in the first
+ten minutes so the pod proves that path while there's still time to fix it.
+
+The deploy only runs on a green check, so a red test on `main` leaves the live
+site sitting at the last commit that passed. Land work-in-progress on a branch
+and open a PR — the checks run there too, and merging is what deploys.
 
 ## 6. The share-back
 
