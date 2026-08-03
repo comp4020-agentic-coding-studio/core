@@ -110,6 +110,16 @@ and verifies the live URL actually serves. In the final-project run (weeks 9–1
 it also tags the crit-cutoff state. Invoke with `/comp4020:ship` or say "ship
 it" / "make my repo public".
 
+### riff
+
+Sets a pod up for the riff, the part of the crit session that starts from the
+crit agent's prototype. The repos are provisioned per group per crit and
+numbered, because pods are dealt in the room — this skill works out which crit
+is running, asks which number the pod was dealt, clones
+`comp4020-riff<N>-<group>-<pod>` (a full copy of the agent's repo, tagged
+`riff-start`), gets the checks green, and pushes early so the share-back is the
+live Pages URL. Invoke with `/comp4020:riff` or ask to "start the riff".
+
 ### help
 
 Lists everything above and routes to the right skill. Invoke with

@@ -26,6 +26,7 @@ matches a skill's job.
 | Starting this week's prototype or an assignment, carrying CLAUDE.md forward | **start**           |
 | Whether your work is ready to submit before a deadline                      | **preflight**       |
 | Making your repo public and getting it deployed at the cutoff               | **ship**            |
+| The riff in the crit session — which repo your pod works in, and pushing it | **riff**            |
 
 A natural first-week path is **onboard** → **doctor**; a natural crit-week path
 is **radar** → **start** → **preflight** → **ship**.
