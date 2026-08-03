@@ -75,9 +75,9 @@ The proactive view of the schedule: what's due this week and next, sorted by
 date with weights, leading with the single most urgent thing. The cutoff
 arithmetic — the teaching-week calendar, the mid-semester break, and the crit
 cutoff two hours before _your_ group's session — lives in
-`scripts/next-deadline.sh`, which **start**, **preflight** and
-**ship** call too, so every skill quotes the same deadline. Invoke with
-`/comp4020:radar` or ask "what's due?" / "what should I work on?".
+`scripts/next-deadline.sh`, which **start**, **preflight** and **ship** call
+too, so every skill quotes the same deadline. Invoke with `/comp4020:radar` or
+ask "what's due?" / "what should I work on?".
 
 ### start
 
@@ -99,17 +99,16 @@ cross-references the assessment spec (from the site) with the local repo — cle
 tree, everything pushed to GitHub, marker can see it, required structure present
 — and, in the full-stack half, that the deploy is healthy and reachable. Offers
 to run the safe fixes (commit, push), but leaves the actual submission to the
-student. Invoke with `/comp4020:preflight` or ask "am I ready to
-submit?".
+student. Invoke with `/comp4020:preflight` or ask "am I ready to submit?".
 
 ### ship
 
-The one irreversible act in the course, treated accordingly: re-runs
-preflight, scans the working tree **and history** for secrets, then —
-with explicit confirmation — flips the repo public, enables GitHub Pages (as a
-workflow site), and verifies the live URL actually serves. In the final-project
-run (weeks 9–11) it also tags the crit-cutoff state. Invoke with
-`/comp4020:ship` or say "ship it" / "make my repo public".
+The one irreversible act in the course, treated accordingly: re-runs preflight,
+scans the working tree **and history** for secrets, then — with explicit
+confirmation — flips the repo public, enables GitHub Pages (as a workflow site),
+and verifies the live URL actually serves. In the final-project run (weeks 9–11)
+it also tags the crit-cutoff state. Invoke with `/comp4020:ship` or say "ship
+it" / "make my repo public".
 
 ### help
 
