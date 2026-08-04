@@ -51,10 +51,11 @@ session, and it's the one mistake that's free to catch here.
 gh repo clone comp4020-agentic-coding-studio/comp4020-riff<num>-<group>-<pod>
 ```
 
-It's a full copy of the agent's repo, history and all, with a `riff-start` tag
-on the commit it was seeded at. Everyone in the cohort has push access to these
-repos, so any of the four can push; the pod leader is just whoever has the
-keyboard, and swapping mid-session is fine.
+It's a full copy of the agent's repo, history and all, plus one commit from the
+course tooling that reframes `CLAUDE.md` for the riff. `riff-start` tags that
+commit, so everything after it is your pod's. Everyone in the cohort has push
+access to these repos, so any of the four can push; the pod leader is just
+whoever has the keyboard, and swapping mid-session is fine.
 
 If it 404s, check the number and the group with the tutor before anything else,
 and never `gh repo create` — a repo you make yourself isn't the one the room
@@ -67,10 +68,17 @@ From the repo root, `mise install`, install dependencies, then run the checks
 (`pnpm check` in the static template). Green before you start means a red check
 later is yours.
 
-This is someone else's harness. Read their `CLAUDE.md` and their spec tests
-before you write anything — how they directed the agent is half of what's
-interesting about starting from their repo, and it's the fastest way to see what
-they'd already decided.
+This is someone else's harness. `CLAUDE.md` opens with a block written for the
+riff — read that first, because it's what governs the session. Everything below
+the rule in that file is the agent's own, written for a graded submission: read
+it for how they directed the agent, which is half of what's interesting about
+starting from their repo, not for what it says you owe.
+
+Their spec tests are the same deal. `spec/*.test.ts` encodes the week's brief as
+the agent worked it, and `pnpm check` runs the lot, so a riff that goes
+somewhere new turns those tests red and stops the deploy. Change them or delete
+them once your riff has outgrown them — keep `spec/invariants.test.ts` green,
+since that one is true of any good site.
 
 ## 4. Decide the riff in the first few minutes
 
