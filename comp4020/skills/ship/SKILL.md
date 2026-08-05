@@ -37,9 +37,10 @@ Then identify the deliverable and quote its real cutoff:
 ```
 
 The `next` row carries the deadline, the week, and the repo prefix, with crit
-cutoffs already resolved against the student's own group. Shipping after the
-cutoff is allowed and shipping early costs nothing, but the student should hear
-the actual time out loud before anything becomes public.
+cutoffs already resolved against the student's own group — including the weeks a
+group's session is moved, which the row marks in its `MOVED` column. Shipping
+after the cutoff is allowed and shipping early costs nothing, but the student
+should hear the actual time out loud before anything becomes public.
 
 ## 2. Is it even ready?
 

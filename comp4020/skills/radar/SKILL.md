@@ -27,8 +27,13 @@ session, and every deliverable ordered by deadline with `past` / `next` /
 teaching break, and the group-relative cutoff — so don't re-derive any of it.
 Read the header rows before the deliverable rows; they carry the framing.
 
-Two rows to respect:
+Three things to respect:
 
+- **a non-empty `MOVED` column** — that week's session isn't in the group's
+  standing slot (a public holiday), and the row's `DEADLINE`, `SESSION` and
+  `ROOM` are the replacement's. Quote those, and say why it moved. The
+  `session`/`cutoff`/`room` headers are the standing slot, so don't quote them
+  for that week.
 - **`time_known no`** — the date is real but the time is a sort key. For a crit
   that means `$COMP4020_GROUP` is unset (say "two hours before your session",
   and offer **onboard** step 5 to fix it permanently). For an assessment it

@@ -73,8 +73,9 @@ right?".
 
 The proactive view of the schedule: what's due this week and next, sorted by
 date with weights, leading with the single most urgent thing. The cutoff
-arithmetic — the teaching-week calendar, the mid-semester break, and the crit
-cutoff two hours before _your_ group's session — lives in
+arithmetic — the teaching-week calendar, the mid-semester break, the crit cutoff
+two hours before _your_ group's session, and the weeks a group's session moves
+(a public holiday) so that its cutoff moves too — lives in
 `scripts/next-deadline.sh`, which **start**, **preflight** and **ship** call
 too, so every skill quotes the same deadline. Invoke with `/comp4020:radar` or
 ask "what's due?" / "what should I work on?".

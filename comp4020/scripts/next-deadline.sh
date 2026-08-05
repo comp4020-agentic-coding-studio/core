@@ -10,7 +10,7 @@
 # Output is TAB-separated. Header rows are `key<TAB>value`; then one row per
 # deliverable, earliest deadline first:
 #
-#   deliverable  STATE  KIND  SLUG  TITLE  WEEK  DEADLINE  TIME_KNOWN  REPO_PREFIX  REFLECTION  PAGE
+#   deliverable  STATE  KIND  SLUG  TITLE  WEEK  DEADLINE  TIME_KNOWN  REPO_PREFIX  REFLECTION  PAGE  SESSION  ROOM  MOVED
 #
 #   STATE       past | next | upcoming   (`next` is the first deadline still ahead)
 #   DEADLINE    YYYY-MM-DDTHH:MM in the course timezone
@@ -18,6 +18,14 @@
 #               no   — the date is real but the time is a sort key only. Crits
 #                      need $COMP4020_GROUP for a real time. Current assessment
 #                      entries carry their real local due time in the API.
+#   SESSION     the crit session this deadline belongs to, and ROOM where it
+#   ROOM        runs — both as they actually are that week. Empty on an
+#               assessment row, which has no session.
+#   MOVED       empty in a normal week. Otherwise the reason this group's
+#               standing slot doesn't run that week (a public holiday), and
+#               SESSION/ROOM/DEADLINE are the replacement's. Quote the row, not
+#               the `session`/`cutoff`/`room` headers, which are the standing
+#               slot: in a moved week those name a session that isn't running.
 #
 # Usage:
 #   next-deadline.sh [--group <id>] [--today YYYY-MM-DD] [--json <file>]
@@ -108,11 +116,17 @@ printf '%s' "$payload" | jq -r \
      | map(
          . as $d
          | $weeks[$d.week|tostring] as $monday
+         # A group meets in its standing slot every week except the ones its
+         # `exceptions` name (a public holiday), where the replacement slot
+         # carries its own day and cutoff — so the cutoff moves with the
+         # session. Resolving that here is what keeps it out of every skill.
+         | (($g.exceptions // []) | map(select(.week == $d.week)) | first) as $ex
+         | ($ex // $g) as $slot
          | (if $d.kind == "crit" then
               (if $g then
                  ((($monday + "T00:00:00Z" | fromdateiso8601)
-                   + (86400 * ($g.day | dayoffset))) | strftime("%Y-%m-%d")) as $date
-                 | {deadline: ($date + "T" + $g.cutoffTime), known: "yes"}
+                   + (86400 * ($slot.day | dayoffset))) | strftime("%Y-%m-%d")) as $date
+                 | {deadline: ($date + "T" + $slot.cutoffTime), known: "yes"}
                else
                  {deadline: ($monday + "T00:00"), known: "no"}
                end)
@@ -127,7 +141,11 @@ printf '%s' "$payload" | jq -r \
             prefix: $d.repoPrefix, reflection: ($d | reflection($root)),
             deadline: $dl.deadline, known: $dl.known,
             page: ($base + (if $d.kind == "crit" then "/crits/" else "/assessments/" end)
-                   + $d.slug + "/")}
+                   + $d.slug + "/"),
+            session: (if $d.kind == "crit" then ($slot.session // "") else "" end),
+            room: (if $d.kind == "crit"
+                   then (($ex.room // $root.room) // "") else "" end),
+            moved: (if $d.kind == "crit" then ($ex.reason // "") else "" end)}
        )
      | sort_by(.deadline)) as $ds
   | ($ds | map(select(.deadline >= $now)) | first) as $next
@@ -156,6 +174,6 @@ printf '%s' "$payload" | jq -r \
           elif $next != null and .deadline == $next.deadline then "next"
           else "upcoming" end),
          .kind, .slug, .title, (.week|tostring), .deadline, .known, .prefix,
-         .reflection, .page]))
+         .reflection, .page, .session, .room, .moved]))
   | .[] | @tsv
 '

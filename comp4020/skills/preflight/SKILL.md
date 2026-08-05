@@ -30,7 +30,10 @@ before a crit or assignment deadline, not after. This crosses the published
   script reports `ok-no-group`, say "two hours before your session", ask which
   group they're in, and offer **onboard** step 5 so it's never asked again. On
   an assessment row, `time_known no` means the time of day is on the assessment
-  page, not in the data — fetch it rather than assuming end-of-day.
+  page, not in the data — fetch it rather than assuming end-of-day. A non-empty
+  `MOVED` column means that week's session isn't in the group's standing slot,
+  so the row's `DEADLINE`, `SESSION` and `ROOM` are the replacement's: quote
+  those, and say why.
 
 - **The brief and spec**: fetch the node's own JSON (`/api/crits/<slug>.json` or
   `/api/assessments/<slug>.json`, both linked from the script's `page` column).
