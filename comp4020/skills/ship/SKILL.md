@@ -43,10 +43,10 @@ the actual time out loud before anything becomes public.
 
 ## 2. Is it even ready?
 
-Run **preflight** and read its verdict. If it reports any FAIL, stop
-and say so. Do not offer to flip anyway: a public repo with uncommitted work in
-the tree is worse than a private repo with the same, because now the gap is
-permanent and visible.
+Run **preflight** and read its verdict. If it reports any FAIL, stop and say so.
+Do not offer to flip anyway: a public repo with uncommitted work in the tree is
+worse than a private repo with the same, because now the gap is permanent and
+visible.
 
 WARNs are the student's call. Show them, ask, continue only on a clear yes.
 

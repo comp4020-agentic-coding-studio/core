@@ -1,6 +1,7 @@
 ---
 name: preflight
-description: Checks that a COMP4020/COMP8020 student's work is actually submittable before
+description:
+  Checks that a COMP4020/COMP8020 student's work is actually submittable before
   a crit or assignment deadline — the local repo is committed and pushed to
   GitHub, matches the published brief and spec, and (in the full-stack half) is
   deployed and reachable. Use before a submission, or when the user asks "am I
@@ -31,10 +32,10 @@ before a crit or assignment deadline, not after. This crosses the published
   an assessment row, `time_known no` means the time of day is on the assessment
   page, not in the data — fetch it rather than assuming end-of-day.
 
-- **The brief and spec**: fetch the node's own JSON
-  (`/api/crits/<slug>.json` or `/api/assessments/<slug>.json`, both linked from
-  the script's `page` column). The `body` is the full brief, `spec` is the fixed
-  contract, and `meta` carries `weight`.
+- **The brief and spec**: fetch the node's own JSON (`/api/crits/<slug>.json` or
+  `/api/assessments/<slug>.json`, both linked from the script's `page` column).
+  The `body` is the full brief, `spec` is the fixed contract, and `meta` carries
+  `weight`.
 - **The repo**: default to the git repo in the current directory. Confirm it's
   the right one (`gh repo view` / `git remote -v`) before judging it.
 

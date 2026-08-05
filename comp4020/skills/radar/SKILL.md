@@ -1,6 +1,7 @@
 ---
 name: radar
-description: Tells a COMP4020/COMP8020 student what's coming up — which crits and
+description:
+  Tells a COMP4020/COMP8020 student what's coming up — which crits and
   assessments are due this week and next, sorted by date, with weights — by
   reading today's date and the live course schedule. Use for "what's due", "what
   should I be working on", "what's coming up", "when's my next deadline", or a
@@ -11,8 +12,8 @@ allowed-tools: Bash, WebFetch
 # COMP4020 deadline radar
 
 Turn the course schedule into "here's what to work on now". This is the
-proactive framing of the same data **handbook** answers reactively: instead
-of "when is assignment 2 due", it's "given today, what's next".
+proactive framing of the same data **handbook** answers reactively: instead of
+"when is assignment 2 due", it's "given today, what's next".
 
 ## 1. Resolve the deadlines
 
