@@ -1,6 +1,7 @@
 ---
 name: start
-description: Sets up a COMP4020/COMP8020 student's repo for a new deliverable — a weekly
+description:
+  Sets up a COMP4020/COMP8020 student's repo for a new deliverable — a weekly
   crit prototype or an assignment. Clones the repo the course provisioned for
   them, carries their CLAUDE.md / AGENTS.md harness forward from last week,
   pulls the spec from the course API, and helps them turn its checkable lines
@@ -70,8 +71,8 @@ sharing a repo, so:
 - a crit whose `repoPrefix` matches an assessment's is a **retro crit** (weeks 4
   and 7): the student presents the assignment that just landed, so there's no
   new prototype and no harness merge. Offer the retro prep instead — confirm
-  which repo they're presenting, run **preflight** against it, and
-  check its deployed URL still serves — then stop.
+  which repo they're presenting, run **preflight** against it, and check its
+  deployed URL still serves — then stop.
 - **week 9** starts the **final-project repo**: created once and carried through
   to the A3 deadline. Run this skill for it as normal — harness carried forward,
   stack chosen deliberately (this is the stack you'll justify in A3).
@@ -112,16 +113,23 @@ boilerplate is the starting point; say so and skip to step 4.
 ## 3. Choose the stack, deliberately
 
 The course lets you use a completely different stack each week, so long as it
-deploys to that week's target. Ask once, and make the choice explicit:
+deploys to that week's target. Ask once, and make the choice explicit — offer to
+set it up now, with the course default named first:
 
+- **course default (Astro, from C2)** — invoke the `stack` skill right now, in
+  this session. It runs the tested conversion script, and the repo comes out
+  `pnpm check`-green with the Pages base path handled. From C2 the published
+  specs assume this stack, so a fresh repo should be one "yes" away from it.
 - **keep** — the same framework and tooling as last week. Carry the build config
   forward (dependencies, scripts, tool config, lockfile), never the prototype
-  source.
-- **switch** — take the template as it ships and pick something new. Separate
-  repos are what make this the cheapest possible switch; this is the week to use
-  that.
+  source. A repo converted to Astro last week keeps that stack this way — no
+  need to run the conversion again.
+- **switch to something else** — take the template as it ships and pick
+  something new. Separate repos are what make this the cheapest possible switch;
+  this is the week to use that.
 - **bare** — the template minus its build tooling. Hand-written HTML and CSS is
-  a legitimate answer in the static half.
+  a legitimate answer in the static half; the `stack` skill's bare arm sets it
+  up.
 
 **Never carry forward** the prototype source (`index.html`, `main.ts`,
 `styles.css`, components), your spec tests from last week (the invariants ship
