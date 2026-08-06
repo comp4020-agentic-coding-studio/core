@@ -12,3 +12,51 @@ jobs:
       - uses: actions/checkout@v7
       - run: python3 .github/validate.py
       - run: node --test comp4020/scripts/*.test.mjs
+
+  # What makes the stack skill's "known-good conversion" a continuously tested
+  # claim: run both scaffold scripts against a real template-static checkout,
+  # and require the same pnpm check the fleet repos' CI runs. Needs network,
+  # so it's a separate job from the stdlib-only validate.
+  stack-integration:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/checkout@v7
+        with:
+          repository: comp4020-agentic-coding-studio/template-static
+          path: _template-astro
+      - uses: actions/checkout@v7
+        with:
+          repository: comp4020-agentic-coding-studio/template-static
+          path: _template-bare
+      - uses: pnpm/action-setup@v6
+        with:
+          version: 11.9.0
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+      - name: Convert to Astro (script exits nonzero unless pnpm check passes)
+        working-directory: _template-astro
+        run: |
+          # a fixed fake remote makes the derived base deterministic
+          git remote set-url origin https://github.com/fake-org/comp4020-fixture.git
+          node "$GITHUB_WORKSPACE/comp4020/scripts/stack-astro.mjs"
+      - name: Serve under the derived base path and prove it resolves
+        working-directory: _template-astro
+        run: |
+          pnpm preview --port 4989 &
+          for i in $(seq 1 20); do
+            curl -sf -o /dev/null http://localhost:4989/comp4020-fixture/ && break
+            sleep 1
+          done
+          curl -sf -o /dev/null http://localhost:4989/comp4020-fixture/ || {
+            echo "page did not serve under the base path"; exit 1; }
+          # the un-prefixed root must 404: a path bug reproduces, not hides
+          if curl -sf -o /dev/null http://localhost:4989/; then
+            echo "root served without the base prefix"; exit 1; fi
+      - name: Strip to bare (script exits nonzero unless pnpm check passes)
+        working-directory: _template-bare
+        run: |
+          node "$GITHUB_WORKSPACE/comp4020/scripts/stack-bare.mjs"
+          grep -q 'data-testid="intro"' dist/index.html
