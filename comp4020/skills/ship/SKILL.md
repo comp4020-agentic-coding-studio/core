@@ -142,15 +142,27 @@ provisioning, so never run `flyctl deploy` yourself. If the run fails in the
 `deploy` job, `flyctl status -a <repo-name>` and `flyctl logs -a <repo-name>`
 are read-only ways to see why — reading, not deploying by hand.
 
-Verify the live URL yourself too. The site takes a moment to come up once the
-workflow finishes, so poll rather than declaring victory:
+Verify the live URL yourself too — the script polls until the site comes up, so
+don't declare victory before it returns:
 
 ```sh
-curl -sf -o /dev/null -w '%{http_code}' <url>
+"$CLAUDE_PLUGIN_ROOT/scripts/verify-deploy.sh" <url>
 ```
 
-Report the URL and the status code. A repo that never deployed is worth no
-marks, so "the flip worked" is not the finish line — a 2xx at the live URL is.
+It checks the page serves _and_ that the css/js the page references resolve
+against the deployed URL. The second half is the point: a project Pages site is
+served from `/<repo>/`, so a build configured for the domain root emits
+`/_astro/index.css`, the page still returns 200, and every stylesheet 404s. A
+bare status code calls that a successful deploy. It renders as an unstyled page
+at the URL the sweep reads and the URL you demo from, and neither localhost nor
+CI's link check can see it, because in both the site sits at the root and the
+same path resolves.
+
+Report the URL and what the script found. A repo that never deployed is worth no
+marks, so "the flip worked" is not the finish line — a live URL that serves a
+working page is. If assets are missing, the fix is the base path: run the
+**stack** skill, which wires it up, or set Astro's `base` to `/<repo-name>` by
+hand, then push and re-verify.
 
 ## 5. Tag the crit state (final-project run, weeks 9–11)
 

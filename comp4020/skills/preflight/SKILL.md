@@ -91,9 +91,13 @@ spec asks for a live URL; otherwise skip.
 - **Fly.io**: `flyctl status` in the app dir — is the app deployed and healthy?
   A stopped/failed machine, or the wrong app, is a FAIL. If flyctl isn't set up,
   defer to the **doctor** skill.
-- **It actually loads**: if the spec wants a reachable URL, a quick
-  `curl -sf -o /dev/null -w '%{http_code}' <url>` confirms it responds (2xx/3xx)
-  rather than 500-ing or 404-ing.
+- **It actually loads**: if the spec wants a reachable URL,
+  `"$CLAUDE_PLUGIN_ROOT/scripts/verify-deploy.sh" <url>` confirms it responds
+  rather than 500-ing or 404-ing — and that the css/js the page references
+  resolve, which a status code on the page alone cannot see. A build configured
+  for the domain root serves a 200 under a `/<repo>/` Pages URL while every
+  stylesheet 404s; missing assets are a FAIL, and the fix is the base path (the
+  **stack** skill wires it up).
 
 ## 4. Report
 

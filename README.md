@@ -134,8 +134,10 @@ Two conventions hold the skills together, and both are enforced in CI
 - **one owner per mechanic.** A fact or procedure that more than one skill needs
   lives in exactly one place, and the others point at it: the setup checks in
   `scripts/doctor.sh`, the deadline arithmetic in `scripts/next-deadline.sh`,
-  settings changes in **onboard**, diagnosis in **doctor**, the status line in
-  the companion plugin. Restating one in a second skill is how they drift.
+  the deploy check in `scripts/verify-deploy.sh` (which **ship** and
+  **preflight** both call), settings changes in **onboard**, diagnosis in
+  **doctor**, the status line in the companion plugin. Restating one in a second
+  skill is how they drift.
 - **the site is ground truth.** Course facts — dates, weights, groups, tool
   lists, policies — are fetched from
   `comp.anu.edu.au/courses/comp4020-agentic-coding-studio`, never hardcoded
