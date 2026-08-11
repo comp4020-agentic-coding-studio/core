@@ -40,6 +40,12 @@ const PRISTINE_INDEX = `<!doctype html>
 `;
 
 const LINKINATOR_STEP = `      - name: Check internal links
+        # Internal links only --- a real org's rate limiter shouldn't redden a build.
+        run: pnpm dlx linkinator ./dist --silent --skip "^https?://(?!localhost|127)"
+`;
+
+// The shape fleets provisioned before the links sensor was scoped carry.
+const LEGACY_LINKINATOR_STEP = `      - name: Check internal links
         run: pnpm dlx linkinator ./dist --silent
 `;
 
@@ -119,7 +125,46 @@ test("pristine template gets the starter trio and derived config", () => {
 
   assert.match(read(dir, "tsconfig.json"), /astro\/tsconfigs\/strict/);
   assert.ok(read(dir, ".gitignore").split("\n").includes(".astro/"));
-  assert.match(read(dir, ".github/workflows/checks.yml"), /pnpm preview --port 4989/);
+  const workflow = read(dir, ".github/workflows/checks.yml");
+  assert.match(workflow, /pnpm preview --port 4989/);
+  // the internal-only scope survives the rewrite, and nothing of the old
+  // command is left dangling after it
+  assert.match(workflow, /linkinator "\$base" --recurse --silent --skip "\^https\?:\/\/\(\?!localhost\|127\)"/);
+  assert.ok(!workflow.includes("linkinator ./dist"));
+});
+
+test("a pre-scoping workflow still converts, and gains the skip", () => {
+  const dir = makeRepo(
+    baseFixture({
+      ".github/workflows/checks.yml": LEGACY_LINKINATOR_STEP,
+      "index.html": PRISTINE_INDEX,
+      "styles.css": "body { color: red; }\n",
+      "main.ts": "console.log('hi');\n",
+    }),
+  );
+  const r = convert(dir);
+  assert.equal(r.status, 0, r.stderr);
+
+  const workflow = read(dir, ".github/workflows/checks.yml");
+  assert.match(workflow, /pnpm preview --port 4989/);
+  assert.match(workflow, /--skip "\^https\?:\/\/\(\?!localhost\|127\)"/);
+  assert.ok(!workflow.includes("linkinator ./dist"));
+});
+
+test("an unrecognised links step is flagged, not silently mangled", () => {
+  const step = '      - name: Check internal links\n        run: npx linkinator ./build\n';
+  const dir = makeRepo(
+    baseFixture({
+      ".github/workflows/checks.yml": step,
+      "index.html": PRISTINE_INDEX,
+      "styles.css": "body { color: red; }\n",
+      "main.ts": "console.log('hi');\n",
+    }),
+  );
+  const r = convert(dir);
+  assert.equal(r.status, 0, r.stderr);
+  assert.equal(read(dir, ".github/workflows/checks.yml"), step);
+  assert.match(r.stdout, /linkinator step not in the expected shape/);
 });
 
 const ABOUT_PAGE = `<!doctype html>

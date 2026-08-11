@@ -346,8 +346,16 @@ for (const f of walk(".")) {
 const workflow = ".github/workflows/checks.yml";
 if (fs.existsSync(workflow)) {
   const yml = fs.readFileSync(workflow, "utf8");
-  const old = "run: pnpm dlx linkinator ./dist --silent";
-  if (yml.includes(old)) {
+  // Two shapes in the wild: fleets provisioned once the links sensor was
+  // scoped to internal links carry the --skip, earlier ones don't. Longest
+  // first — the bare command is a prefix of the other, so matching it first
+  // would leave the skip dangling after the replacement.
+  const SKIP = '--skip "^https?://(?!localhost|127)"';
+  const old = [
+    `run: pnpm dlx linkinator ./dist --silent ${SKIP}`,
+    "run: pnpm dlx linkinator ./dist --silent",
+  ].find((candidate) => yml.includes(candidate));
+  if (old) {
     fs.writeFileSync(
       workflow,
       yml.replace(
@@ -360,7 +368,10 @@ if (fs.existsSync(workflow)) {
           "          for i in $(seq 1 20); do",
           '            curl -sf -o /dev/null "$base" && break; sleep 1',
           "          done",
-          '          pnpm dlx linkinator "$base" --recurse --silent',
+          // Same internal-only scope as the pre-Astro command: preview serves
+          // on localhost, so the skip leaves the crawl intact while a real
+          // org's rate limiter can't redden a build.
+          `          pnpm dlx linkinator "$base" --recurse --silent ${SKIP}`,
         ].join("\n"),
       ),
     );
