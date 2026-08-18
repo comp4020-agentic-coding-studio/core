@@ -166,11 +166,18 @@ function escapeRegExp(s) {
   return s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 }
 
+// The starter's own <head> is lifted into the layout below rather than
+// written fresh: whatever the template keeps there --- the description, the
+// card meta, the comments explaining them --- arrives without this script
+// knowing any of it exists. A copy here would drift the first time the
+// template changed, and drift silently.
+const starter =
+  pages.length === 1 && pages[0] === "index.html" ? fs.readFileSync("index.html", "utf8") : "";
+const starterHead = starter.match(/<head>([\s\S]*?)<\/head>/i)?.[1];
 const pristine =
-  pages.length === 1 &&
-  pages[0] === "index.html" &&
-  fs.readFileSync("index.html", "utf8").includes('data-testid="intro"') &&
-  fs.readFileSync("index.html", "utf8").includes("Replace this with your prototype");
+  starterHead !== undefined &&
+  starter.includes('data-testid="intro"') &&
+  starter.includes("Replace this with your prototype");
 
 if (pristine) {
   // Fresh starter instead of a mechanical conversion: a layout from day one,
@@ -189,6 +196,13 @@ if (pristine) {
     fs.renameSync("main.ts", "src/scripts/main.ts");
     report.moved.push("main.ts -> src/scripts/main.ts");
   }
+  // Both files nest the head the same depth, so the lifted indentation
+  // carries over as-is. The stylesheet link is the one tag that has to go:
+  // the styles are a frontmatter import here.
+  const head = starterHead
+    .replace(/[ \t]*<link\b(?=[^>]*rel\s*=\s*["']stylesheet["'])[^>]*>\n?/gi, "")
+    .replace(/<title>[\s\S]*?<\/title>/i, "<title>{title}</title>")
+    .replace(/\s*$/, "\n  ");
   fs.writeFileSync(
     "src/layouts/Layout.astro",
     `---
@@ -202,11 +216,7 @@ const { title } = Astro.props;
 
 <!doctype html>
 <html lang="en-AU">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>{title}</title>
-  </head>
+  <head>${head}</head>
   <body>
     <slot />
   </body>

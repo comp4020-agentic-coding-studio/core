@@ -26,10 +26,16 @@ const TEMPLATE_PACKAGE = {
   },
 };
 
+// Shaped like the template's own head --- a description, a card, a comment
+// explaining them --- because the layout is built by lifting this, and none
+// of these strings appear anywhere in the script.
 const PRISTINE_INDEX = `<!doctype html>
 <html lang="en-AU">
   <head>
     <title>COMP4020 prototype</title>
+    <meta name="description" content="Replace this with one sentence." />
+    <!-- the card is public/card.png -->
+    <meta property="og:image" content="./card.png" />
     <link rel="stylesheet" href="./styles.css" />
   </head>
   <body>
@@ -105,7 +111,17 @@ test("pristine template gets the starter trio and derived config", () => {
   assert.match(index, /import Layout from "\.\.\/layouts\/Layout\.astro"/);
   assert.match(index, /data-testid="intro"/);
   assert.match(index, /<script src="\.\.\/scripts\/main\.ts"><\/script>/);
-  assert.match(read(dir, "src/layouts/Layout.astro"), /import "\.\.\/styles\/global\.css"/);
+  const layout = read(dir, "src/layouts/Layout.astro");
+  assert.match(layout, /import "\.\.\/styles\/global\.css"/);
+  // The head is lifted from the starter, so everything in it arrives intact
+  // and the title becomes the prop. The stylesheet link is the one casualty:
+  // the styles are a frontmatter import now.
+  assert.match(layout, /<title>\{title\}<\/title>/);
+  assert.match(layout, /<meta name="description" content="Replace this with one sentence\." \/>/);
+  assert.match(layout, /<meta property="og:image" content="\.\/card\.png" \/>/);
+  assert.match(layout, /<!-- the card is public\/card\.png -->/);
+  assert.ok(!layout.includes("<link"));
+  assert.ok(!layout.includes("<title>COMP4020 prototype</title>"));
   assert.equal(read(dir, "src/styles/global.css"), "body { color: red; }\n");
   assert.equal(read(dir, "src/scripts/main.ts"), "console.log('hi');\n");
 
