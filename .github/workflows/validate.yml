@@ -39,9 +39,28 @@ jobs:
       - name: Convert to Astro (script exits nonzero unless pnpm check passes)
         working-directory: _template-astro
         run: |
-          # a fixed fake remote makes the derived base deterministic
+          # a fixed fake remote makes the derived base deterministic; the
+          # shell-level GITHUB_REPOSITORY makes the invariants resolve the
+          # fixture's deployment, not this workflow's own repo
           git remote set-url origin https://github.com/fake-org/comp4020-fixture.git
-          node "$GITHUB_WORKSPACE/comp4020/scripts/stack-astro.mjs"
+          GITHUB_REPOSITORY=fake-org/comp4020-fixture \
+            node "$GITHUB_WORKSPACE/comp4020/scripts/stack-astro.mjs"
+      - name: A page added through the layout keeps the invariants green
+        working-directory: _template-astro
+        run: |
+          mkdir -p src/pages/notes
+          cat > src/pages/notes/index.astro <<'EOF'
+          ---
+          import Layout from "../../layouts/Layout.astro";
+          ---
+
+          <Layout title="Notes" description="A nested page through the shared layout.">
+            <header><nav aria-label="Primary"><a href="../">Home</a></nav></header>
+            <main><h1>Notes</h1></main>
+          </Layout>
+          EOF
+          pnpm build
+          GITHUB_REPOSITORY=fake-org/comp4020-fixture pnpm vitest run
       - name: Serve under the derived base path and prove it resolves
         working-directory: _template-astro
         run: |
