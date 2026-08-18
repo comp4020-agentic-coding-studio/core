@@ -78,12 +78,20 @@ function walk(dir) {
   });
 }
 
+// public/ is the static directory Vite and Astro both flatten into the site
+// root, so public/card.png is served at /card.png. Same here: a link written
+// ./card.png has to keep working after the build.
+const PUBLIC = "public" + path.sep;
+const destOf = (file) =>
+  path.join("dist", file.startsWith(PUBLIC) ? file.slice(PUBLIC.length) : file);
+
 fs.rmSync("dist", { recursive: true, force: true });
 let copied = 0;
 for (const file of walk(".")) {
   if (!COPY_EXTS.has(path.extname(file).toLowerCase())) continue;
-  fs.mkdirSync(path.join("dist", path.dirname(file)), { recursive: true });
-  fs.copyFileSync(file, path.join("dist", file));
+  const dest = destOf(file);
+  fs.mkdirSync(path.dirname(dest), { recursive: true });
+  fs.copyFileSync(file, dest);
   copied += 1;
 }
 console.log(\`build-static: copied \${copied} files to dist/\`);

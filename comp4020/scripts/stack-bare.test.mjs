@@ -100,6 +100,7 @@ test("the written build script copies pages and assets but not course files", ()
     pristineFixture({
       "about.html": "<!doctype html>\n<html><body>about</body></html>\n",
       "img/photo.jpg": "jpg-bytes",
+      "public/card.png": "card-bytes",
     }),
   );
   assert.equal(strip(dir).status, 0);
@@ -113,6 +114,11 @@ test("the written build script copies pages and assets but not course files", ()
   assert.ok(!fs.existsSync(path.join(dir, "dist/PROCESS.md")));
   assert.ok(!fs.existsSync(path.join(dir, "dist/spec")));
   assert.ok(!fs.existsSync(path.join(dir, "dist/package.json")));
+
+  // public/ flattens into the site root the way Vite and Astro both do it, so
+  // a link written ./card.png still resolves after the build.
+  assert.equal(read(dir, "dist/card.png"), "card-bytes");
+  assert.ok(!fs.existsSync(path.join(dir, "dist/public")));
 });
 
 test("the written server serves pages, assets, and 404s honestly", async () => {
