@@ -202,21 +202,46 @@ if (pristine) {
     report.moved.push("main.ts -> src/scripts/main.ts");
   }
   // Both files nest the head the same depth, so the lifted indentation
-  // carries over as-is. The stylesheet link is the one tag that has to go:
-  // the styles are a frontmatter import here.
+  // carries over as-is. Four targeted rewrites, bytes elsewhere untouched:
+  // the stylesheet link goes (the styles are a frontmatter import here), the
+  // title and description become props (a head shared across pages would
+  // otherwise give every page one description), and the card path goes
+  // root-absolute under the base --- this head now serves every page, so a
+  // page-relative card would break on any page below the site root.
+  const defaultDescription = starterHead
+    .match(/<meta\b[^>]*name\s*=\s*["']description["'][^>]*>/i)?.[0]
+    ?.match(/content\s*=\s*["']([^"']*)["']/i)?.[1];
+  let cardRewritten = false;
   const head = starterHead
     .replace(/[ \t]*<link\b(?=[^>]*rel\s*=\s*["']stylesheet["'])[^>]*>\n?/gi, "")
     .replace(/<title>[\s\S]*?<\/title>/i, "<title>{title}</title>")
+    .replace(/<meta\b[^>]*name\s*=\s*["']description["'][^>]*>/i, (tag) =>
+      tag.replace(/content\s*=\s*["'][^"']*["']/i, "content={description}"),
+    )
+    .replace(/<meta\b[^>]*property\s*=\s*["']og:image["'][^>]*>/i, (tag) => {
+      const out = tag.replace(
+        /(content\s*=\s*["'])(?!(?:[a-z]+:|\/))(?:\.\/)?([^"']+)(["'])/i,
+        `$1/${repo}/$2$3`,
+      );
+      cardRewritten = out !== tag;
+      return out;
+    })
     .replace(/\s*$/, "\n  ");
+  if (defaultDescription !== undefined)
+    report.rewritten.push("layout head: description -> prop, starter text as the default");
+  if (cardRewritten)
+    report.rewritten.push(
+      `layout head: og:image -> /${repo}/... (the shared head serves nested pages too)`,
+    );
   fs.writeFileSync(
     "src/layouts/Layout.astro",
     `---
 ${fs.existsSync("src/styles/global.css") ? 'import "../styles/global.css";\n' : ""}
 interface Props {
-  title: string;
+  title: string;${defaultDescription === undefined ? "" : "\n  description?: string;"}
 }
 
-const { title } = Astro.props;
+const { title${defaultDescription === undefined ? "" : `, description = ${JSON.stringify(defaultDescription)}`} } = Astro.props;
 ---
 
 <!doctype html>

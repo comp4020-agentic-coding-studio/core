@@ -114,11 +114,15 @@ test("pristine template gets the starter trio and derived config", () => {
   const layout = read(dir, "src/layouts/Layout.astro");
   assert.match(layout, /import "\.\.\/styles\/global\.css"/);
   // The head is lifted from the starter, so everything in it arrives intact
-  // and the title becomes the prop. The stylesheet link is the one casualty:
-  // the styles are a frontmatter import now.
+  // bar the four targeted rewrites: the stylesheet link becomes a frontmatter
+  // import, title and description become props, and the card path goes
+  // root-absolute under the base --- this head serves nested pages too, where
+  // a page-relative card would fail the shipped invariant.
   assert.match(layout, /<title>\{title\}<\/title>/);
-  assert.match(layout, /<meta name="description" content="Replace this with one sentence\." \/>/);
-  assert.match(layout, /<meta property="og:image" content="\.\/card\.png" \/>/);
+  assert.match(layout, /description\?: string/);
+  assert.match(layout, /description = "Replace this with one sentence\."/);
+  assert.match(layout, /<meta name="description" content=\{description\} \/>/);
+  assert.match(layout, /<meta property="og:image" content="\/fake-repo\/card\.png" \/>/);
   assert.match(layout, /<!-- the card is public\/card\.png -->/);
   assert.ok(!layout.includes("<link"));
   assert.ok(!layout.includes("<title>COMP4020 prototype</title>"));
