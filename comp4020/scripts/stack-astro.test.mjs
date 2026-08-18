@@ -128,7 +128,7 @@ test("pristine template gets the starter trio and derived config", () => {
   const config = read(dir, "astro.config.ts");
   assert.match(config, /site: "https:\/\/fake-org\.github\.io"/);
   assert.match(config, /base: "\/fake-repo"/);
-  assert.match(config, /format: "file"/);
+  assert.match(config, /format: "preserve"/);
   assert.match(config, /compressHTML: true/);
 
   const pkg = JSON.parse(read(dir, "package.json"));
@@ -206,6 +206,7 @@ function multiPageRepo() {
     baseFixture({
       "index.html": '<!doctype html>\n<html><body><a href="./about.html">about</a></body></html>\n',
       "about.html": ABOUT_PAGE,
+      "notes/index.html": '<!doctype html>\n<html><body><h1>notes</h1></body></html>\n',
       "css/site.css": "main { background: url(./bg/tile.png); }\n",
       "css/bg/tile.png": "png-bytes",
       "code/app.ts": "export {};\n",
@@ -239,6 +240,12 @@ test("multi-page conversion rewrites only the two tag shapes and homes assets", 
   // root-absolute ref flagged, not touched
   assert.match(r.stdout, /about\.html: root-absolute src="\/logo\.png"/);
   assert.ok(about.includes('<img src="/logo.png"'));
+
+  // A directory index stays one: paired with build.format "preserve" it keeps
+  // the /notes/ URL it had before the conversion, so the relative links and
+  // card path written against it still resolve. "file" would collapse it to
+  // /notes.html and "directory" would move every root page to /about/.
+  assert.ok(fs.existsSync(path.join(dir, "src/pages/notes/index.astro")));
 });
 
 test("second run detects the converted repo and changes nothing", () => {

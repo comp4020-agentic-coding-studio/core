@@ -93,14 +93,19 @@ fs.writeFileSync(
 
 // Written by the course stack skill; values derived from this repo's origin
 // remote. The dev server serves under the base too, so a path bug reproduces
-// locally instead of only on the live URL. build.format "file" keeps
-// page.astro building to dist/page.html, so hand-written relative links and
-// asset paths keep working; compressHTML true because the default ("jsx")
-// strips the space before line-broken inline elements in hand-written prose.
+// locally instead of only on the live URL. build.format "preserve" maps each
+// page to the same output path it had before the conversion --- about.html
+// stays /about.html and notes/index.html stays /notes/index.html --- so
+// hand-written relative links and asset paths keep working. Astro's default
+// ("directory") would move every root page to /about/, and "file" would
+// collapse notes/index.html to /notes.html; either way half the pages get a
+// URL one level off from the one their relative links were written against.
+// compressHTML true because the default ("jsx") strips the space before
+// line-broken inline elements in hand-written prose.
 export default defineConfig({
   site: "https://${org}.github.io",
   base: "/${repo}",
-  build: { format: "file" },
+  build: { format: "preserve" },
   compressHTML: true,
 });
 `,
@@ -340,7 +345,7 @@ for (const [from, to] of cssMoves) {
 for (const [from, to] of jsMoves) moveFile(from, to);
 
 // Everything else static goes to public/ preserving relative structure: with
-// build.format "file", page-relative references then resolve unchanged.
+// build.format "preserve", page-relative references then resolve unchanged.
 for (const f of walk(".")) {
   if (ASSET_EXTS.has(path.posix.extname(f).toLowerCase()))
     moveFile(f, path.posix.join("public", f));
