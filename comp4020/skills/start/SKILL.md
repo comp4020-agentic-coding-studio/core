@@ -120,10 +120,15 @@ set it up now, with the course default named first:
   this session. It runs the tested conversion script, and the repo comes out
   `pnpm check`-green with the Pages base path handled. From C2 the published
   specs assume this stack, so a fresh repo should be one "yes" away from it.
-- **keep** — the same framework and tooling as last week. Carry the build config
-  forward (dependencies, scripts, tool config, lockfile), never the prototype
-  source. A repo converted to Astro last week keeps that stack this way — no
-  need to run the conversion again.
+- **keep** — the same stack as last week. If that stack is the course default,
+  invoke the `stack` skill again in the fresh repo: the script detects the
+  pristine template and derives the Pages base from **this** repo's remote, and
+  any additions from last week (integrations, extra dependencies) are carried
+  forward on top. Never copy `astro.config.ts` between repos — its `base` embeds
+  last week's repo name, which works on localhost and 404s every asset on the
+  live site. For a non-default stack, carry the build config forward
+  (dependencies, scripts, tool config, lockfile) but re-derive anything
+  repo-specific the same way; never carry the prototype source.
 - **switch to something else** — take the template as it ships and pick
   something new. Separate repos are what make this the cheapest possible switch;
   this is the week to use that.
