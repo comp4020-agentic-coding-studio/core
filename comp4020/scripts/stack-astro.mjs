@@ -187,7 +187,8 @@ const pristine =
 if (pristine) {
   // Fresh starter instead of a mechanical conversion: a layout from day one,
   // because C2 is multi-page and 130 improvised layout extractions is the
-  // alternative. global.css stays a separate file so stylelint keeps a target.
+  // alternative. global.css stays a separate file so the styles keep a home
+  // any sensor the student adds later can point at.
   fs.mkdirSync("src/pages", { recursive: true });
   fs.mkdirSync("src/layouts", { recursive: true });
   const hasMain = fs.existsSync("main.ts");
