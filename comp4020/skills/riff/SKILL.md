@@ -3,7 +3,7 @@ name: riff
 description:
   Sets up a COMP4020/COMP8020 pod for the riff — the part of the crit session
   where a pod of four takes the crit agent's prototype further. Works out which
-  crit is running, asks which pod number the room dealt them, clones
+  crit is running, asks which pod number they were dealt, clones
   `comp4020-riff<N>-<group>-<pod>`, and gets the pod pushing so the share-back
   is a live site. Use for /comp4020:riff, "start the riff", "I'm the pod
   leader", "clone our riff repo", or "which repo does my pod work in".
@@ -17,8 +17,8 @@ artefact — the crit agent's prototype for the week — and spends the session
 taking it past where the agent left it. The repo is already made, already
 public, already deployed: the pod's job is to push to it.
 
-This runs in the room, on a clock, with three other people watching the screen.
-Be quick, and don't ask anything the tutor has already said out loud.
+This runs in the session, on a clock, with three other people watching the
+screen. Be quick, and don't ask anything the tutor has already said out loud.
 
 ## 1. Which crit, and which pod?
 
@@ -37,7 +37,7 @@ Two things to settle:
 
 - **the group** — `$COMP4020_GROUP`, and `status ok-no-group` means it's unset:
   ask, and offer **onboard** step 5 afterwards so it's never asked again.
-- **the pod number, 1–6** — dealt in the room, so ask. Nothing about it is
+- **the pod number, 1–6** — dealt on the day, so ask. Nothing about it is
   derivable and nothing else in this skill works without it.
 
 The repo is `comp4020-riff<num>-<group>-<pod>` in the course org, live at
@@ -58,9 +58,9 @@ access to these repos, so any of the four can push; the pod leader is just
 whoever has the keyboard, and swapping mid-session is fine.
 
 If it 404s, check the number and the group with the tutor before anything else,
-and never `gh repo create` — a repo you make yourself isn't the one the room
+and never `gh repo create` — a repo you make yourself isn't the one the group
 looks at. If `git log --oneline riff-start..HEAD` already shows commits, another
-pod has taken this number: stop and sort it out in the room.
+pod has taken this number: stop and sort it out in the session.
 
 ## 3. Get it green, and read it
 
@@ -103,7 +103,7 @@ and open a PR — the checks run there too, and merging is what deploys.
 ## 6. The share-back
 
 `git diff riff-start` is exactly what the pod added, and the live URL is what
-the room looks at. Between them they're the whole report: what you changed, and
+the group looks at. Between them they're the whole report: what you changed, and
 it running.
 
 The riff isn't assessed and there's nothing to submit — no reflection entry, no
