@@ -42,10 +42,10 @@ Response fields that matter:
 
 ## How to interpret the numbers
 
-- **The budget is a flat weekly allowance.** It resets every Monday at 00:00
+- **The budget is a flat weekly allowance.** It resets every Thursday at 9:00 am
   Canberra time (`week_resets_at` says exactly when); unused budget does not
-  carry over. Don't describe it as "7 days from your first request" — it's a
-  calendar boundary.
+  carry over. Don't describe it as "7 days from your first request" — every
+  student's week turns over at the same instant.
 - **Spend can lag slightly.** Budget accounting is eventually consistent, so
   right after a burst of requests the reported spend may be a little behind.
   Treat near-the-cap readings as approximate, not to-the-cent.
