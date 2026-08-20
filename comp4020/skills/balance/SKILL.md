@@ -68,7 +68,7 @@ Response fields that matter:
 - **401** — the key itself was rejected: `ANTHROPIC_AUTH_TOKEN` is unset,
   mistyped, or the key has been revoked/rotated. Have them check the env var
   against the key in the "Your Claude Code API key" assignment comment on
-  Canvas, and contact the course support address if it still fails.
+  Canvas, and message the convenor on Ed if it still fails.
 
 ## When they're over budget
 
@@ -79,9 +79,9 @@ Response fields that matter:
   are private Ed DMs and don't carry it. This is best-effort, not a course
   commitment: if the proxy rejects the model name with "model not permitted",
   the fallback isn't currently up — don't debug it, just say so.
-- If a deadline makes the cap a real problem, the fix is human: email the course
-  support address (for COMP4020 that's comp4020@anu.edu.au) — convenors can
-  arrange a one-off bump for the cohort. Don't suggest workarounds like sharing
+- If a deadline makes the cap a real problem, the fix is human: message the
+  convenor on Ed, in a private thread since it's about their own account —
+  convenors can arrange a one-off bump. Don't suggest workarounds like sharing
   keys.
 
 ## If they keep asking

@@ -63,7 +63,8 @@ an access quiz:
 
 They only ever see their own key. If the assignment stays locked, the comment is
 missing, or it says "revoked", that's a convenor issue — not Anthropic support,
-not the strproxy maintainers — so point them at comp4020@anu.edu.au.
+not the strproxy maintainers — so point them at a private Ed thread to the
+convenor.
 
 An error from Claude Code naming a revoked **OAuth** token is not that case, and
 not a convenor issue: the proxy never emits one, so a leftover claude.ai login

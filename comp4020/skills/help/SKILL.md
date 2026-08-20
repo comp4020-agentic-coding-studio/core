@@ -48,4 +48,4 @@ All course facts come from the live site
 (`https://comp.anu.edu.au/courses/comp4020-agentic-coding-studio`) and the
 course proxy, so answers stay current. If nothing here fits and it's a
 course-admin question, fall back to **handbook**; if it's a personal/enrolment
-matter, the answer is a human — comp4020@anu.edu.au.
+matter, the answer is a human — message the convenor on Ed.
