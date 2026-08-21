@@ -118,8 +118,9 @@ boilerplate is the starting point; say so and skip to step 4.
 **Assignment 2 exception:** skip the stack choice and conversion. The supplied
 Astro/Slop architecture is mandatory and is itself part of the assignment.
 Tell the student this is a stable platform, not a prescribed page design: they
-still choose the course, visual treatment, authored content, semantic checks,
-and the visible name of their teaching sessions.
+still choose the course, visual treatment, authored content, whether and which
+course-specific semantic checks to add, and the visible name of their teaching
+sessions.
 
 The course lets you use a completely different stack each week, so long as it
 deploys to that week's target. Ask once, and make the choice explicit — offer to
@@ -217,21 +218,22 @@ framework instructions that contradict this architecture.
 ## 6. Turn the checkable spec lines into tests
 
 The week's published `spec` (step 1) is the contract the tutor verifies at the
-crit. Turning its course-specific promises into automated backpressure is the
-student's work. Assignment 2 also ships `spec/data-integrity.test.ts` for shared
-catalogue plumbing plus a replaceable worked example; keep the integrity test
-and adapt or replace the example.
+crit. Deciding whether any of its course-specific promises deserve automated
+backpressure is the student's work. Assignment 2 ships a small
+`spec/data-integrity.test.ts` baseline plus one replaceable worked example;
+keep the baseline and adapt or replace the example.
 
 There is nothing to record locally about which deliverable this is:
-`pnpm check:evidence` works the current deliverable out live, from the repo's
-name and the course API, so an old but well-named reflection cannot accidentally
-satisfy the current one.
+`pnpm check:evidence` derives the current deliverable offline from the repo's
+name, so an old but well-named reflection cannot accidentally satisfy the
+current one.
 
 Walk the fixed spec with the student, line by line, and sort it:
 
 - **mechanically checkable** — "deployed and live", "the core flow persists
-  across a reload", "a navigation landmark". Write tests for these in their own
-  file alongside the invariants (any `spec/*.test.ts` runs with `pnpm check`).
+  across a reload", "a navigation landmark". If a test adds useful
+  backpressure, write it in `spec/` (any `spec/*.test.ts` runs with
+  `pnpm check`).
   Assert the **contract** — what the page must do, not how it's built — so the
   tests survive a change of approach, or of stack.
 - **judged by a person** — "the look commits to an era", "yours is better in
@@ -240,12 +242,14 @@ Walk the fixed spec with the student, line by line, and sort it:
 
 For Assignment 2, help the student select and justify the checks that protect
 their actual course rather than imposing a test count or mechanically demanding
-lint, tests, accessibility and performance tools all at once. Keep every
-selected check reachable through `pnpm check`. Learning-outcome coverage, if
-outcomes are used, and the coherence promises peculiar to their course are good
-semantic candidates; the starter already checks refs, dates and API shape.
+lint, tests, accessibility and performance tools all at once. It is legitimate
+to add no new check if the supplied baseline protects the course's mechanical
+contract. Keep every selected check reachable through `pnpm check`. Learning-
+outcome coverage, if outcomes are used, and coherence promises peculiar to the
+course are good candidates; the build already checks refs, links,
+accessibility, API emission and deck compilation.
 
-The new tests **start red** — there's no prototype yet, and that's the point.
+Any new tests **start red** — there's no prototype yet, and that's the point.
 Red-to-green across the week is the work, and the commits that turn each one
 green are exactly the process evidence `PROCESS.md` wants to cite.
 
@@ -255,14 +259,17 @@ green are exactly the process evidence `PROCESS.md` wants to cite.
   checks (`pnpm check` in the static template). Mise is the supported runtime
   path and the template pins its tested Node and pnpm versions there. Another
   runtime manager is fine if it provides those versions; do not treat that alone
-  as off piste. The invariants and everything carried forward should be green
-  before the student starts — a red check later is then theirs, not inherited.
+  as off piste. The supplied baseline and everything carried forward should be
+  green before the student starts — a red check later is then theirs, not
+  inherited.
   Their fresh spec tests are the exception: red is their starting state.
 - for Assignment 2, direct them first to the brief's code generator: they choose
-  the level digit, generate the remaining three digits, and put the resulting
-  `SLOPxxxx` record in `src/course-config.ts`. Work through placeholders
-  incrementally. `pnpm check:evidence` is the separate final gate that rejects
-  starter copy and unchanged starter imagery.
+  the level digit and generate the remaining three. Change the resulting
+  `SLOPxxxx` record and the dated placeholder content it governs as one coherent
+  slice, since moving the course period alone should make the date-integrity
+  check red. Work through the remaining placeholders incrementally.
+  `pnpm check:evidence` is the separate final gate that rejects starter copy and
+  unchanged starter imagery.
 - read them the week's brief and spec from the site, name what is open in the
   brief and what is fixed in the spec, and stop there. Their next step is to
   interrogate both and agree a plan with the agent. Do not supply that plan or
