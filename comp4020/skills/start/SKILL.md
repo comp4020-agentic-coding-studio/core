@@ -18,8 +18,10 @@ template and waiting in the course org. The isolation is deliberate: a clean
 thing to fork, a live URL per week, and a bad `git reset` that can only ever
 cost you one week.
 
-The template is **identical for every deliverable** — what changes each week is
-the spec, and that lives on the course website, not in the repo. What shouldn't
+Most deliverables use the template for their half of the course. Assignment 2
+is the deliberate exception: its provisioned repo comes from the specialised
+`template-course-site`, whose Slop University content model is part of the
+published contract. What shouldn't
 reset is the **harness**: the `CLAUDE.md` you grow to direct the agent is meant
 to accumulate across the whole course, and the gap between the starter's
 boilerplate and your own version is read as evidence of how you work. This skill
@@ -82,10 +84,11 @@ sharing a repo, so:
   entry at the cutoff.
 - **week 12** has no crit.
 
-The template follows the half of the course — the static half (weeks 2–6) uses
+The template normally follows the half of the course — the static half (weeks 2–6) uses
 `comp4020-agentic-coding-studio/template-static`; week 7 is the A2 retro, so it
-reuses the assignment repo rather than a fresh template (the retro-crit case
-above); the full-stack half (week 8 onwards) uses
+reuses the Assignment 2 repo generated from
+`comp4020-agentic-coding-studio/template-course-site` rather than a fresh
+template (the retro-crit case above); the full-stack half (week 8 onwards) uses
 `comp4020-agentic-coding-studio/template-dynamic`. Within a half it's the same
 template every week; nothing about the deliverable is baked into it. You never
 choose a template: the course provisioned your repo from the right one.
@@ -111,6 +114,12 @@ If this is their first prototype, there's nothing to carry. The template's
 boilerplate is the starting point; say so and skip to step 4.
 
 ## 3. Choose the stack, deliberately
+
+**Assignment 2 exception:** skip the stack choice and conversion. The supplied
+Astro/Slop architecture is mandatory and is itself part of the assignment.
+Tell the student this is a stable platform, not a prescribed page design: they
+still choose the course, visual treatment, authored content, semantic checks,
+and the visible name of their teaching sessions.
 
 The course lets you use a completely different stack each week, so long as it
 deploys to that week's target. Ask once, and make the choice explicit — offer to
@@ -199,12 +208,19 @@ before any prototype work, with a message that says where it came from
 (`harness: carry forward from week N`). The first commit in the repo is then an
 honest answer to "where did this CLAUDE.md come from".
 
+For Assignment 2, compare the prior harness with the specialised course-site
+template rather than `template-static`. Preserve the template's course schema,
+API, base-path, deck and content-graph guidance. Carry forward only the
+student's applicable additions; do not transplant old prototype source or
+framework instructions that contradict this architecture.
+
 ## 6. Turn the checkable spec lines into tests
 
 The week's published `spec` (step 1) is the contract the tutor verifies at the
-crit. Turning it into automated backpressure is the student's work — the
-template deliberately ships only the invariants (`spec/invariants.test.ts`, true
-of any good website) and leaves the week's contract to them.
+crit. Turning its course-specific promises into automated backpressure is the
+student's work. Assignment 2 also ships `spec/data-integrity.test.ts` for shared
+catalogue plumbing plus a replaceable worked example; keep the integrity test
+and adapt or replace the example.
 
 There is nothing to record locally about which deliverable this is:
 `pnpm check:evidence` works the current deliverable out live, from the repo's
@@ -222,6 +238,13 @@ Walk the fixed spec with the student, line by line, and sort it:
   ways you can name". No test can hold these; name them out loud so the student
   knows they're still on the hook for them at the crit.
 
+For Assignment 2, help the student select and justify the checks that protect
+their actual course rather than imposing a test count or mechanically demanding
+lint, tests, accessibility and performance tools all at once. Keep every
+selected check reachable through `pnpm check`. Learning-outcome coverage, if
+outcomes are used, and the coherence promises peculiar to their course are good
+semantic candidates; the starter already checks refs, dates and API shape.
+
 The new tests **start red** — there's no prototype yet, and that's the point.
 Red-to-green across the week is the work, and the commits that turn each one
 green are exactly the process evidence `PROCESS.md` wants to cite.
@@ -235,6 +258,11 @@ green are exactly the process evidence `PROCESS.md` wants to cite.
   as off piste. The invariants and everything carried forward should be green
   before the student starts — a red check later is then theirs, not inherited.
   Their fresh spec tests are the exception: red is their starting state.
+- for Assignment 2, direct them first to the brief's code generator: they choose
+  the level digit, generate the remaining three digits, and put the resulting
+  `SLOPxxxx` record in `src/course-config.ts`. Work through placeholders
+  incrementally. `pnpm check:evidence` is the separate final gate that rejects
+  starter copy and unchanged starter imagery.
 - read them the week's brief and spec from the site, name what is open in the
   brief and what is fixed in the spec, and stop there. Their next step is to
   interrogate both and agree a plan with the agent. Do not supply that plan or
