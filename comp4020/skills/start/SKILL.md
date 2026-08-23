@@ -156,9 +156,9 @@ Last week's `spec/` splits in two, on lifespan rather than on subject:
 - **contract tests** answered last week's published spec, so they stay behind
   with the prototype they were written for.
 - **sensors** assert a standard the student holds the agent to whatever the
-  brief is — no bare `toLocaleDateString`, no inline `style` attributes, nothing
-  left logging to the console in shipped output. A sensor is harness, the same
-  as a rule in `CLAUDE.md`, so it carries forward with it.
+  brief is, rather than answering any one brief. A sensor is harness, the same
+  as a rule in `CLAUDE.md`, so it carries forward with it. Which standards are
+  worth holding is theirs to decide; don't offer a list.
 
 Walk last week's `spec/*.test.ts` with the student and sort it the same way you
 sorted the harness, dropping only what plainly answered last week's brief. The
@@ -238,9 +238,9 @@ framework instructions that contradict this architecture.
 
 The week's published `spec` (step 1) is the contract the tutor verifies at the
 crit. Deciding whether any of its course-specific promises deserve automated
-backpressure is the student's work. Assignment 2 ships a small
-`spec/data-integrity.test.ts` baseline plus one replaceable worked example; keep
-the baseline and adapt or replace the example.
+backpressure is the student's work. Assignment 2 ships one supplied file,
+`spec/data-integrity.test.ts`, covering the cross-page course facts the build
+cannot see; keep it, and add alongside it or not at all.
 
 There is nothing to record locally about which deliverable this is:
 `pnpm check:evidence` derives the current deliverable offline from the repo's
@@ -249,11 +249,12 @@ current one.
 
 Walk the fixed spec with the student, line by line, and sort it:
 
-- **mechanically checkable** — "deployed and live", "the core flow persists
-  across a reload", "a navigation landmark". If a test adds useful backpressure,
-  write it in `spec/` (any `spec/*.test.ts` runs with `pnpm check`). Assert the
-  **contract** — what the page must do, not how it's built — so the tests
-  survive a change of approach, or of stack.
+- **mechanically checkable** — a line naming an observable state of the deployed
+  thing. If a test on it adds useful backpressure, write it in `spec/` (any
+  `spec/*.test.ts` runs with `pnpm check`). Assert the **contract** — what the
+  page must do, not how it's built — so the tests survive a change of approach,
+  or of stack. Sorting the lines is the conversation; don't arrive with them
+  sorted.
 - **judged by a person** — "the look commits to an era", "yours is better in
   ways you can name". No test can hold these; name them out loud so the student
   knows they're still on the hook for them at the crit.
@@ -262,10 +263,9 @@ For Assignment 2, help the student select and justify the checks that protect
 their actual course rather than imposing a test count or mechanically demanding
 lint, tests, accessibility and performance tools all at once. It is legitimate
 to add no new check if the supplied baseline protects the course's mechanical
-contract. Keep every selected check reachable through `pnpm check`. Learning-
-outcome coverage, if outcomes are used, and coherence promises peculiar to the
-course are good candidates; the build already checks refs, links, accessibility,
-API emission and deck compilation.
+contract. Keep every selected check reachable through `pnpm check`, and don't
+duplicate the build, which already checks refs, links, accessibility, API
+emission and deck compilation.
 
 Everything written here answers this week's brief, so it is a **contract test**
 and it retires with the brief — next week's step 5 leaves it behind. The other
