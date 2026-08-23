@@ -78,4 +78,4 @@ jobs:
         working-directory: _template-bare
         run: |
           node "$GITHUB_WORKSPACE/comp4020/scripts/stack-bare.mjs"
-          grep -q 'data-testid="intro"' dist/index.html
+          grep -q 'Replace this with your prototype' dist/index.html
