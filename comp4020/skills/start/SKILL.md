@@ -147,10 +147,29 @@ set it up now, with the course default named first:
   up.
 
 **Never carry forward** the prototype source (`index.html`, `main.ts`,
-`styles.css`, components), your spec tests from last week (the invariants ship
-with the template; the week tests answer last week's contract), `PROCESS.md`, or
-`reflections/`. Each week answers a new provocation. A student who drags last
-week's source along ends up presenting last week's work.
+`styles.css`, components), `PROCESS.md`, or `reflections/`. Each week answers a
+new provocation. A student who drags last week's source along ends up presenting
+last week's work.
+
+Last week's `spec/` splits in two, on lifespan rather than on subject:
+
+- **contract tests** answered last week's published spec, so they stay behind
+  with the prototype they were written for.
+- **sensors** assert a standard the student holds the agent to whatever the
+  brief is — no bare `toLocaleDateString`, alt text on every image, nothing left
+  logging to the console in shipped output. A sensor is harness, the same as a
+  rule in `CLAUDE.md`, so it carries forward with it.
+
+Walk last week's `spec/*.test.ts` with the student and sort it the same way you
+sorted the harness, dropping only what plainly answered last week's brief. The
+invariants ship with the template, so they are never carried — a copied
+`invariants.test.ts` shadows a version that may have moved on. Bring sensors
+over in the harness commit, and expect the accumulated suite to be small early
+and worth having by November: it is the clearest record a student has of what
+they have taught themselves to check for, and C9 and the A3 workflow
+justification both read it. A sensor that no longer applies (it named a
+framework they have just left) is dropped like a stale `CLAUDE.md` rule — ask
+first.
 
 Tell the student the reflection filename for this deliverable while you're here
 — it's the `reflection` column of the row you picked in step 1, and it is what
@@ -247,6 +266,13 @@ contract. Keep every selected check reachable through `pnpm check`. Learning-
 outcome coverage, if outcomes are used, and coherence promises peculiar to the
 course are good candidates; the build already checks refs, links, accessibility,
 API emission and deck compilation.
+
+Everything written here answers this week's brief, so it is a **contract test**
+and it retires with the brief — next week's step 5 leaves it behind. The other
+kind, the **sensors** carried in from last week, are already in `spec/` and stay
+green in the background. A student who hits the same agent failure twice this
+week should add a sensor for it rather than re-prompting; that one is harness,
+it carries, and it is the kind of moment `PROCESS.md` is for.
 
 Any new tests **start red** — there's no prototype yet, and that's the point.
 Red-to-green across the week is the work, and the commits that turn each one
