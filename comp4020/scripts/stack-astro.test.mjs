@@ -39,7 +39,7 @@ const PRISTINE_INDEX = `<!doctype html>
     <link rel="stylesheet" href="./styles.css" />
   </head>
   <body>
-    <p data-testid="intro">Replace this with your prototype.</p>
+    <p>Replace this with your prototype.</p>
     <script type="module" src="./main.ts"></script>
   </body>
 </html>
@@ -109,7 +109,7 @@ test("pristine template gets the starter trio and derived config", () => {
   assert.ok(!fs.existsSync(path.join(dir, "vite.config.ts")));
   const index = read(dir, "src/pages/index.astro");
   assert.match(index, /import Layout from "\.\.\/layouts\/Layout\.astro"/);
-  assert.match(index, /data-testid="intro"/);
+  assert.match(index, /Replace this with your prototype/);
   assert.match(index, /<script src="\.\.\/scripts\/main\.ts"><\/script>/);
   const layout = read(dir, "src/layouts/Layout.astro");
   assert.match(layout, /import "\.\.\/styles\/global\.css"/);

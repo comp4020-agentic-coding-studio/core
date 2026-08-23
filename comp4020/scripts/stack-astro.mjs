@@ -180,9 +180,7 @@ const starter =
   pages.length === 1 && pages[0] === "index.html" ? fs.readFileSync("index.html", "utf8") : "";
 const starterHead = starter.match(/<head>([\s\S]*?)<\/head>/i)?.[1];
 const pristine =
-  starterHead !== undefined &&
-  starter.includes('data-testid="intro"') &&
-  starter.includes("Replace this with your prototype");
+  starterHead !== undefined && starter.includes("Replace this with your prototype");
 
 if (pristine) {
   // Fresh starter instead of a mechanical conversion: a layout from day one,
@@ -268,7 +266,7 @@ import Layout from "../layouts/Layout.astro";
   </header>
   <main>
     <h1>COMP4020 prototype</h1>
-    <p data-testid="intro">
+    <p>
       Replace this with your prototype. This week's brief is on the course
       website; <code>spec/README.md</code> explains how the checks in this repo
       relate to it.

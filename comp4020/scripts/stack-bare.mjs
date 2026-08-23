@@ -170,7 +170,6 @@ if (fs.existsSync("vite.config.ts")) {
 
 const pristineIndex =
   fs.existsSync("index.html") &&
-  fs.readFileSync("index.html", "utf8").includes('data-testid="intro"') &&
   fs.readFileSync("index.html", "utf8").includes("Replace this with your prototype");
 
 if (pristineIndex && fs.existsSync("main.ts")) {

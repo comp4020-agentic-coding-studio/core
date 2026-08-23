@@ -29,7 +29,7 @@ const TEMPLATE_PACKAGE = {
 const PRISTINE_INDEX = `<!doctype html>
 <html lang="en-AU">
   <body>
-    <p data-testid="intro">Replace this with your prototype.</p>
+    <p>Replace this with your prototype.</p>
     <script type="module" src="./main.ts"></script>
   </body>
 </html>
@@ -140,7 +140,7 @@ test("the written server serves pages, assets, and 404s honestly", async () => {
     });
     const page = await fetch(`http://localhost:${port}/`);
     assert.equal(page.status, 200);
-    assert.match(await page.text(), /data-testid="intro"/);
+    assert.match(await page.text(), /Replace this with your prototype/);
     const css = await fetch(`http://localhost:${port}/styles.css`);
     assert.equal(css.headers.get("content-type"), "text/css; charset=utf-8");
     const missing = await fetch(`http://localhost:${port}/nope.html`);
