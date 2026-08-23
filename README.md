@@ -22,7 +22,20 @@ claude plugin marketplace add comp4020-agentic-coding-studio/core
 claude plugin install comp4020@comp4020
 ```
 
-To pick up updates later: `/plugin marketplace update comp4020`.
+## Keeping it up to date
+
+Refreshing the marketplace only re-reads the catalogue --- it installs nothing.
+Updating the plugin is the second step, and the new version loads on the next
+restart:
+
+```sh
+claude plugin marketplace update comp4020
+claude plugin update comp4020@comp4020
+```
+
+`/comp4020:doctor` says when your copy is behind, and if the update reports the
+plugin isn't installed at that scope, re-run it with the `--scope` you installed
+under (`local` or `project`) from inside that repo.
 
 ## What's in the plugin
 
@@ -115,8 +128,8 @@ it" / "make my repo public".
 
 Sets a pod up for the riff, the part of the crit session that starts from the
 crit agent's prototype. The repos are provisioned per group per crit and
-numbered, because pods are dealt on the day — this skill works out which crit
-is running, asks which number the pod was dealt, clones
+numbered, because pods are dealt on the day — this skill works out which crit is
+running, asks which number the pod was dealt, clones
 `comp4020-riff<N>-<group>-<pod>` (a full copy of the agent's repo, tagged
 `riff-start`), gets the checks green, and pushes early so the share-back is the
 live Pages URL. Invoke with `/comp4020:riff` or ask to "start the riff".
