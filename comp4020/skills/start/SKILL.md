@@ -156,9 +156,9 @@ Last week's `spec/` splits in two, on lifespan rather than on subject:
 - **contract tests** answered last week's published spec, so they stay behind
   with the prototype they were written for.
 - **sensors** assert a standard the student holds the agent to whatever the
-  brief is — no bare `toLocaleDateString`, alt text on every image, nothing left
-  logging to the console in shipped output. A sensor is harness, the same as a
-  rule in `CLAUDE.md`, so it carries forward with it.
+  brief is — no bare `toLocaleDateString`, no inline `style` attributes, nothing
+  left logging to the console in shipped output. A sensor is harness, the same
+  as a rule in `CLAUDE.md`, so it carries forward with it.
 
 Walk last week's `spec/*.test.ts` with the student and sort it the same way you
 sorted the harness, dropping only what plainly answered last week's brief. The
