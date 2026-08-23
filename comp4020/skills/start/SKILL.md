@@ -18,15 +18,15 @@ template and waiting in the course org. The isolation is deliberate: a clean
 thing to fork, a live URL per week, and a bad `git reset` that can only ever
 cost you one week.
 
-Most deliverables use the template for their half of the course. Assignment 2
-is the deliberate exception: its provisioned repo comes from the specialised
+Most deliverables use the template for their half of the course. Assignment 2 is
+the deliberate exception: its provisioned repo comes from the specialised
 `template-course-site`, whose Slop University content model is part of the
-published contract. What shouldn't
-reset is the **harness**: the `CLAUDE.md` you grow to direct the agent is meant
-to accumulate across the whole course, and the gap between the starter's
-boilerplate and your own version is read as evidence of how you work. This skill
-runs that transition: new repo, harness carried forward, stack chosen on
-purpose, and the week's spec pulled and turned into your own tests.
+published contract. What shouldn't reset is the **harness**: the `CLAUDE.md` you
+grow to direct the agent is meant to accumulate across the whole course, and the
+gap between the starter's boilerplate and your own version is read as evidence
+of how you work. This skill runs that transition: new repo, harness carried
+forward, stack chosen on purpose, and the week's spec pulled and turned into
+your own tests.
 
 ## 1. Which week, and which deliverable?
 
@@ -84,9 +84,9 @@ sharing a repo, so:
   entry at the cutoff.
 - **week 12** has no crit.
 
-The template normally follows the half of the course — the static half (weeks 2–6) uses
-`comp4020-agentic-coding-studio/template-static`; week 7 is the A2 retro, so it
-reuses the Assignment 2 repo generated from
+The template normally follows the half of the course — the static half (weeks
+2–6) uses `comp4020-agentic-coding-studio/template-static`; week 7 is the A2
+retro, so it reuses the Assignment 2 repo generated from
 `comp4020-agentic-coding-studio/template-course-site` rather than a fresh
 template (the retro-crit case above); the full-stack half (week 8 onwards) uses
 `comp4020-agentic-coding-studio/template-dynamic`. Within a half it's the same
@@ -116,9 +116,9 @@ boilerplate is the starting point; say so and skip to step 4.
 ## 3. Choose the stack, deliberately
 
 **Assignment 2 exception:** skip the stack choice and conversion. The supplied
-Astro/Slop architecture is mandatory and is itself part of the assignment.
-Tell the student this is a stable platform, not a prescribed page design: they
-still choose the course, visual treatment, authored content, whether and which
+Astro/Slop architecture is mandatory and is itself part of the assignment. Tell
+the student this is a stable platform, not a prescribed page design: they still
+choose the course, visual treatment, authored content, whether and which
 course-specific semantic checks to add, and the visible name of their teaching
 sessions.
 
@@ -220,8 +220,8 @@ framework instructions that contradict this architecture.
 The week's published `spec` (step 1) is the contract the tutor verifies at the
 crit. Deciding whether any of its course-specific promises deserve automated
 backpressure is the student's work. Assignment 2 ships a small
-`spec/data-integrity.test.ts` baseline plus one replaceable worked example;
-keep the baseline and adapt or replace the example.
+`spec/data-integrity.test.ts` baseline plus one replaceable worked example; keep
+the baseline and adapt or replace the example.
 
 There is nothing to record locally about which deliverable this is:
 `pnpm check:evidence` derives the current deliverable offline from the repo's
@@ -231,11 +231,10 @@ current one.
 Walk the fixed spec with the student, line by line, and sort it:
 
 - **mechanically checkable** — "deployed and live", "the core flow persists
-  across a reload", "a navigation landmark". If a test adds useful
-  backpressure, write it in `spec/` (any `spec/*.test.ts` runs with
-  `pnpm check`).
-  Assert the **contract** — what the page must do, not how it's built — so the
-  tests survive a change of approach, or of stack.
+  across a reload", "a navigation landmark". If a test adds useful backpressure,
+  write it in `spec/` (any `spec/*.test.ts` runs with `pnpm check`). Assert the
+  **contract** — what the page must do, not how it's built — so the tests
+  survive a change of approach, or of stack.
 - **judged by a person** — "the look commits to an era", "yours is better in
   ways you can name". No test can hold these; name them out loud so the student
   knows they're still on the hook for them at the crit.
@@ -246,8 +245,8 @@ lint, tests, accessibility and performance tools all at once. It is legitimate
 to add no new check if the supplied baseline protects the course's mechanical
 contract. Keep every selected check reachable through `pnpm check`. Learning-
 outcome coverage, if outcomes are used, and coherence promises peculiar to the
-course are good candidates; the build already checks refs, links,
-accessibility, API emission and deck compilation.
+course are good candidates; the build already checks refs, links, accessibility,
+API emission and deck compilation.
 
 Any new tests **start red** — there's no prototype yet, and that's the point.
 Red-to-green across the week is the work, and the commits that turn each one
@@ -261,8 +260,8 @@ green are exactly the process evidence `PROCESS.md` wants to cite.
   runtime manager is fine if it provides those versions; do not treat that alone
   as off piste. The supplied baseline and everything carried forward should be
   green before the student starts — a red check later is then theirs, not
-  inherited.
-  Their fresh spec tests are the exception: red is their starting state.
+  inherited. Their fresh spec tests are the exception: red is their starting
+  state.
 - for Assignment 2, direct them first to the brief's code generator: they choose
   the level digit and generate the remaining three. Change the resulting
   `SLOPxxxx` record and the dated placeholder content it governs as one coherent
