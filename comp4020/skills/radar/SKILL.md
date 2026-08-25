@@ -7,6 +7,8 @@ description:
   should I be working on", "what's coming up", "when's my next deadline", or a
   start-of-week check-in.
 allowed-tools: Bash, WebFetch
+model: sonnet
+effort: low
 ---
 
 # COMP4020 deadline radar

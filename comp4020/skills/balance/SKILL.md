@@ -7,6 +7,8 @@ description:
   Use whenever the user asks about their balance, budget, spend, usage, quota,
   or why their key seems blocked or out of budget.
 allowed-tools: Bash, WebFetch
+model: sonnet
+effort: low
 ---
 
 # Check my Claude Code balance

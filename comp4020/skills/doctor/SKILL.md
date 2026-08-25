@@ -10,6 +10,8 @@ description:
   gh/fly/claude working", "am I in the course GitHub org", "are my course
   plugins up to date", or any setup/environment health check.
 allowed-tools: Bash, Read, Edit, Write, WebFetch
+model: sonnet
+effort: medium
 ---
 
 # COMP4020 environment doctor

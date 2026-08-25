@@ -8,6 +8,8 @@ description:
   is a live site. Use for /comp4020:riff, "start the riff", "I'm the pod
   leader", "clone our riff repo", or "which repo does my pod work in".
 allowed-tools: Bash, Read, Edit, Write, WebFetch, Glob, Grep
+model: sonnet
+effort: medium
 ---
 
 # COMP4020 riff

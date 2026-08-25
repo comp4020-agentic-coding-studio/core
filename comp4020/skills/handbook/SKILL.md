@@ -7,6 +7,8 @@ description:
   course website. Use whenever the user asks about COMP4020 logistics,
   deadlines, assessment, or "the course".
 allowed-tools: Bash, WebFetch
+model: sonnet
+effort: low
 ---
 
 # COMP4020 course info

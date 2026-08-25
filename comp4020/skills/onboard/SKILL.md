@@ -10,6 +10,8 @@ description:
   group", "use my course credits in this repo", or removing the course setup
   when semester ends.
 allowed-tools: Bash, Read, Edit, Write, WebFetch
+model: sonnet
+effort: medium
 ---
 
 # COMP4020 onboard: get your key working

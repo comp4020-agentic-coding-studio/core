@@ -6,6 +6,8 @@ description:
   does the comp4020 plugin do", invokes /comp4020:help, or asks a course-related
   question that doesn't clearly match one specific skill.
 allowed-tools: Bash, WebFetch
+model: sonnet
+effort: low
 ---
 
 # COMP4020 plugin — what's here

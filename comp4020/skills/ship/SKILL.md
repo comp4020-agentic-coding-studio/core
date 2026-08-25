@@ -8,6 +8,8 @@ description:
   prototype", "enable Pages", or "deploy for the crit". Not for checking whether
   the work is ready; that's preflight.
 allowed-tools: Bash, Read, WebFetch, Glob, Grep
+model: sonnet
+effort: medium
 ---
 
 # COMP4020 ship

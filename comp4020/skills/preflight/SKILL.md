@@ -7,6 +7,8 @@ description:
   deployed and reachable. Use before a submission, or when the user asks "am I
   ready to submit", "is my crit/assignment ready", or "did I push everything".
 allowed-tools: Bash, Read, WebFetch, Glob, Grep
+model: sonnet
+effort: medium
 ---
 
 # COMP4020 submission preflight

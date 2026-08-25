@@ -8,6 +8,8 @@ description:
   committed work. Use for "switch to Astro", "use the course default stack",
   "set up Astro in this repo", "go bare", or "strip the build tooling".
 allowed-tools: Bash, Read, Edit, Glob, Grep
+model: sonnet
+effort: medium
 ---
 
 # COMP4020 stack
