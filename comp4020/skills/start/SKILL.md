@@ -260,13 +260,14 @@ green are exactly the process evidence `PROCESS.md` wants to cite.
   green before the student starts — a red check later is then theirs, not
   inherited. Their fresh spec tests are the exception: red is their starting
   state.
-- for Assignment 2, direct them first to the brief's code generator: they choose
-  the level digit and generate the remaining three. Change the resulting
-  `SLOPxxxx` record and the dated placeholder content it governs as one coherent
-  slice, since moving the course period alone should make the date-integrity
-  check red. Work through the remaining placeholders incrementally.
-  `pnpm check:evidence` is the separate final gate that rejects starter copy and
-  unchanged starter imagery.
+- for Assignment 2, the last three digits of the course code arrived with the
+  repo (in `src/course-config.ts`), and no other course in the cohort has them.
+  The student chooses the first digit, the level, and keeps the other three.
+  Change the course record and the dated placeholder content it governs as one
+  coherent slice, since moving the course period alone should make the
+  date-integrity check red. Work through the remaining placeholders
+  incrementally. `pnpm check:evidence` is the separate final gate that rejects
+  starter copy and unchanged starter imagery.
 - read them the week's brief and spec from the site, name what is open in the
   brief and what is fixed in the spec, and stop there. Their next step is to
   interrogate both and agree a plan with the agent. Do not supply that plan or
