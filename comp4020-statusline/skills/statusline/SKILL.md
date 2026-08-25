@@ -111,9 +111,8 @@ recipe above).
 ## What it is, and isn't
 
 It reads a figure cached and refreshed at most once a minute in the background:
-an indicator, not a ledger. The authoritative number is
-`/comp4020:balance` — say so if the two disagree, rather than trusting the
-bar.
+an indicator, not a ledger. The authoritative number is `/comp4020:balance` —
+say so if the two disagree, rather than trusting the bar.
 
 ## Turning it off
 
