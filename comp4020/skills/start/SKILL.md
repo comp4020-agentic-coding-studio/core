@@ -9,6 +9,8 @@ description:
   prototype", "start assignment 1", "set up week N", "clone this week's repo",
   "pull this week's spec", or "carry my CLAUDE.md forward".
 allowed-tools: Bash, Read, Edit, Write, WebFetch, Glob, Grep
+model: sonnet
+effort: medium
 ---
 
 # COMP4020 start
@@ -84,15 +86,6 @@ sharing a repo, so:
   entry at the cutoff.
 - **week 12** has no crit.
 
-The template normally follows the half of the course — the static half (weeks
-2–6) uses `comp4020-agentic-coding-studio/template-static`; week 7 is the A2
-retro, so it reuses the Assignment 2 repo generated from
-`comp4020-agentic-coding-studio/template-course-site` rather than a fresh
-template (the retro-crit case above); the full-stack half (week 8 onwards) uses
-`comp4020-agentic-coding-studio/template-dynamic`. Within a half it's the same
-template every week; nothing about the deliverable is baked into it. You never
-choose a template: the course provisioned your repo from the right one.
-
 ## 2. Find last week's harness
 
 The previous prototype repo is where `CLAUDE.md` and `AGENTS.md` come from. Use
@@ -107,11 +100,9 @@ repos in one batch or GitHub reports equal creation times.
 
 **Confirm that exact prior repo with the student before reading it** — a harness
 carried forward from the wrong repo is worse than no harness. Do not fall back
-to “the most recently created repo”; if none of the earlier published rows has a
-repository, treat this as their first prototype and say so.
-
-If this is their first prototype, there's nothing to carry. The template's
-boilerplate is the starting point; say so and skip to step 4.
+to “the most recently created repo”. If none of the earlier published rows has a
+repository, this is their first prototype: there's nothing to carry, the
+template's boilerplate is the starting point, and you skip to step 4. Say so.
 
 ## 3. Choose the stack, deliberately
 
@@ -123,28 +114,17 @@ course-specific semantic checks to add, and the visible name of their teaching
 sessions.
 
 The course lets you use a completely different stack each week, so long as it
-deploys to that week's target. Ask once, and make the choice explicit — offer to
-set it up now, with the course default named first:
+deploys to that week's target — the course default, the same as last week,
+something new, or bare hand-written HTML and CSS. Ask once, make the choice
+explicit, and hand the setup to the **stack** skill, which owns every arm of it.
+From C2 the published specs assume the default (Astro), so a fresh repo should
+be one "yes" away from it; separate repos are what make switching cheap, and
+this is the week to use that.
 
-- **course default (Astro, from C2)** — invoke the `stack` skill right now, in
-  this session. It runs the tested conversion script, and the repo comes out
-  `pnpm check`-green with the Pages base path handled. From C2 the published
-  specs assume this stack, so a fresh repo should be one "yes" away from it.
-- **keep** — the same stack as last week. If that stack is the course default,
-  invoke the `stack` skill again in the fresh repo: the script detects the
-  pristine template and derives the Pages base from **this** repo's remote, and
-  any additions from last week (integrations, extra dependencies) are carried
-  forward on top. Never copy `astro.config.ts` between repos — its `base` embeds
-  last week's repo name, which works on localhost and 404s every asset on the
-  live site. For a non-default stack, carry the build config forward
-  (dependencies, scripts, tool config, lockfile) but re-derive anything
-  repo-specific the same way; never carry the prototype source.
-- **switch to something else** — take the template as it ships and pick
-  something new. Separate repos are what make this the cheapest possible switch;
-  this is the week to use that.
-- **bare** — the template minus its build tooling. Hand-written HTML and CSS is
-  a legitimate answer in the static half; the `stack` skill's bare arm sets it
-  up.
+Whatever they choose, the build config is re-derived in the new repo rather than
+copied across from the old one. `astro.config.ts` is the trap: its `base` embeds
+last week's repo name, so a copy works on localhost and 404s every asset on the
+live site.
 
 **Never carry forward** the prototype source (`index.html`, `main.ts`,
 `styles.css`, components), `PROCESS.md`, or `reflections/`. Each week answers a
@@ -242,11 +222,6 @@ backpressure is the student's work. Assignment 2 ships one supplied file,
 `spec/data-integrity.test.ts`, covering the cross-page course facts the build
 cannot see; keep it, and add alongside it or not at all.
 
-There is nothing to record locally about which deliverable this is:
-`pnpm check:evidence` derives the current deliverable offline from the repo's
-name, so an old but well-named reflection cannot accidentally satisfy the
-current one.
-
 Walk the fixed spec with the student, line by line, and sort it:
 
 - **mechanically checkable** — a line naming an observable state of the deployed
@@ -267,12 +242,9 @@ contract. Keep every selected check reachable through `pnpm check`, and don't
 duplicate the build, which already checks refs, links, accessibility, API
 emission and deck compilation.
 
-Everything written here answers this week's brief, so it is a **contract test**
-and it retires with the brief — next week's step 5 leaves it behind. The other
-kind, the **sensors** carried in from last week, are already in `spec/` and stay
-green in the background. A student who hits the same agent failure twice this
-week should add a sensor for it rather than re-prompting; that one is harness,
-it carries, and it is the kind of moment `PROCESS.md` is for.
+A student who hits the same agent failure twice this week should add a sensor
+for it rather than re-prompting: that one is harness, it carries forward, and it
+is the kind of moment `PROCESS.md` is for.
 
 Any new tests **start red** — there's no prototype yet, and that's the point.
 Red-to-green across the week is the work, and the commits that turn each one
