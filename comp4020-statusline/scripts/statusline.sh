@@ -35,6 +35,7 @@ readonly TTL=60 # seconds a cached figure stays fresh
 input=$(cat 2>/dev/null || true)
 
 dim=$'\e[2m'
+magenta=$'\e[35m'
 reset=$'\e[0m'
 
 # The model, as `.model.display_name` --- "Opus", "Sonnet". Prefer jq, but fall
@@ -93,6 +94,23 @@ done
 # Everything from here down is course-credit territory, so every rendering
 # carries the tag --- the tag means "this session burns course credits", even
 # when the figure itself is unavailable.
+
+# An Opus request costs several times a Sonnet one, and on course credits that
+# is the course's money, so here the model name stops being recessive. Magenta
+# deliberately sits outside the green/yellow/red the budget figure uses below:
+# that scale means "how much of the week is gone", and a model that shares its
+# colours would read as a budget warning rather than a price tag. On someone's
+# own plan the spend isn't ours to flag, so the prefix stays dim --- own_plan
+# has already returned by this point.
+#
+# `case` rather than `${model,,}`: this runs on whatever bash a student's
+# machine has, and macOS still ships 3.2, where that expansion is a syntax
+# error. Matched on the display name, which is what we parsed --- "Opus",
+# "Opus 4.6".
+case "$model" in
+*[Oo]pus*) prefix="${magenta}${model} · ${reset}" ;;
+esac
+
 tag="${prefix}${dim}comp4020${reset} "
 
 if ! command -v jq >/dev/null 2>&1 || ! command -v curl >/dev/null 2>&1; then

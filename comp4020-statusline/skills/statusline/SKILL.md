@@ -26,7 +26,12 @@ always visible. For a student running the course key alongside their own Claude
 plan, that flip is the main reason to want it.
 
 The model leads either rendering (`Opus · own plan`), since which model a
-session is on is the other thing that moves what it costs.
+session is on is the other thing that moves what it costs. On course credits an
+Opus model is picked out in magenta rather than dimmed — an Opus request costs
+several times a Sonnet one — and that colour deliberately sits outside the
+budget figure's green-amber-red, so it reads as a price rather than a warning
+about the cap. On someone's own plan the spend isn't the course's to flag, so
+the model stays dim there whatever it is.
 
 ## Install
 
