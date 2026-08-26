@@ -82,8 +82,8 @@ sharing a repo, so:
   stack chosen deliberately (this is the stack you'll justify in A3).
 - **weeks 10–11** run in that same repo: no new clone, no harness merge. Skip to
   step 6 and pull _that week's_ crit spec into the repo you already have — new
-  tests alongside the old (don't delete a past week's), and a fresh reflection
-  entry at the cutoff.
+  tests alongside the old (don't delete a past week's), and a fresh crit
+  reflection entry at the cutoff.
 - **week 12** has no crit.
 
 ## 2. Find last week's harness
@@ -153,11 +153,11 @@ first.
 
 Tell the student the reflection filename for this deliverable while you're here
 — it's the `reflection` column of the row you picked in step 1, and it is what
-the marker reads. It's named for the deliverable, so the number in it matches
-the number in the repo name (`crit-1.md` in `comp4020-crit1-<handle>`); the one
-to say out loud is the assignment repo, where the entry is `assignment-1.md` and
-the week-4 retro crit reads that rather than asking for a second one.
-`pnpm check:evidence` fails on any other name.
+the cutoff sweep reads. It's named for the crit, so the number in it matches the
+number in the repo name (`crit-1.md` in `comp4020-crit1-<handle>`), and
+`pnpm check:evidence` fails on any other name. The column is empty for an
+assignment: there is no reflection there, the written account is `PROCESS.md`,
+and the retro crit that follows presents from it — say that out loud instead.
 
 ## 4. Clone the repo
 

@@ -96,16 +96,13 @@ printf '%s' "$payload" | jq -r \
   --arg group "$group" --arg now "$now" --arg today "$today" --arg base "$BASE" '
   def dayoffset: {"Mon":0,"Tue":1,"Wed":2,"Thu":3,"Fri":4}[.];
 
-  # A reflection is named for the deliverable it answers, so the number in the
-  # filename is the number in the repo name. A retro crit has none of its own:
-  # it reads the entry the assignment sharing its repo prefix already submitted.
+  # A reflection is a crit-week artefact, named for the crit it answers so the
+  # number in the filename is the number in the repo name. An assessment has
+  # none (its written account is PROCESS.md), and nor does the retro crit that
+  # runs on the assessment repo: both read as an empty column.
   def reflection($root):
     . as $d
-    | if $d.kind != "crit" then $d.slug + ".md"
-      elif ($d.slug | endswith("-retro")) then
-        (($root.deliverables
-          | map(select(.kind == "assessment" and .repoPrefix == $d.repoPrefix))
-          | first | .slug) + ".md")
+    | if $d.kind != "crit" or ($d.slug | endswith("-retro")) then ""
       else "crit-" + ($d.slug | split("-") | .[0] | tonumber | tostring) + ".md"
       end;
 

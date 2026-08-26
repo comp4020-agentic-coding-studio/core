@@ -68,16 +68,19 @@ Classify each PASS / WARN / FAIL:
   requirements.
 - **Process evidence** — run `pnpm check:evidence` if the script exists. It
   verifies the every-submission artefacts: `PROCESS.md` with its boilerplate
-  replaced and every cited commit resolving, a correctly named reflection entry
-  in `reflections/` (the `reflection` column of the row from step 1 — the marker
-  reads that exact name, so a misnamed one reads as no reflection at all), and
-  `CLAUDE.md`. A failure here is a FAIL — these are read by the marker on every
-  deliverable, and on a crit the reflection is part of the shipped mark itself:
-  the cutoff sweep looks for that exact filename, so a live prototype with no
-  reflection beside it scores 0 for shipping. The same sweep reads CI, and green
-  checks are worth the other half of that mark --- so on a crit, a red or
-  still-running build is worth flagging as a WARN even when everything else
-  passes, with the reason stated: the sweep fires cutoff+15 and won't wait.
+  replaced and every cited commit resolving, on a crit week a correctly named
+  reflection entry in `reflections/` (the `reflection` column of the row from
+  step 1 — the sweep reads that exact name, so a misnamed one reads as no
+  reflection at all; the column is empty for an assignment or a retro, which
+  carry none), and `CLAUDE.md`. A failure here is a FAIL — these are read by the
+  marker on every deliverable, and on a crit the reflection is part of the
+  shipped mark itself: the cutoff sweep looks for that exact filename, so a live
+  prototype with no reflection beside it scores 0 for shipping. On a retro week
+  the sweep reads the assignment's written-up `PROCESS.md` instead, and that is
+  the whole shipped mark. The same sweep reads CI, and green checks are worth
+  the other half of that mark --- so on a crit, a red or still-running build is
+  worth flagging as a WARN even when everything else passes, with the reason
+  stated: the sweep fires cutoff+15 and won't wait.
 
 ## 3. Deploy checks (when a live URL is expected)
 
