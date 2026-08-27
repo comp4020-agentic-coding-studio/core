@@ -20,15 +20,15 @@ template and waiting in the course org. The isolation is deliberate: a clean
 thing to fork, a live URL per week, and a bad `git reset` that can only ever
 cost you one week.
 
-Most deliverables use the template for their half of the course. Assignment 2 is
-the deliberate exception: its provisioned repo comes from the specialised
-`template-course-site`, whose Slop University content model is part of the
-published contract. What shouldn't reset is the **harness**: the `CLAUDE.md` you
-grow to direct the agent is meant to accumulate across the whole course, and the
-gap between the starter's boilerplate and your own version is read as evidence
-of how you work. This skill runs that transition: new repo, harness carried
-forward, stack chosen on purpose, and the week's spec pulled and turned into
-your own tests.
+Each deliverable's repo comes from the starter the course chose for it — usually
+the standard template for that half of the course, sometimes a specialised one
+whose architecture is itself part of the published contract. The starter's
+`README.md` is what says which parts are fixed; read it before offering to
+change anything. What shouldn't reset is the **harness**: the `CLAUDE.md` you
+grow to direct the agent is meant to accumulate across the whole course, and it
+is read as evidence of how you work. This skill runs that transition: new repo,
+harness carried forward, stack chosen on purpose, and the week's spec pulled and
+turned into your own tests.
 
 ## 1. Which week, and which deliverable?
 
@@ -106,20 +106,19 @@ template's boilerplate is the starting point, and you skip to step 4. Say so.
 
 ## 3. Choose the stack, deliberately
 
-**Assignment 2 exception:** skip the stack choice and conversion. The supplied
-Astro/Slop architecture is mandatory and is itself part of the assignment. Tell
-the student this is a stable platform, not a prescribed page design: they still
-choose the course, visual treatment, authored content, whether and which
-course-specific semantic checks to add, and the visible name of their teaching
-sessions.
+**Not every deliverable offers this choice.** If the brief or the starter's
+`README.md` says the platform is fixed, skip the stack choice and the conversion
+entirely, and say why: a fixed platform is a stable base, not a prescribed
+design. What it leaves open — the content, the visual treatment, which checks
+are worth adding, what things are called — is still all theirs.
 
-The course lets you use a completely different stack each week, so long as it
-deploys to that week's target — the course default, the same as last week,
-something new, or bare hand-written HTML and CSS. Ask once, make the choice
-explicit, and hand the setup to the **stack** skill, which owns every arm of it.
-From C2 the published specs assume the default (Astro), so a fresh repo should
-be one "yes" away from it; separate repos are what make switching cheap, and
-this is the week to use that.
+Otherwise the course lets you use a completely different stack each week, so
+long as it deploys to that week's target — the course default, the same as last
+week, something new, or bare hand-written HTML and CSS. Ask once, make the
+choice explicit, and hand the setup to the **stack** skill, which owns every arm
+of it. From C2 the published specs assume the default (Astro), so a fresh repo
+should be one "yes" away from it; separate repos are what make switching cheap,
+and this is the week to use that.
 
 Whatever they choose, the build config is re-derived in the new repo rather than
 copied across from the old one. `astro.config.ts` is the trap: its `base` embeds
@@ -188,17 +187,19 @@ hasn't been provisioned yet. Say which of the two it is, and stop.
 
 ## 5. Merge the harness
 
-This is the part that matters, and it's a merge rather than a copy. The template
-ships its own boilerplate `CLAUDE.md`, and that boilerplate can still evolve
-between weeks. So:
+This is the part that matters, and it's a merge rather than a copy. A starter's
+`CLAUDE.md` either arrives empty — the student's to write, with nothing about
+the platform pre-recorded in it — or carries boilerplate that has itself evolved
+between weeks. Diff rather than assume:
 
-- **diff** last week's `CLAUDE.md` against the template's, and show the student
-  what differs before touching anything.
+- **diff** last week's `CLAUDE.md` against the one this repo arrived with, and
+  show the student what differs before touching anything.
 - **keep every rule they added** — the conventions they hold the agent to, the
   corrections that stuck, the facts about the stack the agent kept getting
   wrong. That accretion is theirs, and it's assessed.
-- **take the template's new material** — new sections, anything describing the
-  checks that changed.
+- **take whatever the starter ships** — new sections, anything describing the
+  checks that changed. An empty starter ships nothing, and the carried file
+  stands as it is.
 - **drop only what no longer applies**, such as rules about a framework they've
   just switched away from. Ask first. A stale rule is much cheaper than a lost
   one.
@@ -208,19 +209,13 @@ before any prototype work, with a message that says where it came from
 (`harness: carry forward from week N`). The first commit in the repo is then an
 honest answer to "where did this CLAUDE.md come from".
 
-For Assignment 2, compare the prior harness with the specialised course-site
-template rather than `template-static`. Preserve the template's course schema,
-API, base-path, deck and content-graph guidance. Carry forward only the
-student's applicable additions; do not transplant old prototype source or
-framework instructions that contradict this architecture.
-
 ## 6. Turn the checkable spec lines into tests
 
 The week's published `spec` (step 1) is the contract the tutor verifies at the
-crit. Deciding whether any of its course-specific promises deserve automated
-backpressure is the student's work. Assignment 2 ships one supplied file,
-`spec/data-integrity.test.ts`, covering the cross-page course facts the build
-cannot see; keep it, and add alongside it or not at all.
+crit. Deciding whether any of its prototype-specific promises deserve automated
+backpressure is the student's work. Whatever checks the starter ships stay —
+they cover what the build cannot see on its own — so the student adds alongside
+them, or not at all.
 
 Walk the fixed spec with the student, line by line, and sort it:
 
@@ -234,13 +229,13 @@ Walk the fixed spec with the student, line by line, and sort it:
   ways you can name". No test can hold these; name them out loud so the student
   knows they're still on the hook for them at the crit.
 
-For Assignment 2, help the student select and justify the checks that protect
-their actual course rather than imposing a test count or mechanically demanding
-lint, tests, accessibility and performance tools all at once. It is legitimate
-to add no new check if the supplied baseline protects the course's mechanical
-contract. Keep every selected check reachable through `pnpm check`, and don't
-duplicate the build, which already checks refs, links, accessibility, API
-emission and deck compilation.
+Help the student select and justify the checks that protect their actual
+prototype rather than imposing a test count or mechanically demanding lint,
+tests, accessibility and performance tools all at once. It is legitimate to add
+no new check if the supplied baseline already protects the mechanical contract.
+Keep every selected check reachable through `pnpm check`, and don't duplicate
+what the starter's own build already verifies — its `README.md` says what that
+is.
 
 A student who hits the same agent failure twice this week should add a sensor
 for it rather than re-prompting: that one is harness, it carries forward, and it
@@ -260,14 +255,10 @@ green are exactly the process evidence `PROCESS.md` wants to cite.
   green before the student starts — a red check later is then theirs, not
   inherited. Their fresh spec tests are the exception: red is their starting
   state.
-- for Assignment 2, the last three digits of the course code arrived with the
-  repo (in `src/course-config.ts`), and no other course in the cohort has them.
-  The student chooses the first digit, the level, and keeps the other three.
-  Change the course record and the dated placeholder content it governs as one
-  coherent slice, since moving the course period alone should make the
-  date-integrity check red. Work through the remaining placeholders
-  incrementally. `pnpm check:evidence` is the separate final gate that rejects
-  starter copy and unchanged starter imagery.
+- if the starter arrived part-filled for this student — an allocated identifier,
+  a pre-set record — its `README.md` says what to keep and what to choose. Walk
+  that with them before they start replacing placeholder content, since a record
+  and the dated content it governs move as one slice.
 - read them the week's brief and spec from the site, name what is open in the
   brief and what is fixed in the spec, and stop there. Their next step is to
   interrogate both and agree a plan with the agent. Do not supply that plan or
