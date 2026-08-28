@@ -29,9 +29,19 @@ the agent do the wiring while you verify the outcome.
 ## 1. Establish the arm and the repo
 
 Astro unless the student asked for bare. Then confirm this is a course prototype
-repo: `package.json` must exist and its `name` must start with `comp4020`
-(template lineage). If it doesn't, stop and say why — running a stack conversion
-on an unrelated project is not what this skill is for.
+repo whose stack is actually theirs to choose: `package.json` must exist and its
+`name` must start with `comp4020` (template lineage).
+
+Two different reasons it might not, and they need different answers:
+
+- **the starter's `README.md` says the platform is fixed** — some deliverables
+  ship a platform as part of the published contract (Assignment 2's course-site
+  starter is one, and its package is named for the site rather than the course).
+  There is no stack choice to make, so say that, and say what the starter does
+  leave open: the content, the components, the visual treatment, which checks
+  are worth adding. Then stop.
+- **it isn't a course repo at all** — stop and say why; running a stack
+  conversion on an unrelated project is not what this skill is for.
 
 ## 2. Require a clean tree
 

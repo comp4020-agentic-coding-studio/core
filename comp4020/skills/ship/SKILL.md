@@ -109,8 +109,9 @@ dies with `unknown flag` instead, the `gh` is a distro-packaged one older than
 gh api -X PATCH /repos/<owner>/<repo> -f visibility=public
 ```
 
-For the **static half** (weeks 2–6), the flip is what makes Pages available.
-Enable it as a **workflow** site, then dispatch the deploy workflow and wait:
+For a **Pages deliverable** (the static half, weeks 2–6, and Assignment 2 in
+week 7), the flip is what makes Pages available. Enable it as a **workflow**
+site, then dispatch the deploy workflow and wait:
 
 ```sh
 gh api -X POST /repos/{owner}/{repo}/pages -f build_type=workflow
@@ -128,10 +129,10 @@ rejected. The deploy job can't enable Pages for you either: creating a Pages
 site needs admin, and `GITHUB_TOKEN` isn't ("Resource not accessible by
 integration"), which is why this step is yours to run.
 
-For the **full-stack half** (weeks 8+), the deploy is gated on the same
-visibility flip — CI's `deploy` job only runs once the repo is public, same as
-Pages. The flip triggers no push event, so dispatch the workflow and wait,
-exactly as above:
+For a **fly.io deliverable** (the full-stack half, weeks 8+), the deploy is
+gated on the same visibility flip — CI's `deploy` job only runs once the repo is
+public, same as Pages. The flip triggers no push event, so dispatch the workflow
+and wait, exactly as above:
 
 ```sh
 gh workflow run checks && gh run watch
