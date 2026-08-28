@@ -1,12 +1,7 @@
 #!/usr/bin/env node
 
 import { spawnSync } from "node:child_process";
-import {
-  existsSync,
-  lstatSync,
-  readFileSync,
-  readlinkSync,
-} from "node:fs";
+import { existsSync, lstatSync, readFileSync, readlinkSync } from "node:fs";
 import { join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -49,9 +44,9 @@ const PATTERNS = [
 ];
 
 export function findSecretKinds(text) {
-  return PATTERNS.filter(({ source, flags = "i" }) =>
-    new RegExp(source, flags).test(text),
-  ).map(({ name }) => name);
+  return PATTERNS.filter(({ source, flags = "i" }) => new RegExp(source, flags).test(text)).map(
+    ({ name }) => name,
+  );
 }
 
 export function safeLabel(text) {
@@ -132,26 +127,14 @@ function scanWorktree(findings, root) {
 function scanHistory(findings, root) {
   const history = command(
     "git",
-    [
-      "log",
-      "--all",
-      "--full-history",
-      "--patch",
-      "--no-ext-diff",
-      "--text",
-      "--format=fuller",
-    ],
+    ["log", "--all", "--full-history", "--patch", "--no-ext-diff", "--text", "--format=fuller"],
     root,
   ).stdout;
   scanText(findings, history, "reachable Git history");
 }
 
 function main() {
-  const root = command(
-    "git",
-    ["rev-parse", "--show-toplevel"],
-    process.cwd(),
-  ).stdout.trim();
+  const root = command("git", ["rev-parse", "--show-toplevel"], process.cwd()).stdout.trim();
   if (!root) throw new ScanError("not inside a Git repository");
 
   const remotes = command("git", ["remote"], root).stdout.trim();
@@ -171,9 +154,7 @@ function main() {
       `secret-scan: STOP — ${findings.length} publishable surface(s) need review\n`,
     );
     for (const finding of findings) {
-      process.stderr.write(
-        `- ${finding.surface}: ${finding.kinds.join(", ")} (value withheld)\n`,
-      );
+      process.stderr.write(`- ${finding.surface}: ${finding.kinds.join(", ")} (value withheld)\n`);
     }
     process.exitCode = 2;
     return;
@@ -186,11 +167,8 @@ if (resolve(process.argv[1] ?? "") === fileURLToPath(import.meta.url)) {
   try {
     main();
   } catch (error) {
-    const message =
-      error instanceof ScanError ? error.message : "unexpected scanner failure";
-    process.stderr.write(
-      `secret-scan: STOP — scan incomplete: ${safeLabel(message)}\n`,
-    );
+    const message = error instanceof ScanError ? error.message : "unexpected scanner failure";
+    process.stderr.write(`secret-scan: STOP — scan incomplete: ${safeLabel(message)}\n`);
     process.exitCode = 1;
   }
 }

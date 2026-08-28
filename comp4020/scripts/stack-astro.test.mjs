@@ -149,7 +149,10 @@ test("pristine template gets the starter trio and derived config", () => {
   assert.match(workflow, /pnpm preview --port 4989/);
   // the internal-only scope survives the rewrite, and nothing of the old
   // command is left dangling after it
-  assert.match(workflow, /linkinator "\$base" --recurse --silent --skip "\^https\?:\/\/\(\?!localhost\|127\)"/);
+  assert.match(
+    workflow,
+    /linkinator "\$base" --recurse --silent --skip "\^https\?:\/\/\(\?!localhost\|127\)"/,
+  );
   assert.ok(!workflow.includes("linkinator ./dist"));
 });
 
@@ -172,7 +175,7 @@ test("a pre-scoping workflow still converts, and gains the skip", () => {
 });
 
 test("an unrecognised links step is flagged, not silently mangled", () => {
-  const step = '      - name: Check internal links\n        run: npx linkinator ./build\n';
+  const step = "      - name: Check internal links\n        run: npx linkinator ./build\n";
   const dir = makeRepo(
     baseFixture({
       ".github/workflows/checks.yml": step,
@@ -210,7 +213,7 @@ function multiPageRepo() {
     baseFixture({
       "index.html": '<!doctype html>\n<html><body><a href="./about.html">about</a></body></html>\n',
       "about.html": ABOUT_PAGE,
-      "notes/index.html": '<!doctype html>\n<html><body><h1>notes</h1></body></html>\n',
+      "notes/index.html": "<!doctype html>\n<html><body><h1>notes</h1></body></html>\n",
       "css/site.css": "main { background: url(./bg/tile.png); }\n",
       "css/bg/tile.png": "png-bytes",
       "code/app.ts": "export {};\n",

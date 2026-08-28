@@ -41,7 +41,10 @@ if (!fs.existsSync("package.json")) die(2, "no package.json in the current direc
 const pkg = JSON.parse(fs.readFileSync("package.json", "utf8"));
 
 if (pkg.dependencies?.astro || pkg.devDependencies?.astro)
-  die(2, "this repo uses Astro — going from Astro back to bare is a manual job; ask your agent to unwind it");
+  die(
+    2,
+    "this repo uses Astro — going from Astro back to bare is a manual job; ask your agent to unwind it",
+  );
 
 if (!pkg.devDependencies?.vite && fs.existsSync("scripts/build-static.mjs")) {
   console.log("already bare — re-running the verify step only");
@@ -49,7 +52,10 @@ if (!pkg.devDependencies?.vite && fs.existsSync("scripts/build-static.mjs")) {
 }
 
 if (sh("git status --porcelain") !== "")
-  die(2, "working tree is dirty — commit your work first, so the change lands as one reviewable diff");
+  die(
+    2,
+    "working tree is dirty — commit your work first, so the change lands as one reviewable diff",
+  );
 
 // --- helper scripts written into the repo ------------------------------------
 
@@ -196,7 +202,9 @@ function walk(dir) {
 const looseTs = walk(".").filter((f) => f.endsWith(".ts"));
 if (looseTs.length > 0) {
   for (const f of looseTs)
-    report.flagged.push(`${f}: TypeScript has no compile step in the bare stack — it would ship uncompiled and 404; convert it to .js or remove it`);
+    report.flagged.push(
+      `${f}: TypeScript has no compile step in the bare stack — it would ship uncompiled and 404; convert it to .js or remove it`,
+    );
 } else {
   if (fs.existsSync("tsconfig.json")) {
     fs.rmSync("tsconfig.json");
@@ -223,5 +231,8 @@ for (const [kind, lines] of Object.entries(report)) {
 if (verify()) {
   console.log("\nbare stack ready — review the staged diff and commit it");
 } else {
-  die(1, "pnpm check failed — everything is staged; fix the reported errors, then re-run pnpm check");
+  die(
+    1,
+    "pnpm check failed — everything is staged; fix the reported errors, then re-run pnpm check",
+  );
 }

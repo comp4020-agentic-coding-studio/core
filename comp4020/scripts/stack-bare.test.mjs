@@ -153,7 +153,8 @@ test("the written server serves pages, assets, and 404s honestly", async () => {
 test("loose TypeScript is flagged and left, and typecheck survives", () => {
   const dir = makeRepo(
     pristineFixture({
-      "index.html": '<!doctype html>\n<html><body><script type="module" src="./app.ts"></script></body></html>\n',
+      "index.html":
+        '<!doctype html>\n<html><body><script type="module" src="./app.ts"></script></body></html>\n',
       "app.ts": "export {};\n",
     }),
   );

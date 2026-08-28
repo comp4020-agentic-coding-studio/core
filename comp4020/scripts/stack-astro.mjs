@@ -14,19 +14,30 @@ import path from "node:path";
 // Same exclusion set as the template's old vite.config.ts, plus the two
 // directories this script writes into. spec/, scripts/ and reflections/ being
 // here is what makes them untouchable by every sweep below.
-const SKIP = new Set([
-  "node_modules",
-  "dist",
-  "spec",
-  "scripts",
-  "reflections",
-  "src",
-  "public",
-]);
+const SKIP = new Set(["node_modules", "dist", "spec", "scripts", "reflections", "src", "public"]);
 const ASSET_EXTS = new Set([
-  ".png", ".jpg", ".jpeg", ".gif", ".svg", ".webp", ".avif", ".ico", ".bmp",
-  ".mp4", ".webm", ".mov", ".mp3", ".ogg", ".wav", ".flac",
-  ".woff", ".woff2", ".ttf", ".otf", ".eot", ".pdf",
+  ".png",
+  ".jpg",
+  ".jpeg",
+  ".gif",
+  ".svg",
+  ".webp",
+  ".avif",
+  ".ico",
+  ".bmp",
+  ".mp4",
+  ".webm",
+  ".mov",
+  ".mp3",
+  ".ogg",
+  ".wav",
+  ".flac",
+  ".woff",
+  ".woff2",
+  ".ttf",
+  ".otf",
+  ".eot",
+  ".pdf",
 ]);
 // typescript stays at the template's ^6: typescript@7 is outside
 // @astrojs/check's peer range (^5 || ^6).
@@ -78,7 +89,10 @@ if (hasAstro && fs.existsSync("src/pages")) {
 }
 
 if (sh("git status --porcelain") !== "")
-  die(2, "working tree is dirty — commit your work first, so the conversion lands as one reviewable diff");
+  die(
+    2,
+    "working tree is dirty — commit your work first, so the conversion lands as one reviewable diff",
+  );
 
 const remote = sh("git remote get-url origin");
 const m = remote.match(/github\.com[:/]([^/]+)\/([^/]+?)(?:\.git)?$/);
@@ -179,8 +193,7 @@ function escapeRegExp(s) {
 const starter =
   pages.length === 1 && pages[0] === "index.html" ? fs.readFileSync("index.html", "utf8") : "";
 const starterHead = starter.match(/<head>([\s\S]*?)<\/head>/i)?.[1];
-const pristine =
-  starterHead !== undefined && starter.includes("Replace this with your prototype");
+const pristine = starterHead !== undefined && starter.includes("Replace this with your prototype");
 
 if (pristine) {
   // Fresh starter instead of a mechanical conversion: a layout from day one,
@@ -272,11 +285,13 @@ import Layout from "../layouts/Layout.astro";
       relate to it.
     </p>
   </main>
-${hasMain ? "  <script src=\"../scripts/main.ts\"></script>\n" : ""}</Layout>
+${hasMain ? '  <script src="../scripts/main.ts"></script>\n' : ""}</Layout>
 `,
   );
   fs.rmSync("index.html");
-  report.converted.push("index.html -> starter trio (src/pages/index.astro, src/layouts/Layout.astro)");
+  report.converted.push(
+    "index.html -> starter trio (src/pages/index.astro, src/layouts/Layout.astro)",
+  );
 } else {
   // Mechanical conversion: rename each page verbatim to src/pages/*.astro
   // (a full HTML document is valid .astro page content; the rename is what
@@ -316,7 +331,9 @@ ${hasMain ? "  <script src=\"../scripts/main.ts\"></script>\n" : ""}</Layout>
       }
       const dest = path.posix.join("src/scripts", target);
       jsMoves.set(target, dest);
-      report.rewritten.push(`${page}: module script -> ${dest} (Astro compiles TS and adds type="module")`);
+      report.rewritten.push(
+        `${page}: module script -> ${dest} (Astro compiles TS and adds type="module")`,
+      );
       return `<script src="${path.posix.relative(newPageDir, dest)}"></script>`;
     });
 
@@ -360,7 +377,10 @@ for (const [from, to] of cssMoves) {
     moveFile(
       companion,
       path.posix.normalize(
-        path.posix.join(path.posix.dirname(to), path.posix.relative(path.posix.dirname(from), companion)),
+        path.posix.join(
+          path.posix.dirname(to),
+          path.posix.relative(path.posix.dirname(from), companion),
+        ),
       ),
     );
   }
@@ -416,7 +436,9 @@ if (fs.existsSync(workflow)) {
     );
     report.rewritten.push(`${workflow}: linkinator now crawls astro preview under the base path`);
   } else {
-    report.flagged.push(`${workflow}: linkinator step not in the expected shape — patch it by hand`);
+    report.flagged.push(
+      `${workflow}: linkinator step not in the expected shape — patch it by hand`,
+    );
   }
 }
 
@@ -429,5 +451,8 @@ printReport();
 if (verify()) {
   console.log("\nconversion complete — review the staged diff and commit it");
 } else {
-  die(1, "pnpm check failed — everything is staged; fix the reported errors, then re-run pnpm check");
+  die(
+    1,
+    "pnpm check failed — everything is staged; fix the reported errors, then re-run pnpm check",
+  );
 }
