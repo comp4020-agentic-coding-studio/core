@@ -43,13 +43,18 @@ so C1 (`week: 2`) is the week-1 job, and the thing to set up right after your
 week-N crit is week N+1's. The script does that arithmetic — the week calendar,
 the teaching break, and the group-relative cutoff — so don't re-derive it.
 
-Four cases where `next` isn't the answer:
+Five cases where `next` isn't the answer:
 
 - the student **names a target** ("set up week 5", "start assignment 2") — that
   wins over any date arithmetic
 - its repo is **already cloned and under way** — the target is the row after it
+- **`next` is a retro crit** (a crit sharing an assessment's `repoPrefix`) and
+  the assessment's own row is still ahead — the target is that assessment. The
+  retro sorts first whenever no group is set, and ties with the assessment for a
+  Monday group; either way there's nothing to start for a retro until the
+  assessment it presents is in
 - **two rows share the `next` deadline** (an assignment finishing alongside a
-  crit) — say so and ask which they're starting
+  crit that isn't its retro) — say so and ask which they're starting
 - **no `next` row at all** — the course's deliverables are done; say so and stop
 
 The student's repo for a deliverable is `<repoPrefix>-<handle>`, and
@@ -74,9 +79,10 @@ sharing a repo, so:
 
 - a crit whose `repoPrefix` matches an assessment's is a **retro crit** (weeks 4
   and 7): the student presents the assignment that just landed, so there's no
-  new prototype and no harness merge. Offer the retro prep instead — confirm
-  which repo they're presenting, run **preflight** against it, and check its
-  deployed URL still serves — then stop.
+  new prototype and no harness merge. Once that assignment's deadline has
+  passed, offer the retro prep instead — confirm which repo they're presenting,
+  run **preflight** against it, and check its deployed URL still serves — then
+  stop. Before it has passed, the assessment is the target (step 1).
 - **week 9** starts the **final-project repo**: created once and carried through
   to the A3 deadline. Run this skill for it as normal — harness carried forward,
   stack chosen deliberately (this is the stack you'll justify in A3).
