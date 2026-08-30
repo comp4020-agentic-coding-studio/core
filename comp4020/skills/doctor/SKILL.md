@@ -92,15 +92,17 @@ Most rows say what they mean. These are the ones that need judgement:
   living proof. Have them re-run it before anyone acts on it.
 - **`flyctl` WARN** — only matters from the full-stack half: checked at the week
   7 crit, used from week 8. Say so rather than presenting it as an outstanding
-  failure in week 3; onboard step 7 on the site is the whole job
-  (`mise use -g flyctl`, `flyctl auth login`, accept the org invite). The course
-  covers Fly billing, so also remind them not to add a payment method; there's
-  no CLI check for that.
-- **`flyctl-orgs` WARN** — each student's app lives in their own per-student
-  linked Fly org (`comp4020-<uid>`), not one shared course org, so there is no
-  single org name to assert. What matters is that the account shows a `SHARED`
-  org at all; only a `PERSONAL` one means the invitation hasn't been accepted,
-  and those go out ahead of the full-stack half.
+  failure in week 3; `mise use -g flyctl` is the whole install. There is no
+  Fly.io account to create and no `flyctl auth login`: the course covers Fly
+  billing and holds every app, so also remind them not to sign up or add a
+  payment method.
+- **`flyctl-token` WARN** — students reach their app with a token the course DMs
+  them on Ed when their first full-stack repo is created (start of week 7), set
+  in the shell as `FLY_API_TOKEN`; onboard step 7 on the site covers it. "Not
+  set" before then is expected. "Set, but `fly status` fails" from inside a
+  course repo means the token in the shell is for a different repo's app (each
+  full-stack repo gets its own) or the repo has no app yet; the token itself
+  reaches one app and nothing else.
 - **`plugin-comp4020` WARN** — the course skills churn early in the semester, so
   a stale copy answers with last week's facts instead of failing loudly. The fix
   is `claude plugin update comp4020@comp4020` and a restart, which is why it's

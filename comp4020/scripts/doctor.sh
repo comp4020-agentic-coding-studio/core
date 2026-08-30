@@ -146,27 +146,27 @@ have flyctl && fly_bin=flyctl
 
 if [ -n "$fly_bin" ]; then
   row PASS flyctl "$($fly_bin version 2>/dev/null | head -1)"
-  if [ "$NETWORK" = "1" ]; then
-    if $fly_bin auth whoami >/dev/null 2>&1; then
-      row PASS flyctl-auth "logged in"
 
-      # Each student gets their own linked org (comp4020-<uid>), so there is no
-      # single name to assert — just that a non-personal one is there. The Type
-      # column is the discriminator; the personal org is named after the person,
-      # so matching on the name would not work.
-      orgs=$($fly_bin orgs list 2>/dev/null | grep -c 'SHARED')
-      if [ "${orgs:-0}" -gt 0 ]; then
-        row PASS flyctl-orgs "member of an org beyond personal"
-      else
-        row WARN flyctl-orgs "only a personal org — the course invitation isn't accepted yet"
-      fi
-    else
-      row WARN flyctl-auth "not logged in"
-      row SKIP flyctl-orgs "not logged in"
-    fi
+  # Students hold no Fly account: the course DMs them a token scoped to their
+  # own app when a full-stack repo is provisioned, and flyctl reads it from
+  # FLY_API_TOKEN. The app is named after the repo, so from inside a checkout
+  # the token can be proven against the real thing; elsewhere only its presence
+  # can be checked.
+  if [ -z "${FLY_API_TOKEN:-}" ]; then
+    row WARN flyctl-token "FLY_API_TOKEN not set (arrives by Ed message with your first full-stack repo)"
   else
-    row SKIP flyctl-auth "network checks disabled"
-    row SKIP flyctl-orgs "network checks disabled"
+    fly_app=""
+    fly_origin=$(git remote get-url origin 2>/dev/null || true)
+    [ -n "$fly_origin" ] && fly_app=$(basename "$fly_origin" .git)
+    if [ "$NETWORK" != "1" ]; then
+      row SKIP flyctl-token "set; network checks disabled"
+    elif [ -z "$fly_app" ]; then
+      row PASS flyctl-token "set (run from inside a course repo to prove it against the app)"
+    elif $fly_bin status -a "$fly_app" >/dev/null 2>&1; then
+      row PASS flyctl-token "reaches $fly_app"
+    else
+      row WARN flyctl-token "set, but fly status -a $fly_app fails — wrong repo's token, or no app provisioned yet"
+    fi
   fi
 else
   row WARN flyctl "not installed (needed from the full-stack half, week 8)"
