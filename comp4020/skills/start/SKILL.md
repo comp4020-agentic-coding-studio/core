@@ -3,11 +3,10 @@ name: start
 description:
   Sets up a COMP4020/COMP8020 student's repo for a new deliverable — a weekly
   crit prototype or an assignment. Clones the repo the course provisioned for
-  them, carries their CLAUDE.md / AGENTS.md harness forward from last week,
-  pulls the spec from the course API, and helps them turn its checkable lines
-  into tests. Use at the start of a crit week, or for "start this week's
+  them, pulls the spec from the course API, and helps them turn its checkable
+  lines into tests. Use at the start of a crit week, or for "start this week's
   prototype", "start assignment 1", "set up week N", "clone this week's repo",
-  "pull this week's spec", or "carry my CLAUDE.md forward".
+  or "pull this week's spec".
 allowed-tools: Bash, Read, Edit, Write, WebFetch, Glob, Grep
 model: sonnet
 effort: medium
@@ -24,11 +23,8 @@ Each deliverable's repo comes from the starter the course chose for it — usual
 the standard template for that half of the course, sometimes a specialised one
 whose architecture is itself part of the published contract. The starter's
 `README.md` is what says which parts are fixed; read it before offering to
-change anything. What shouldn't reset is the **harness**: the `CLAUDE.md` you
-grow to direct the agent is meant to accumulate across the whole course, and it
-is read as evidence of how you work. This skill runs that transition: new repo,
-harness carried forward, stack chosen on purpose, and the week's spec pulled and
-turned into your own tests.
+change anything. This skill runs that transition: new repo, stack chosen on
+purpose, and the week's spec pulled and turned into your own tests.
 
 ## 1. Which week, and which deliverable?
 
@@ -79,38 +75,20 @@ sharing a repo, so:
 
 - a crit whose `repoPrefix` matches an assessment's is a **retro crit** (weeks 4
   and 7): the student presents the assignment that just landed, so there's no
-  new prototype and no harness merge. Once that assignment's deadline has
-  passed, offer the retro prep instead — confirm which repo they're presenting,
-  run **preflight** against it, and check its deployed URL still serves — then
-  stop. Before it has passed, the assessment is the target (step 1).
+  new prototype to set up. Once that assignment's deadline has passed, offer the
+  retro prep instead — confirm which repo they're presenting, run **preflight**
+  against it, and check its deployed URL still serves — then stop. Before it has
+  passed, the assessment is the target (step 1).
 - **week 9** starts the **final-project repo**: created once and carried through
-  to the A3 deadline. Run this skill for it as normal — harness carried forward,
-  stack chosen deliberately (this is the stack you'll justify in A3).
-- **weeks 10–11** run in that same repo: no new clone, no harness merge. Skip to
-  step 6 and pull _that week's_ crit spec into the repo you already have — new
-  tests alongside the old (don't delete a past week's), and a fresh crit
-  reflection entry at the cutoff.
+  to the A3 deadline. Run this skill for it as normal, with the stack chosen
+  deliberately (this is the stack you'll justify in A3).
+- **weeks 10–11** run in that same repo: no new clone. Skip to step 4 and pull
+  _that week's_ crit spec into the repo you already have — new tests alongside
+  the old (don't delete a past week's), and a fresh crit reflection entry at the
+  cutoff.
 - **week 12** has no crit.
 
-## 2. Find last week's harness
-
-The previous prototype repo is where `CLAUDE.md` and `AGENTS.md` come from. Use
-the ordered deliverable rows from step 1, not GitHub creation time: starting
-immediately before the selected target, walk backwards to the first row with a
-**different `repoPrefix`** whose exact `<repoPrefix>-<current-handle>`
-repository exists. Resolve the current handle with `gh api /user --jq .login`
-and check an exact name with `gh repo view`. Skip repeated rows for the same
-repo (retros and the shared final-project crits), and never select the target
-repo itself. This stays deterministic when the course provisions several future
-repos in one batch or GitHub reports equal creation times.
-
-**Confirm that exact prior repo with the student before reading it** — a harness
-carried forward from the wrong repo is worse than no harness. Do not fall back
-to “the most recently created repo”. If none of the earlier published rows has a
-repository, this is their first prototype: there's nothing to carry, the
-template's boilerplate is the starting point, and you skip to step 4. Say so.
-
-## 3. Choose the stack, deliberately
+## 2. Choose the stack, deliberately
 
 **Not every deliverable offers this choice.** If the brief or the starter's
 `README.md` says the platform is fixed, skip the stack choice and the conversion
@@ -136,26 +114,6 @@ live site.
 new provocation. A student who drags last week's source along ends up presenting
 last week's work.
 
-Last week's `spec/` splits in two, on lifespan rather than on subject:
-
-- **contract tests** answered last week's published spec, so they stay behind
-  with the prototype they were written for.
-- **sensors** assert a standard the student holds the agent to whatever the
-  brief is, rather than answering any one brief. A sensor is harness, the same
-  as a rule in `CLAUDE.md`, so it carries forward with it. Which standards are
-  worth holding is theirs to decide; don't offer a list.
-
-Walk last week's `spec/*.test.ts` with the student and sort it the same way you
-sorted the harness, dropping only what plainly answered last week's brief. The
-invariants ship with the template, so they are never carried — a copied
-`invariants.test.ts` shadows a version that may have moved on. Bring sensors
-over in the harness commit, and expect the accumulated suite to be small early
-and worth having by November: it is the clearest record a student has of what
-they have taught themselves to check for, and C9 and the A3 workflow
-justification both read it. A sensor that no longer applies (it named a
-framework they have just left) is dropped like a stale `CLAUDE.md` rule — ask
-first.
-
 Tell the student the reflection filename for this deliverable while you're here
 — it's the `reflection` column of the row you picked in step 1, and it is what
 the cutoff sweep reads. It's named for the crit, so the number in it matches the
@@ -164,7 +122,7 @@ number in the repo name (`crit-1.md` in `comp4020-crit1-<handle>`), and
 assignment: there is no reflection there, the written account is `PROCESS.md`,
 and the retro crit that follows presents from it — say that out loud instead.
 
-## 4. Clone the repo
+## 3. Clone the repo
 
 Your repo already exists. The course generates one per student per deliverable,
 owned by the org and named `<prefix>-<handle>`. You are its admin — you can flip
@@ -178,7 +136,7 @@ gh repo clone comp4020-agentic-coding-studio/<prefix>-<handle>
 `gh repo clone` writes into the current directory, so `cd` to wherever they keep
 the course first — one folder holding every course repo, `~/comp4020/` or their
 own choice. Offer to create it on the first run. By November there are a dozen
-repos, and scattered ones make step 2 harder than it needs to be.
+repos, and scattered ones are harder to find your way around.
 
 **Private, always.** It arrives private and goes public at the cutoff, not
 before — until then peers can't read your source, your prompts or your harness.
@@ -191,31 +149,7 @@ fix — the course's provisioning refuses to create a repo for anyone who hasn't
 joined. If they are an active member and the repo still isn't there, the week
 hasn't been provisioned yet. Say which of the two it is, and stop.
 
-## 5. Merge the harness
-
-This is the part that matters, and it's a merge rather than a copy. A starter's
-`CLAUDE.md` either arrives empty — the student's to write, with nothing about
-the platform pre-recorded in it — or carries boilerplate that has itself evolved
-between weeks. Diff rather than assume:
-
-- **diff** last week's `CLAUDE.md` against the one this repo arrived with, and
-  show the student what differs before touching anything.
-- **keep every rule they added** — the conventions they hold the agent to, the
-  corrections that stuck, the facts about the stack the agent kept getting
-  wrong. That accretion is theirs, and it's assessed.
-- **take whatever the starter ships** — new sections, anything describing the
-  checks that changed. An empty starter ships nothing, and the carried file
-  stands as it is.
-- **drop only what no longer applies**, such as rules about a framework they've
-  just switched away from. Ask first. A stale rule is much cheaper than a lost
-  one.
-
-Do the same for `AGENTS.md` if it exists. Commit the merged harness on its own,
-before any prototype work, with a message that says where it came from
-(`harness: carry forward from week N`). The first commit in the repo is then an
-honest answer to "where did this CLAUDE.md come from".
-
-## 6. Turn the checkable spec lines into tests
+## 4. Turn the checkable spec lines into tests
 
 The week's published `spec` (step 1) is the contract the tutor verifies at the
 crit. Deciding whether any of its prototype-specific promises deserve automated
@@ -244,23 +178,21 @@ what the starter's own build already verifies — its `README.md` says what that
 is.
 
 A student who hits the same agent failure twice this week should add a sensor
-for it rather than re-prompting: that one is harness, it carries forward, and it
-is the kind of moment `PROCESS.md` is for.
+for it rather than re-prompting: it is the kind of moment `PROCESS.md` is for.
 
 Any new tests **start red** — there's no prototype yet, and that's the point.
 Red-to-green across the week is the work, and the commits that turn each one
 green are exactly the process evidence `PROCESS.md` wants to cite.
 
-## 7. Land it
+## 5. Land it
 
 - from the repo root, run `mise install` then install dependencies and run the
   checks (`pnpm check` in the static template). Mise is the supported runtime
   path and the template pins its tested Node and pnpm versions there. Another
   runtime manager is fine if it provides those versions; do not treat that alone
-  as off piste. The supplied baseline and everything carried forward should be
-  green before the student starts — a red check later is then theirs, not
-  inherited. Their fresh spec tests are the exception: red is their starting
-  state.
+  as off piste. The supplied baseline should be green before the student starts
+  — a red check later is then theirs, not inherited. Their fresh spec tests are
+  the exception: red is their starting state.
 - if the starter arrived part-filled for this student — an allocated identifier,
   a pre-set record — its `README.md` says what to keep and what to choose. Walk
   that with them before they start replacing placeholder content, since a record
@@ -277,12 +209,11 @@ green are exactly the process evidence `PROCESS.md` wants to cite.
 - Confirm before pushing, and never `gh repo create`. The course provisions the
   repos; a repo you make yourself is in the wrong place, under the wrong owner,
   and is not the one your tutor will mark.
-- If they've already cloned this week's repo, don't clone a second copy. Offer
-  to run the harness merge into what they have.
+- If they've already cloned this week's repo, don't clone a second copy. Pick up
+  from step 2 in what they have.
 - Assignments (A1–A3) run through this skill exactly like crits
-  (`kind: assessment` in the deliverables map) — same repo anatomy, same harness
-  carry, same spec pull. Don't invent a brief or a due date the site doesn't
-  state.
+  (`kind: assessment` in the deliverables map) — same repo anatomy, same spec
+  pull. Don't invent a brief or a due date the site doesn't state.
 
 ## Hand off
 
