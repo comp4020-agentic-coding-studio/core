@@ -162,6 +162,14 @@ no `jq` in `doctor.sh` (the machine being diagnosed may have nothing installed),
 and `jq` in `next-deadline.sh` only with a clean fallback message when it's
 missing.
 
+### The loop
+
+A session loads an installed copy of the plugin, never this checkout, so an edit
+here reaches you the same way it reaches a student: land it, cut a release, then
+pick it up with the two commands under
+[keeping it up to date](#keeping-it-up-to-date). `CLAUDE.md` has the release
+steps.
+
 ## The status line (a separate, optional plugin)
 
 `comp4020-statusline` shows which credits every Claude Code session is burning,
