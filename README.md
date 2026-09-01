@@ -33,9 +33,11 @@ claude plugin marketplace update comp4020
 claude plugin update comp4020@comp4020
 ```
 
-`/comp4020:doctor` says when your copy is behind, and if the update reports the
-plugin isn't installed at that scope, re-run it with the `--scope` you installed
-under (`local` or `project`) from inside that repo.
+`/comp4020:doctor` says when your copy is behind, and so do **ship** and
+**preflight** — a stale copy runs whatever steps the version you installed
+happened to carry, which is worst at a cutoff. If the update reports the plugin
+isn't installed at that scope, re-run it with the `--scope` you installed under
+(`local` or `project`) from inside that repo.
 
 ## What's in the plugin
 
@@ -147,10 +149,11 @@ Two conventions hold the skills together, and both are enforced in CI
 - **one owner per mechanic.** A fact or procedure that more than one skill needs
   lives in exactly one place, and the others point at it: the setup checks in
   `scripts/doctor.sh`, the deadline arithmetic in `scripts/next-deadline.sh`,
-  the deploy check in `scripts/verify-deploy.sh` (which **ship** and
-  **preflight** both call), settings changes in **onboard**, diagnosis in
-  **doctor**, the status line in the companion plugin. Restating one in a second
-  skill is how they drift.
+  the deploy check in `scripts/verify-deploy.sh` and the staleness check in
+  `scripts/plugin-version.sh` (which **ship** and **preflight** both call, and
+  which **doctor** folds into its own report), settings changes in **onboard**,
+  diagnosis in **doctor**, the status line in the companion plugin. Restating
+  one in a second skill is how they drift.
 - **the site is ground truth.** Course facts — dates, weights, groups, tool
   lists, policies — are fetched from
   `comp.anu.edu.au/courses/comp4020-agentic-coding-studio`, never hardcoded
@@ -158,9 +161,9 @@ Two conventions hold the skills together, and both are enforced in CI
 
 Scripts stay dependency-light so they run on a student's unprepared laptop:
 POSIX-ish bash that works on macOS's bash 3.2 and on Linux, `shellcheck`-clean,
-no `jq` in `doctor.sh` (the machine being diagnosed may have nothing installed),
-and `jq` in `next-deadline.sh` only with a clean fallback message when it's
-missing.
+no `jq` in `doctor.sh` or `plugin-version.sh` (the machine being diagnosed may
+have nothing installed), and `jq` in `next-deadline.sh` only with a clean
+fallback message when it's missing.
 
 ### The loop
 

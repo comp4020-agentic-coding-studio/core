@@ -48,6 +48,12 @@ before a crit or assignment deadline, not after. This crosses the published
 
 Classify each PASS / WARN / FAIL:
 
+- **The plugin is current** —
+  `"$CLAUDE_PLUGIN_ROOT/scripts/plugin-version.sh" --quiet`. Silence is a PASS.
+  A row means this copy is behind the marketplace, so these checks are whatever
+  the student's installed version happens to say; report it as a WARN with the
+  `claude plugin update comp4020@comp4020` it names. Worth catching here rather
+  than at the cutoff, since an update needs a restart.
 - **Clean working tree** — `git status --porcelain`. Uncommitted or untracked
   files that belong in the submission are a FAIL; offer to stage and commit them
   (by name, after showing what they are).
