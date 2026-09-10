@@ -90,19 +90,22 @@ Classify each PASS / WARN / FAIL:
 
 ## 3. Deploy checks (when a live URL is expected)
 
-Pages is the static half's deploy target, Fly the full-stack half's — but in the
-static half the deploy only happens when **ship** flips the repo public at the
-cutoff, so pre-cutoff there is usually nothing to probe yet. Run these in the
-full-stack half (week 8 onwards), on a re-run after shipping, or whenever the
-spec asks for a live URL; otherwise skip.
+Pages is the static half's deploy target, Fly the full-stack half's. For Pages
+the deploy only happens when **ship** flips the repo public at the cutoff, so
+pre-cutoff there is usually nothing to probe yet. For Fly the student deploys by
+hand all week (private repos deploy fine; only CI's own `deploy` job waits for
+the flip), so the probe is worth running any time in the full-stack half, not
+just after shipping. Run these from week 8 onwards, on a re-run after shipping,
+or whenever the spec asks for a live URL; otherwise skip.
 
 - **Static (GitHub Pages)**: `gh run list --limit 5` — did the most recent Pages
   build succeed? A red build means the live site is stale or broken. Point them
   at the failing run (`gh run view`).
-- **Fly.io**: `flyctl status -a <repo-name>` (with the student's `FLY_API_TOKEN`
-  in the shell) — is the app deployed and healthy? A stopped machine is normal
-  between requests (the app scales to zero); a failed machine, or the wrong app,
-  is a FAIL. If flyctl or the token isn't set up, defer to the **doctor** skill.
+- **Fly.io**: `flyctl status -a <repo-name>`, run from inside the repo so the
+  token in its `mise.local.toml` reaches the app — is it deployed and healthy? A
+  stopped machine is normal between requests (the app scales to zero); a failed
+  machine, or the wrong app, is a FAIL. If flyctl or the token isn't set up,
+  defer to the **doctor** skill.
 - **It actually loads**: if the spec wants a reachable URL,
   `"$CLAUDE_PLUGIN_ROOT/scripts/verify-deploy.sh" <url>` confirms it responds
   rather than 500-ing or 404-ing — and that the css/js the page references

@@ -97,12 +97,13 @@ Most rows say what they mean. These are the ones that need judgement:
   billing and holds every app, so also remind them not to sign up or add a
   payment method.
 - **`flyctl-token` WARN** — students reach their app with a token the course DMs
-  them on Ed when their first full-stack repo is created (start of week 7), set
-  in the shell as `FLY_API_TOKEN`; onboard step 7 on the site covers it. "Not
-  set" before then is expected. "Set, but `fly status` fails" from inside a
-  course repo means the token in the shell is for a different repo's app (each
-  full-stack repo gets its own) or the repo has no app yet; the token itself
-  reaches one app and nothing else.
+  them on Ed when their first full-stack repo is created (start of week 7), as a
+  block that's pasted into the repo's gitignored `mise.local.toml`; onboard step
+  7 on the site covers it. "Not found" before then is expected. From inside a
+  course repo the row proves the token against that repo's own app, so "found in
+  `mise.local.toml`, but `fly status` fails" means the file holds a different
+  repo's token (each full-stack repo gets its own) or the repo has no app yet —
+  the token itself reaches one app and nothing else.
 - **`plugin-comp4020` WARN** — the course skills churn early in the semester, so
   a stale copy answers with last week's facts instead of failing loudly. The fix
   is `claude plugin update comp4020@comp4020` and a restart, which is why it's
@@ -144,9 +145,9 @@ is the exception that already works either way: it's looked up through
 
 1. A compact per-check summary, FAILs first, one line of reason each.
 2. For each non-PASS, the fix. Config edits (the `env` block, `COMP4020_GROUP`)
-   belong to **onboard** — name the step rather than re-deriving it. Interactive
-   logins (`gh auth login`, `flyctl auth login`) open a browser and can't be
-   fully automated: run them for the student, or hand them the command.
+   belong to **onboard** — name the step rather than re-deriving it. An
+   interactive login (`gh auth login`) opens a browser and can't be fully
+   automated: run it for the student, or hand them the command.
 3. **Confirm every fix before running it.** Never run one without an explicit
    yes.
 4. If everything's green, say so plainly and stop. No busywork.

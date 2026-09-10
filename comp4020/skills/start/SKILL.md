@@ -193,6 +193,15 @@ green are exactly the process evidence `PROCESS.md` wants to cite.
   as off piste. The supplied baseline should be green before the student starts
   — a red check later is then theirs, not inherited. Their fresh spec tests are
   the exception: red is their starting state.
+- for a full-stack deliverable (crit 7 onwards), also check the repo has a
+  `mise.local.toml` carrying `FLY_API_TOKEN` — if it doesn't, the token is in
+  the Ed message the course sent when this repo was created; paste its block in
+  from inside the repo, then `flyctl status -a <repo-name>` should answer. See
+  onboard step 7 on the site
+  (`/topics/onboard/#7-later-flyio-for-the-full-stack-half`) for the full setup.
+  During the week they deploy by hand with
+  `flyctl deploy --remote-only --ha=false -a <repo-name>`; CI takes over once
+  they ship.
 - if the starter arrived part-filled for this student — an allocated identifier,
   a pre-set record — its `README.md` says what to keep and what to choose. Walk
   that with them before they start replacing placeholder content, since a record

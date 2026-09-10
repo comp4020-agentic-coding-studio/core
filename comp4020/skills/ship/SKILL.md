@@ -83,8 +83,9 @@ repo. It knows the course-key, Anthropic, GitHub, Fly.io, AWS and private-key
 shapes, plus a broad credential-assignment heuristic; it also verifies that a
 repo-local `.claude/settings.local.json` is ignored. It never prints a matched
 value — only the file or surface where a match exists. (Actions logs aren't
-scanned: course repos configure no CI secrets, and anything a workflow file
-could echo is already in the tree.)
+scanned: a full-stack repo's `FLY_API_TOKEN` is the one CI secret the course
+installs, the workflow never echoes it, and anything else a workflow file could
+print is already in the tree.)
 
 Read a finding before reacting, because the kinds mean different things:
 
@@ -155,11 +156,15 @@ gh workflow run checks && gh run watch
 ```
 
 That single run builds and checks the app, then — once `check` passes — deploys
-to Fly and verifies the live URL and the live-update stream itself. You never
-hold the deploy credential: the token is a repo secret installed at
-provisioning, so never run `flyctl deploy` yourself. If the run fails in the
-`deploy` job, `flyctl status -a <repo-name>` and `flyctl logs -a <repo-name>`
-are read-only ways to see why — reading, not deploying by hand.
+to Fly and verifies the live URL and the live-update stream itself. Up to this
+point the student has been deploying by hand from the repo, using the token
+provisioning left in its `mise.local.toml`:
+`flyctl deploy --remote-only --ha=false -a <repo-name>` is that command, and
+that's how the app got live during the week. From the flip onward CI takes over,
+deploying every push to `main` with a separate `FLY_API_TOKEN` repo secret the
+course installed alongside the student's own copy. If the run fails in the
+`deploy` job, `flyctl status -a <repo-name>` and `flyctl logs -a <repo-name>` —
+run the same way, from inside the repo — are how to see why.
 
 ## 5. Verify the deploy
 

@@ -147,26 +147,51 @@ have flyctl && fly_bin=flyctl
 if [ -n "$fly_bin" ]; then
   row PASS flyctl "$($fly_bin version 2>/dev/null | head -1)"
 
-  # Students hold no Fly account: the course DMs them a token scoped to their
-  # own app when a full-stack repo is provisioned, and flyctl reads it from
-  # FLY_API_TOKEN. The app is named after the repo, so from inside a checkout
-  # the token can be proven against the real thing; elsewhere only its presence
-  # can be checked.
-  if [ -z "${FLY_API_TOKEN:-}" ]; then
-    row WARN flyctl-token "FLY_API_TOKEN not set (arrives by Ed message with your first full-stack repo)"
-  else
-    fly_app=""
-    fly_origin=$(git remote get-url origin 2>/dev/null || true)
-    [ -n "$fly_origin" ] && fly_app=$(basename "$fly_origin" .git)
+  # Students hold no Fly account: each full-stack repo's token arrives by Ed
+  # message as a paste-ready block for that repo's gitignored mise.local.toml
+  # (an [env] table setting FLY_API_TOKEN), so the token lives with the repo,
+  # not the shell. From inside a repo (mise loads the file once `mise install`
+  # has run there — activation or shims — and `mise exec` works regardless)
+  # this proves the token against that repo's own app; a bare FLY_API_TOKEN in
+  # the environment is a fallback some setups still use, and outside a repo
+  # only its presence can be checked.
+  fly_app=""
+  fly_origin=$(git remote get-url origin 2>/dev/null || true)
+  [ -n "$fly_origin" ] && fly_app=$(basename "$fly_origin" .git)
+  fly_repo_root=$(git rev-parse --show-toplevel 2>/dev/null || true)
+  fly_mise_local=""
+  [ -n "$fly_repo_root" ] && fly_mise_local="$fly_repo_root/mise.local.toml"
+  fly_mise_has_token=0
+  if [ -n "$fly_mise_local" ] && [ -f "$fly_mise_local" ] && grep -q FLY_API_TOKEN "$fly_mise_local" 2>/dev/null; then
+    fly_mise_has_token=1
+  fi
+
+  if [ -n "$fly_app" ] && [ "$fly_mise_has_token" = 1 ]; then
     if [ "$NETWORK" != "1" ]; then
-      row SKIP flyctl-token "set; network checks disabled"
-    elif [ -z "$fly_app" ]; then
-      row PASS flyctl-token "set (run from inside a course repo to prove it against the app)"
-    elif $fly_bin status -a "$fly_app" >/dev/null 2>&1; then
-      row PASS flyctl-token "reaches $fly_app"
+      row SKIP flyctl-token "found in mise.local.toml; network checks disabled"
     else
-      row WARN flyctl-token "set, but fly status -a $fly_app fails — wrong repo's token, or no app provisioned yet"
+      fly_ok=1
+      if have mise; then
+        mise exec -- "$fly_bin" status -a "$fly_app" >/dev/null 2>&1 || fly_ok=0
+      else
+        "$fly_bin" status -a "$fly_app" >/dev/null 2>&1 || fly_ok=0
+      fi
+      if [ "$fly_ok" = 1 ]; then
+        row PASS flyctl-token "reaches $fly_app (token from mise.local.toml)"
+      else
+        row WARN flyctl-token "found in mise.local.toml but fly status -a $fly_app fails — wrong repo's token, or no app provisioned yet"
+      fi
     fi
+  elif [ -z "${FLY_API_TOKEN:-}" ]; then
+    row WARN flyctl-token "no token in mise.local.toml or the environment (arrives by Ed message with your first full-stack repo)"
+  elif [ "$NETWORK" != "1" ]; then
+    row SKIP flyctl-token "set; network checks disabled"
+  elif [ -z "$fly_app" ]; then
+    row PASS flyctl-token "set (run from inside a course repo to prove it against the app — normally lives in its mise.local.toml)"
+  elif $fly_bin status -a "$fly_app" >/dev/null 2>&1; then
+    row PASS flyctl-token "reaches $fly_app"
+  else
+    row WARN flyctl-token "set, but fly status -a $fly_app fails — wrong repo's token, or no app provisioned yet"
   fi
 else
   row WARN flyctl "not installed (needed from the full-stack half, week 8)"
