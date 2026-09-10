@@ -76,12 +76,15 @@ node "$CLAUDE_PLUGIN_ROOT/scripts/secret-scan.mjs"
 ```
 
 It fetches remote refs, then scans the current tracked and untracked worktree
-and every reachable Git diff. It knows the course-key, Anthropic, GitHub,
-Fly.io, AWS and private-key shapes, plus a broad credential-assignment
-heuristic; it also verifies that a repo-local `.claude/settings.local.json` is
-ignored. It never prints a matched value — only the file or surface where a
-match exists. (Actions logs aren't scanned: course repos configure no CI
-secrets, and anything a workflow file could echo is already in the tree.)
+and every diff on a branch, remote or tag. It is deliberately coarse about what
+it can't publish: local-only refs (a stash especially) and the inside of binary
+files are out of scope, because the target is a credential committed to the
+repo. It knows the course-key, Anthropic, GitHub, Fly.io, AWS and private-key
+shapes, plus a broad credential-assignment heuristic; it also verifies that a
+repo-local `.claude/settings.local.json` is ignored. It never prints a matched
+value — only the file or surface where a match exists. (Actions logs aren't
+scanned: course repos configure no CI secrets, and anything a workflow file
+could echo is already in the tree.)
 
 Read a finding before reacting, because the kinds mean different things:
 

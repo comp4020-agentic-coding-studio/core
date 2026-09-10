@@ -67,9 +67,10 @@ function command(commandName, args, cwd, allowedStatuses = [0]) {
     stdio: ["ignore", "pipe", "pipe"],
   });
   if (result.error || !allowedStatuses.includes(result.status)) {
-    throw new ScanError(
-      `${commandName} could not complete safely (exit ${result.status ?? "unknown"})`,
-    );
+    // Name the cause: a killed git (ENOBUFS on a huge history) and a missing
+    // git read identically otherwise, and both stop a student at a cutoff.
+    const reason = result.error?.code ?? `exit ${result.status ?? "unknown"}`;
+    throw new ScanError(`${commandName} could not complete safely (${reason})`);
   }
   return result;
 }
@@ -125,12 +126,26 @@ function scanWorktree(findings, root) {
 }
 
 function scanHistory(findings, root) {
+  // Branches, remotes and tags rather than --all: refs/stash is under refs/, so
+  // --all walks a stash whose untracked-files parent can hold node_modules --
+  // hundreds of megabytes of diff that can never be published anyway, and that
+  // a student could not act on if it did match. Binaries stay unexpanded (no
+  // --text) for the same reason: a scan that is coarse about blobs still runs.
   const history = command(
     "git",
-    ["log", "--all", "--full-history", "--patch", "--no-ext-diff", "--text", "--format=fuller"],
+    [
+      "log",
+      "--branches",
+      "--remotes",
+      "--tags",
+      "--full-history",
+      "--patch",
+      "--no-ext-diff",
+      "--format=fuller",
+    ],
     root,
   ).stdout;
-  scanText(findings, history, "reachable Git history");
+  scanText(findings, history, "publishable Git history");
 }
 
 function main() {
@@ -146,7 +161,7 @@ function main() {
   const findings = [];
   process.stdout.write("secret-scan: scanning publishable worktree files\n");
   scanWorktree(findings, root);
-  process.stdout.write("secret-scan: scanning all reachable Git history\n");
+  process.stdout.write("secret-scan: scanning publishable Git history\n");
   scanHistory(findings, root);
 
   if (findings.length > 0) {
@@ -160,7 +175,7 @@ function main() {
     return;
   }
 
-  process.stdout.write("secret-scan: clean — worktree and reachable history scanned\n");
+  process.stdout.write("secret-scan: clean — worktree and publishable history scanned\n");
 }
 
 if (resolve(process.argv[1] ?? "") === fileURLToPath(import.meta.url)) {
