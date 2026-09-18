@@ -199,9 +199,11 @@ green are exactly the process evidence `PROCESS.md` wants to cite.
   from inside the repo, then `flyctl status -a <repo-name>` should answer. See
   onboard step 7 on the site
   (`/topics/onboard/#7-later-flyio-for-the-full-stack-half`) for the full setup.
-  During the week they deploy by hand with
-  `flyctl deploy --remote-only --ha=false -a <repo-name>`; CI takes over once
-  they ship.
+  Deploy the untouched starter straight away with
+  `flyctl deploy --remote-only --ha=false -a <repo-name>` and open the URL: a
+  live starter is the week 7 check-in, and it proves the whole path before any
+  work rides on it. The same command updates the live app all week; CI takes
+  over once they ship.
 - if the starter arrived part-filled for this student — an allocated identifier,
   a pre-set record — its `README.md` says what to keep and what to choose. Walk
   that with them before they start replacing placeholder content, since a record

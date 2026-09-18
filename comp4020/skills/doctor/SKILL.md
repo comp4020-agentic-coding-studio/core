@@ -90,8 +90,9 @@ Most rows say what they mean. These are the ones that need judgement:
   unreachable, or answered with something unexpected. That is not evidence they
   aren't a member — students who can already clone and push their repo are
   living proof. Have them re-run it before anyone acts on it.
-- **`flyctl` WARN** — only matters from the full-stack half: checked at the week
-  7 crit, used from week 8. Say so rather than presenting it as an outstanding
+- **`flyctl` WARN** — only matters from the full-stack half: the first
+  full-stack repo arrives at the start of week 7 and its starter is deployed at
+  the week 7 crit's door. Say so rather than presenting it as an outstanding
   failure in week 3; `mise use -g flyctl` is the whole install. There is no
   Fly.io account to create and no `flyctl auth login`: the course covers Fly
   billing and holds every app, so also remind them not to sign up or add a
@@ -104,6 +105,13 @@ Most rows say what they mean. These are the ones that need judgement:
   `mise.local.toml`, but `fly status` fails" means the file holds a different
   repo's token (each full-stack repo gets its own) or the repo has no app yet —
   the token itself reaches one app and nothing else.
+- **`flyctl-deployed` WARN** — the token works but nothing has been deployed:
+  this is the week 7 check-in itself, so the fix is the one command in the
+  detail, run from inside the repo, then the URL in a browser. The untouched
+  starter is what's expected; there is nothing to build first. A FAIL on this
+  row is different: a machine exists but the URL doesn't answer, so a deploy
+  broke the app rather than the setup — `flyctl logs -a <repo>` from inside the
+  repo says how, and the previous deploy is not restored automatically.
 - **`plugin-comp4020` WARN** — the course skills churn early in the semester, so
   a stale copy answers with last week's facts instead of failing loudly. The fix
   is `claude plugin update comp4020@comp4020` and a restart, which is why it's

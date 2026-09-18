@@ -166,21 +166,25 @@ if [ -n "$fly_bin" ]; then
     fly_mise_has_token=1
   fi
 
+  # From inside the repo the check runs the same way the student's shell
+  # does: through mise when the token is in mise.local.toml, directly when
+  # it's a bare environment variable.
+  fly_run() {
+    if [ "$fly_mise_has_token" = 1 ] && have mise; then
+      mise exec -- "$fly_bin" "$@"
+    else
+      "$fly_bin" "$@"
+    fi
+  }
+  fly_token_ok=0
   if [ -n "$fly_app" ] && [ "$fly_mise_has_token" = 1 ]; then
     if [ "$NETWORK" != "1" ]; then
       row SKIP flyctl-token "found in mise.local.toml; network checks disabled"
+    elif fly_run status -a "$fly_app" >/dev/null 2>&1; then
+      fly_token_ok=1
+      row PASS flyctl-token "reaches $fly_app (token from mise.local.toml)"
     else
-      fly_ok=1
-      if have mise; then
-        mise exec -- "$fly_bin" status -a "$fly_app" >/dev/null 2>&1 || fly_ok=0
-      else
-        "$fly_bin" status -a "$fly_app" >/dev/null 2>&1 || fly_ok=0
-      fi
-      if [ "$fly_ok" = 1 ]; then
-        row PASS flyctl-token "reaches $fly_app (token from mise.local.toml)"
-      else
-        row WARN flyctl-token "found in mise.local.toml but fly status -a $fly_app fails — wrong repo's token, or no app provisioned yet"
-      fi
+      row WARN flyctl-token "found in mise.local.toml but fly status -a $fly_app fails — wrong repo's token, or no app provisioned yet"
     fi
   elif [ -z "${FLY_API_TOKEN:-}" ]; then
     row WARN flyctl-token "no token in mise.local.toml or the environment (arrives by Ed message with your first full-stack repo)"
@@ -188,13 +192,29 @@ if [ -n "$fly_bin" ]; then
     row SKIP flyctl-token "set; network checks disabled"
   elif [ -z "$fly_app" ]; then
     row PASS flyctl-token "set (run from inside a course repo to prove it against the app — normally lives in its mise.local.toml)"
-  elif $fly_bin status -a "$fly_app" >/dev/null 2>&1; then
+  elif fly_run status -a "$fly_app" >/dev/null 2>&1; then
+    fly_token_ok=1
     row PASS flyctl-token "reaches $fly_app"
   else
     row WARN flyctl-token "set, but fly status -a $fly_app fails — wrong repo's token, or no app provisioned yet"
   fi
+
+  # The full-stack check-in: the starter deployed and serving at the URL of
+  # record. The URL is the first fact (curl -f: a stopped machine wakes on the
+  # request, so it waits); if it doesn't answer, an empty machine list means
+  # nothing has been deployed yet, and anything else means a deploy broke it.
+  if [ "$fly_token_ok" = 1 ]; then
+    fly_url="https://$fly_app.fly.dev/"
+    if curl -sf -o /dev/null --max-time 45 "$fly_url" 2>/dev/null; then
+      row PASS flyctl-deployed "$fly_url serves 200"
+    elif [ -z "$(fly_run machines list -a "$fly_app" --quiet 2>/dev/null)" ]; then
+      row WARN flyctl-deployed "nothing deployed to $fly_app yet — from inside the repo: flyctl deploy --remote-only --ha=false -a $fly_app"
+    else
+      row FAIL flyctl-deployed "$fly_app has a machine but $fly_url doesn't answer — the last deploy broke the app; flyctl logs -a $fly_app says how"
+    fi
+  fi
 else
-  row WARN flyctl "not installed (needed from the full-stack half, week 8)"
+  row WARN flyctl "not installed (needed from week 7, when the first full-stack repo arrives)"
 fi
 
 # --- Claude Code / strproxy -------------------------------------------------
