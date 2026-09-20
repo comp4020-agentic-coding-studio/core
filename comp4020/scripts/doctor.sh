@@ -150,11 +150,11 @@ if [ -n "$fly_bin" ]; then
   # Students hold no Fly account: each full-stack repo's token arrives by Ed
   # message as a paste-ready block for that repo's gitignored mise.local.toml
   # (an [env] table setting FLY_API_TOKEN), so the token lives with the repo,
-  # not the shell. From inside a repo (mise loads the file once `mise install`
-  # has run there — activation or shims — and `mise exec` works regardless)
-  # this proves the token against that repo's own app; a bare FLY_API_TOKEN in
-  # the environment is a fallback some setups still use, and outside a repo
-  # only its presence can be checked.
+  # not the shell. From inside a repo (a file the student wrote themselves is
+  # trusted, so mise loads it with no further step, and `mise exec` works even
+  # where activation doesn't) this proves the token against that repo's own
+  # app; a bare FLY_API_TOKEN in the environment is a fallback some setups
+  # still use, and outside a repo only its presence can be checked.
   fly_app=""
   fly_origin=$(git remote get-url origin 2>/dev/null || true)
   [ -n "$fly_origin" ] && fly_app=$(basename "$fly_origin" .git)
