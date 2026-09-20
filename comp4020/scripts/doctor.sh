@@ -155,9 +155,14 @@ if [ -n "$fly_bin" ]; then
   # where activation doesn't) this proves the token against that repo's own
   # app; a bare FLY_API_TOKEN in the environment is a fallback some setups
   # still use, and outside a repo only its presence can be checked.
+  # The app is named after the repo, in lowercase: fly takes no capitals in an
+  # app name, flyctl -a is case-sensitive, and a mixed-case hostname gets a 421
+  # over HTTP/2. The course names full-stack repos in lowercase too, but GitHub
+  # answers to either spelling, so an origin URL can still carry the capitals
+  # of the student's handle --- hence the tr.
   fly_app=""
   fly_origin=$(git remote get-url origin 2>/dev/null || true)
-  [ -n "$fly_origin" ] && fly_app=$(basename "$fly_origin" .git)
+  [ -n "$fly_origin" ] && fly_app=$(basename "$fly_origin" .git | tr '[:upper:]' '[:lower:]')
   fly_repo_root=$(git rev-parse --show-toplevel 2>/dev/null || true)
   fly_mise_local=""
   [ -n "$fly_repo_root" ] && fly_mise_local="$fly_repo_root/mise.local.toml"
