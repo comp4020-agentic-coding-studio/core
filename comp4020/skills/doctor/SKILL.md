@@ -103,8 +103,22 @@ Most rows say what they mean. These are the ones that need judgement:
   7 on the site covers it. "Not found" before then is expected. From inside a
   course repo the row proves the token against that repo's own app, so "found in
   `mise.local.toml`, but `fly status` fails" means the file holds a different
-  repo's token (each full-stack repo gets its own) or the repo has no app yet —
-  the token itself reaches one app and nothing else.
+  repo's token (each full-stack repo gets its own) or that token has been
+  revoked — the app is provisioned before the token is ever sent, so a missing
+  app is not the explanation. The token reaches one app and nothing else.
+- **`flyctl-token-shape` FAIL** — half a token. A Fly token is two macaroons
+  joined by a comma, and with the second one gone flyctl can still read the
+  token's id, so its errors name the token and look like it is being read:
+  `missing third-party discharge token` from a deploy, 401 from everything else.
+  The fix is to re-copy the whole line from the Ed DM. On Windows it usually
+  comes from `setx`, where an unquoted comma ends the value.
+- **`flyctl-token-shadow` WARN** — `mise.local.toml` holds one token and the
+  shell holds another. Every other flyctl row runs through mise, so they can all
+  pass while the student's own bare `flyctl deploy` reads the shell's token and
+  fails — they then debug a file flyctl never opened. Have them run
+  `mise exec -- flyctl ...`, or clear the variable (PowerShell:
+  `[Environment]::SetEnvironmentVariable('FLY_API_TOKEN', $null, 'User')`, then
+  a fresh terminal).
 - **`flyctl-deployed` WARN** — the token works but nothing has been deployed:
   this is the week 7 check-in itself, so the fix is the one command in the
   detail, run from inside the repo, then the URL in a browser. The untouched

@@ -167,8 +167,37 @@ if [ -n "$fly_bin" ]; then
   fly_mise_local=""
   [ -n "$fly_repo_root" ] && fly_mise_local="$fly_repo_root/mise.local.toml"
   fly_mise_has_token=0
+  fly_file_token=""
   if [ -n "$fly_mise_local" ] && [ -f "$fly_mise_local" ] && grep -q FLY_API_TOKEN "$fly_mise_local" 2>/dev/null; then
     fly_mise_has_token=1
+    fly_file_token=$(sed -n 's/^[[:space:]]*FLY_API_TOKEN[[:space:]]*=[[:space:]]*"\(.*\)"[[:space:]]*$/\1/p' "$fly_mise_local" | tail -1)
+  fi
+
+  # A Fly token is two macaroons joined by a comma: the permission token, and
+  # the discharge that proves it. Keep only the first and flyctl can still read
+  # the token's id --- so its errors name it, and look like the token is being
+  # seen --- but every use of it fails: "missing third-party discharge token"
+  # locally, 401 from the API. A comma is an argument separator in cmd.exe, so
+  # `setx FLY_API_TOKEN FlyV1 fm2_...,fm2_...` cuts the value exactly there.
+  # Shape needs no network, so it is checked before anything is proven.
+  fly_half_token() { case "$1" in *,*) return 1 ;; *) return 0 ;; esac; }
+
+  if [ -n "$fly_file_token" ] && fly_half_token "$fly_file_token"; then
+    row FAIL flyctl-token-shape "the token in mise.local.toml is half a token — a Fly token is two macaroons joined by a comma; re-copy the whole line from the Ed message"
+  fi
+  if [ -n "${FLY_API_TOKEN:-}" ] && fly_half_token "$FLY_API_TOKEN"; then
+    row FAIL flyctl-token-shape "FLY_API_TOKEN in this shell is half a token — a Fly token is two macaroons joined by a comma, and cmd.exe's setx cuts a value at the comma; unset it and keep the token in the repo's mise.local.toml"
+  fi
+
+  # mise hands mise.local.toml to the commands it runs: `mise exec --`, or any
+  # shell where `mise activate` is installed. A bare `flyctl deploy` in a shell
+  # without activation reads FLY_API_TOKEN from the environment instead, so a
+  # token left there from an earlier repo (or an earlier attempt) shadows the
+  # one in the file and the student debugs a file flyctl never opened. Every
+  # row below runs through mise, so this is the failure doctor would otherwise
+  # pass straight over.
+  if [ -n "$fly_file_token" ] && [ -n "${FLY_API_TOKEN:-}" ] && [ "$FLY_API_TOKEN" != "$fly_file_token" ]; then
+    row WARN flyctl-token-shadow "this shell's FLY_API_TOKEN is not the token in mise.local.toml, and a bare flyctl uses the shell's — run it as 'mise exec -- flyctl ...', or clear the variable"
   fi
 
   # From inside the repo the check runs the same way the student's shell
@@ -189,7 +218,7 @@ if [ -n "$fly_bin" ]; then
       fly_token_ok=1
       row PASS flyctl-token "reaches $fly_app (token from mise.local.toml)"
     else
-      row WARN flyctl-token "found in mise.local.toml but fly status -a $fly_app fails — wrong repo's token, or no app provisioned yet"
+      row WARN flyctl-token "found in mise.local.toml but fly status -a $fly_app fails — it's another repo's token, or it's been revoked; ask on your Ed DM thread for a new one"
     fi
   elif [ -z "${FLY_API_TOKEN:-}" ]; then
     row WARN flyctl-token "no token in mise.local.toml or the environment (arrives by Ed message with your first full-stack repo)"
@@ -201,7 +230,7 @@ if [ -n "$fly_bin" ]; then
     fly_token_ok=1
     row PASS flyctl-token "reaches $fly_app"
   else
-    row WARN flyctl-token "set, but fly status -a $fly_app fails — wrong repo's token, or no app provisioned yet"
+    row WARN flyctl-token "set, but fly status -a $fly_app fails — it's another repo's token, or it's been revoked; the token belongs in this repo's mise.local.toml, not the environment"
   fi
 
   # The full-stack check-in: the starter deployed and serving at the URL of
