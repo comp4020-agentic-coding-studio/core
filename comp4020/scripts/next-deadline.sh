@@ -13,6 +13,9 @@
 #   deliverable  STATE  KIND  SLUG  TITLE  WEEK  DEADLINE  TIME_KNOWN  REPO_PREFIX  REFLECTION  PAGE  SESSION  ROOM  MOVED
 #
 #   STATE       past | next | upcoming   (`next` is the first deadline still ahead)
+#               — true only at the `now` header. The `hint` header tells the
+#               agent to re-run rather than reuse an earlier result, because a
+#               session started before a cutoff otherwise warns about it after.
 #   DEADLINE    YYYY-MM-DDTHH:MM in the course timezone
 #   TIME_KNOWN  yes  — the time is real, quote it
 #               no   — the date is real but the time is a sort key only. Crits
@@ -152,6 +155,9 @@ printf '%s' "$payload" | jq -r \
                   else "ok" end)],
       ["today", $today],
       ["now", $now],
+      ["hint", ("STATE is as of now (" + $now + ", course time). Re-run this script"
+                + " before quoting any deadline later in the session, and never judge"
+                + " past or next from the date yourself.")],
       ["timezone", $root.timezone],
       ["group", (if $group == "" then "unset" else $group end)],
       ["session", ($g.session // "")],
