@@ -98,11 +98,13 @@ are worth adding, what things are called — is still all theirs.
 
 Otherwise the course lets you use a completely different stack each week, so
 long as it deploys to that week's target — the course default, the same as last
-week, something new, or bare hand-written HTML and CSS. Ask once, make the
-choice explicit, and hand the setup to the **stack** skill, which owns every arm
-of it. From C2 the published specs assume the default (Astro), so a fresh repo
-should be one "yes" away from it; separate repos are what make switching cheap,
-and this is the week to use that.
+week, something new, or bare hand-written HTML and CSS. Ask once and make the
+choice explicit. For a Pages repo, hand the setup to the **stack** skill, which
+owns every arm of it; from C2 the published specs assume the default (Astro), so
+a fresh repo should be one "yes" away from it, and separate repos are what make
+switching cheap. The final-project repo has no default and no conversion: it
+arrives with a placeholder container, and the student's stack replaces it within
+what `fly.toml`, the `Dockerfile` and `spec/README.md` fix.
 
 Whatever they choose, the build config is re-derived in the new repo rather than
 copied across from the old one. `astro.config.ts` is the trap: its `base` embeds
@@ -187,23 +189,25 @@ green are exactly the process evidence `PROCESS.md` wants to cite.
 ## 5. Land it
 
 - from the repo root, run `mise install` then install dependencies and run the
-  checks (`pnpm check` in the static template). Mise is the supported runtime
-  path and the template pins its tested Node and pnpm versions there. Another
-  runtime manager is fine if it provides those versions; do not treat that alone
-  as off piste. The supplied baseline should be green before the student starts
-  — a red check later is then theirs, not inherited. Their fresh spec tests are
-  the exception: red is their starting state.
+  checks (`pnpm check`). In the final-project repo `pnpm check` needs a running
+  app, so run it after the deploy below, against the live URL:
+  `APP_URL=https://<repo-name>.fly.dev pnpm check` (PowerShell:
+  `$env:APP_URL="https://<repo-name>.fly.dev"; pnpm check`). Mise is the
+  supported runtime path and the template pins its tested Node and pnpm versions
+  there. Another runtime manager is fine if it provides those versions; do not
+  treat that alone as off piste. The supplied baseline should be green before
+  the student starts — a red check later is then theirs, not inherited. Their
+  fresh spec tests are the exception: red is their starting state.
 - for a full-stack deliverable (crit 7 onwards), also check the repo has a
   `mise.local.toml` carrying `FLY_API_TOKEN` — if it doesn't, the token is in
   the Ed message the course sent when this repo was created; paste its block in
   from inside the repo, then `flyctl status -a <repo-name>` should answer. See
   onboard step 7 on the site
   (`/topics/onboard/#7-later-flyio-for-the-full-stack-half`) for the full setup.
-  Deploy the untouched starter straight away with
-  `flyctl deploy --remote-only --ha=false -a <repo-name>` and open the URL: a
-  live starter is the week 7 check-in, and it proves the whole path before any
-  work rides on it. The same command updates the live app all week; CI takes
-  over once they ship.
+  Deploy the repo as it arrived straight away with
+  `flyctl deploy --remote-only --ha=false -a <repo-name>` and open the URL: it
+  proves the whole path before any work rides on it. The same command updates
+  the live app all week; CI takes over once they ship.
 - if the starter arrived part-filled for this student — an allocated identifier,
   a pre-set record — its `README.md` says what to keep and what to choose. Walk
   that with them before they start replacing placeholder content, since a record
