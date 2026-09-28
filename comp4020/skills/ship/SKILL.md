@@ -156,15 +156,15 @@ gh workflow run checks && gh run watch
 ```
 
 That single run builds and checks the app, then — once `check` passes — deploys
-to Fly and verifies the live URL and the live-update stream itself. Up to this
-point the student has been deploying by hand from the repo, using the token
-provisioning left in its `mise.local.toml`:
-`flyctl deploy --remote-only --ha=false -a <repo-name>` is that command, and
-that's how the app got live during the week. From the flip onward CI takes over,
-deploying every push to `main` with a separate `FLY_API_TOKEN` repo secret the
-course installed alongside the student's own copy. If the run fails in the
-`deploy` job, `flyctl status -a <repo-name>` and `flyctl logs -a <repo-name>` —
-run the same way, from inside the repo — are how to see why.
+to Fly and checks the live site. Up to this point the student has been deploying
+by hand from the repo, using the token provisioning left in its
+`mise.local.toml`: `flyctl deploy --remote-only --ha=false -a <repo-name>` is
+that command, and that's how the app got live during the week. From the flip
+onward CI takes over, deploying every push to `main` with a separate
+`FLY_API_TOKEN` repo secret the course installed alongside the student's own
+copy. If the run fails in the `deploy` job, `flyctl status -a <repo-name>` and
+`flyctl logs -a <repo-name>` — run the same way, from inside the repo — are how
+to see why.
 
 ## 5. Verify the deploy
 
@@ -191,9 +191,9 @@ status code already gave you, and misses exactly what this catches.
 
 Report the URL and what the script found. A repo that never deployed is worth no
 marks, so "the flip worked" is not the finish line — a live URL that serves a
-working page is. If assets are missing, the fix is the base path: run the
-**stack** skill, which wires it up, or set Astro's `base` to `/<repo-name>` by
-hand, then push and re-verify.
+working page is. If assets are missing on a Pages site, the fix is the base
+path: run the **stack** skill, which wires it up, or set Astro's `base` to
+`/<repo-name>` by hand, then push and re-verify.
 
 ## 6. Tag the crit state (final-project run, weeks 9–11)
 
@@ -213,12 +213,14 @@ crits 8, 9 and 10, in weeks 9, 10 and 11. Take it from the deliverable you
 identified in step 1 — it's the number leading the crit's slug, and the same
 number your reflection for that crit carries (`reflections/crit-8.md`). This
 applies whether or not a flip happened this week — in weeks 10 and 11 the repo
-is already public and shipping is just deploy, verify, tag. Re-shipping before
-the cutoff moves the tag to the new deploy (`git tag -fa`, then force-push
-**that tag ref only** — the one permitted force in this course, because the
-cutoff hasn't fixed the state yet). Never move a crit tag after its cutoff has
-passed: from then on it records what the tutor marked, and moving it defeats the
-purpose.
+is already public and shipping is just deploy, verify, tag. Before tagging,
+confirm `reflections/crit-<n>.md` is in the deployed commit:
+`pnpm check:evidence` passes here on any one of the three crit reflections, but
+the sweep reads only this crit's. Re-shipping before the cutoff moves the tag to
+the new deploy (`git tag -fa`, then force-push **that tag ref only** — the one
+permitted force in this course, because the cutoff hasn't fixed the state yet).
+Never move a crit tag after its cutoff has passed: from then on it records what
+the tutor marked, and moving it defeats the purpose.
 
 Weeks 2–8 don't need this — each of those prototypes is its own repo, which is
 its own frozen record.
