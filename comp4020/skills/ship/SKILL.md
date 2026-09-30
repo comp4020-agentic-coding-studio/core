@@ -132,8 +132,21 @@ site, then dispatch the deploy workflow and wait:
 
 ```sh
 gh api -X POST /repos/{owner}/{repo}/pages -f build_type=workflow
-gh workflow run checks && gh run watch
+gh workflow run checks
 ```
+
+Then find the run the dispatch started and watch it by ID. With no ID,
+`gh run watch` stops at "Run ID required when not running interactively" in an
+agent's shell:
+
+```sh
+gh run list --workflow checks --event workflow_dispatch --limit 1 --json databaseId,headSha,createdAt
+gh run watch <databaseId> --exit-status
+```
+
+A list taken the instant after the dispatch can still show the previous run: if
+its `createdAt` is older than the dispatch, list again. Its `headSha` is the
+deployed commit step 6 tags.
 
 `build_type=workflow` is load-bearing, and the tempting alternative
 (`-f 'source[branch]=main' -f 'source[path]=/'`) is actively wrong here. It
@@ -149,22 +162,19 @@ integration"), which is why this step is yours to run.
 For a **fly.io deliverable** (the full-stack half, weeks 8+), the deploy is
 gated on the same visibility flip — CI's `deploy` job only runs once the repo is
 public, same as Pages. The flip triggers no push event, so dispatch the workflow
-and wait, exactly as above:
-
-```sh
-gh workflow run checks && gh run watch
-```
+(`gh workflow run checks`), then find and watch its run exactly as above.
 
 That single run builds and checks the app, then — once `check` passes — deploys
 to Fly and checks the live site. Up to this point the student has been deploying
 by hand from the repo, using the token provisioning left in its
-`mise.local.toml`: `flyctl deploy --remote-only --ha=false -a <repo-name>` is
-that command, and that's how the app got live during the week. From the flip
-onward CI takes over, deploying every push to `main` with a separate
-`FLY_API_TOKEN` repo secret the course installed alongside the student's own
-copy. If the run fails in the `deploy` job, `flyctl status -a <repo-name>` and
-`flyctl logs -a <repo-name>` — run the same way, from inside the repo — are how
-to see why.
+`mise.local.toml`:
+`mise exec -- flyctl deploy --remote-only --ha=false -a <repo-name>` is that
+command, and that's how the app got live during the week. From the flip onward
+CI takes over, deploying every push to `main` with a separate `FLY_API_TOKEN`
+repo secret the course installed alongside the student's own copy. If the run
+fails in the `deploy` job, `mise exec -- flyctl status -a <repo-name>` and
+`mise exec -- flyctl logs -a <repo-name>` — run the same way, from inside the
+repo — are how to see why.
 
 ## 5. Verify the deploy
 
@@ -211,9 +221,12 @@ git push origin crit-<n>
 `<n>` is the **crit number**, not the week: the three final-project crits are
 crits 8, 9 and 10, in weeks 9, 10 and 11. Take it from the deliverable you
 identified in step 1 — it's the number leading the crit's slug, and the same
-number your reflection for that crit carries (`reflections/crit-8.md`). This
-applies whether or not a flip happened this week — in weeks 10 and 11 the repo
-is already public and shipping is just deploy, verify, tag. Before tagging,
+number your reflection for that crit carries (`reflections/crit-8.md`).
+`<deployed-sha>` is the `headSha` of the run step 4 watched; in a week with no
+flip, it's the latest green `checks` run on `main`
+(`gh run list --workflow checks --branch main --limit 1 --json headSha,conclusion`).
+This applies whether or not a flip happened this week — in weeks 10 and 11 the
+repo is already public and shipping is just deploy, verify, tag. Before tagging,
 confirm `reflections/crit-<n>.md` is in the deployed commit:
 `pnpm check:evidence` passes here on any one of the three crit reflections, but
 the sweep reads only this crit's. Re-shipping before the cutoff moves the tag to
