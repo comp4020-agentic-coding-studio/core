@@ -21,10 +21,12 @@ cost you one week.
 
 Each deliverable's repo comes from the starter the course chose for it — usually
 the standard template for that half of the course, sometimes a specialised one
-whose architecture is itself part of the published contract. The starter's
-`README.md` is what says which parts are fixed; read it before offering to
-change anything. This skill runs that transition: new repo, stack chosen on
-purpose, and the week's spec pulled and turned into your own tests.
+whose architecture is itself part of the published contract. The starter says
+which parts are fixed: its `README.md`, or in the final-project repo, whose
+`README.md` is the student's to write, the comments in `fly.toml`, the
+`Dockerfile` and `spec/README.md`. Read them before offering to change anything.
+This skill runs that transition: new repo, stack chosen on purpose, and the
+week's spec pulled and turned into your own tests.
 
 ## 1. Which week, and which deliverable?
 
@@ -119,10 +121,10 @@ last week's work.
 Tell the student the reflection filename for this deliverable while you're here
 — it's the `reflection` column of the row you picked in step 1, and it is what
 the cutoff sweep reads. It's named for the crit, so the number in it matches the
-number in the repo name (`crit-1.md` in `comp4020-crit1-<handle>`), and
-`pnpm check:evidence` fails on any other name. The column is empty for an
-assignment: there is no reflection there, the written account is `PROCESS.md`,
-and the retro crit that follows presents from it — say that out loud instead.
+number in the repo name (`crit-1.md` in `comp4020-crit1-<handle>`), and the
+sweep reads no other name. The column is empty for an assignment: there is no
+reflection there, the written account is `PROCESS.md`, and the retro crit that
+follows presents from it — say that out loud instead.
 
 ## 3. Clone the repo
 
@@ -177,7 +179,7 @@ tests, accessibility and performance tools all at once. It is legitimate to add
 no new check if the supplied baseline already protects the mechanical contract.
 Keep every selected check reachable through `pnpm check`, and don't duplicate
 what the starter's own build already verifies — its `README.md` says what that
-is.
+is (`spec/README.md` in the final-project repo).
 
 A student who hits the same agent failure twice this week should add a sensor
 for it rather than re-prompting: it is the kind of moment `PROCESS.md` is for.
@@ -201,13 +203,15 @@ green are exactly the process evidence `PROCESS.md` wants to cite.
 - for a full-stack deliverable (crit 7 onwards), also check the repo has a
   `mise.local.toml` carrying `FLY_API_TOKEN` — if it doesn't, the token is in
   the Ed message the course sent when this repo was created; paste its block in
-  from inside the repo, then `flyctl status -a <repo-name>` should answer. See
+  from inside the repo, then `mise exec -- flyctl status -a <repo-name>` should
+  answer. `mise exec --` puts the file's token in front of flyctl whether or not
+  mise is activated in that shell, so use it for every flyctl command. See
   onboard step 7 on the site
   (`/topics/onboard/#7-later-flyio-for-the-full-stack-half`) for the full setup.
   Deploy the repo as it arrived straight away with
-  `flyctl deploy --remote-only --ha=false -a <repo-name>` and open the URL: it
-  proves the whole path before any work rides on it. The same command updates
-  the live app all week; CI takes over once they ship.
+  `mise exec -- flyctl deploy --remote-only --ha=false -a <repo-name>` and open
+  the URL: it proves the whole path before any work rides on it. The same
+  command updates the live app all week; CI takes over once they ship.
 - if the starter arrived part-filled for this student — an allocated identifier,
   a pre-set record — its `README.md` says what to keep and what to choose. Walk
   that with them before they start replacing placeholder content, since a record

@@ -58,8 +58,8 @@ Classify each PASS / WARN / FAIL:
   files that belong in the submission are a FAIL; offer to stage and commit them
   (by name, after showing what they are).
 - **Everything pushed** — `git status -sb` and
-  `git log --oneline @{upstream}..HEAD`. Local commits ahead of the remote mean
-  the marker won't see them. FAIL; offer to `git push`.
+  `git log --oneline '@{upstream}..HEAD'`. Local commits ahead of the remote
+  mean the marker won't see them. FAIL; offer to `git push`.
 - **Remote is on GitHub** — all course submissions go through GitHub. A missing
   or non-GitHub remote is a FAIL.
 - **Marker can see it** — `gh repo view --json visibility,url`. Repos are
@@ -101,11 +101,17 @@ or whenever the spec asks for a live URL; otherwise skip.
 - **Static (GitHub Pages)**: `gh run list --limit 5` — did the most recent Pages
   build succeed? A red build means the live site is stale or broken. Point them
   at the failing run (`gh run view`).
-- **Fly.io**: `flyctl status -a <repo-name>`, run from inside the repo so the
-  token in its `mise.local.toml` reaches the app — is it deployed and healthy? A
-  stopped machine is normal between requests (the app scales to zero); a failed
-  machine, or the wrong app, is a FAIL. If flyctl or the token isn't set up,
-  defer to the **doctor** skill.
+- **Fly.io**: `mise exec -- flyctl status -a <repo-name>`, run from inside the
+  repo so the token in its `mise.local.toml` reaches the app — is it deployed
+  and healthy? A stopped machine is normal between requests (the app scales to
+  zero); a failed machine, or the wrong app, is a FAIL. If flyctl or the token
+  isn't set up, defer to the **doctor** skill.
+- **The spec passes against the live app** (Fly.io): CI's `check` job only runs
+  once the repo is public, so while it's private this is the only run of the
+  spec before the flip, and a red run after the flip blocks every deploy. Run
+  `APP_URL=https://<repo-name>.fly.dev pnpm check` (PowerShell:
+  `$env:APP_URL="https://<repo-name>.fly.dev"; pnpm check`). A red run is a
+  FAIL.
 - **It actually loads**: if the spec wants a reachable URL,
   `"$CLAUDE_PLUGIN_ROOT/scripts/verify-deploy.sh" <url>` confirms it responds
   rather than 500-ing or 404-ing — and that the css/js the page references

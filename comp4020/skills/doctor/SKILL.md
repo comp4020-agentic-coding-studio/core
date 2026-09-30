@@ -69,7 +69,9 @@ Most rows say what they mean. These are the ones that need judgement:
   going through the course key.
 - **`key-guard` FAIL** — the template repos ship a pre-commit hook that stops a
   key being committed, and `core.hooksPath` isn't pointing at it, so the guard
-  is off. `pnpm install` in the repo restores it. Read this together with
+  is off. `git config core.hooksPath .githooks` in the repo restores it, in any
+  shell. (`pnpm install` sets it too, but on native Windows the templates'
+  POSIX-only `prepare` script fails before it does.) Read this together with
   `committed-key`: the guard being off is why a key could get in.
 - **`claude-code` WARN** — the session is running but `claude` isn't on PATH.
   Nothing is broken in front of them, which is exactly the problem: the status
@@ -124,8 +126,9 @@ Most rows say what they mean. These are the ones that need judgement:
   detail, run from inside the repo, then the URL in a browser. The untouched
   starter is what's expected; there is nothing to build first. A FAIL on this
   row is different: a machine exists but the URL doesn't answer, so a deploy
-  broke the app rather than the setup — `flyctl logs -a <repo>` from inside the
-  repo says how, and the previous deploy is not restored automatically.
+  broke the app rather than the setup — `mise exec -- flyctl logs -a <repo>`
+  from inside the repo says how, and the previous deploy is not restored
+  automatically.
 - **`plugin-comp4020` WARN** — the course skills churn early in the semester, so
   a stale copy answers with last week's facts instead of failing loudly. The fix
   is `claude plugin update comp4020@comp4020` and a restart, which is why it's

@@ -242,9 +242,9 @@ if [ -n "$fly_bin" ]; then
     if curl -sf -o /dev/null --max-time 45 "$fly_url" 2>/dev/null; then
       row PASS flyctl-deployed "$fly_url serves 200"
     elif [ -z "$(fly_run machines list -a "$fly_app" --quiet 2>/dev/null)" ]; then
-      row WARN flyctl-deployed "nothing deployed to $fly_app yet — from inside the repo: flyctl deploy --remote-only --ha=false -a $fly_app"
+      row WARN flyctl-deployed "nothing deployed to $fly_app yet — from inside the repo: mise exec -- flyctl deploy --remote-only --ha=false -a $fly_app"
     else
-      row FAIL flyctl-deployed "$fly_app has a machine but $fly_url doesn't answer — the last deploy broke the app; flyctl logs -a $fly_app says how"
+      row FAIL flyctl-deployed "$fly_app has a machine but $fly_url doesn't answer — the last deploy broke the app; mise exec -- flyctl logs -a $fly_app says how"
     fi
   fi
 else
@@ -334,7 +334,7 @@ if [ -n "$repo_root" ] && [ -f "$repo_root/.githooks/pre-commit" ]; then
   if [ "$hooks_path" = ".githooks" ]; then
     row PASS key-guard "core.hooksPath=.githooks"
   else
-    row FAIL key-guard "core.hooksPath is '${hooks_path:-unset}' — the key guard is off; run pnpm install"
+    row FAIL key-guard "core.hooksPath is '${hooks_path:-unset}' — the key guard is off; run git config core.hooksPath .githooks"
   fi
 
   # file:line only — never the matched text. Real keys are random base64url
