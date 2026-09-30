@@ -51,9 +51,9 @@ Response fields that matter:
 - **Spend can lag slightly.** Budget accounting is eventually consistent, so
   right after a burst of requests the reported spend may be a little behind.
   Treat near-the-cap readings as approximate, not to-the-cent.
-- **Local-model traffic is free.** If the course has a local-model fallback
-  (e.g. `local-qwen`), those requests are rate-limited but cost $0 against the
-  dollar budget — they won't show up in spend.
+- **Local-model traffic is free.** `soco-fast` and `soco-smart` run on School
+  GPU servers and cost $0 against the dollar budget — they won't show up in
+  spend.
 - **Cold starts dominate cost.** A fresh Claude Code session pays for the full
   ~35k-token system prompt (roughly $0.10 on Sonnet); follow-up turns in the
   same session hit the prompt cache and cost under half a cent. Many short
@@ -75,12 +75,13 @@ Response fields that matter:
 ## When they're over budget
 
 - The budget comes back at `week_resets_at` — say when that is in local time.
-- If the course has a local-model fallback, they can keep working now:
-  `export ANTHROPIC_MODEL=local-qwen` in the shell that runs Claude Code. Don't
-  send them looking for the name in their budget warnings — COMP4020's warnings
-  are private Ed DMs and don't carry it. This is best-effort, not a course
-  commitment: if the proxy rejects the model name with "model not permitted",
-  the fallback isn't currently up — don't debug it, just say so.
+- They can keep working now on a local model: `soco-fast` (quicker) or
+  `soco-smart` (more capable). Set it in the shell that runs Claude Code —
+  `export ANTHROPIC_MODEL=soco-fast` on macOS/Linux,
+  `$env:ANTHROPIC_MODEL = "soco-fast"` in PowerShell — and unset it to go back
+  to Claude. Expect weaker results than Claude on hard agentic work. This is
+  best-effort, not a course commitment: if the local model errors or hangs, it's
+  down — don't debug it, just say so.
 - If a deadline makes the cap a real problem, the fix is human: message the
   convenor on Ed, in a private thread since it's about their own account —
   convenors can arrange a one-off bump. Don't suggest workarounds like sharing
