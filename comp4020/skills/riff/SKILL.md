@@ -2,11 +2,11 @@
 name: riff
 description:
   Sets up a COMP4020/COMP8020 pod for the riff — the part of the crit session
-  where a pod of four takes the crit agent's prototype further. Works out which
-  crit is running, asks which pod number they were dealt, clones
-  `comp4020-riff<N>-<group>-<pod>`, and gets the pod pushing so the share-back
-  is a live site. Use for /comp4020:riff, "start the riff", "I'm the pod
-  leader", "clone our riff repo", or "which repo does my pod work in".
+  where a pod writes the prompt the group's crit agent runs after the session.
+  Works out which crit is running, asks which pod number they were dealt, clones
+  the pod's riff repo, and helps the pod draft, test and push `prompt.md`. Use
+  for /comp4020:riff, "start the riff", "I'm the pod leader", "clone our riff
+  repo", "help us write the prompt", or "which repo does my pod work in".
 allowed-tools: Bash, Read, Edit, Write, WebFetch, Glob, Grep
 model: sonnet
 effort: medium
@@ -14,12 +14,18 @@ effort: medium
 
 # COMP4020 riff
 
-The riff is the last part of the crit session. Every pod starts from the same
-artefact — the crit agent's prototype for the week — and spends the session
-taking it past where the agent left it. The repo is already made, already
-public, already deployed: the pod's job is to push to it.
+The riff is the last part of the crit session. Each pod has a repo holding the
+group's crit agent's final project, live on its own Fly app. The pod doesn't
+build anything in it. It writes one file, `prompt.md`, aimed at the **next**
+brief. After the session the group's crit agent runs that prompt once,
+unattended, and the next crit opens by looking at where each pod's repo ended
+up.
 
-This runs in the session, on a clock, with three other people watching the
+So the work is the prompt: what the app should become, what good looks like,
+what to leave alone, all said clearly enough that an agent with nobody to ask
+can act on it.
+
+This runs in the session, on a clock, with the rest of the pod watching the
 screen. Be quick, and don't ask anything the tutor has already said out loud.
 
 ## 1. Which crit, and which pod?
@@ -29,98 +35,89 @@ screen. Be quick, and don't ask anything the tutor has already said out loud.
 ```
 
 The riff runs in **today's** crit, so the target is the `deliverable` row whose
-`WEEK` matches the `teaching_week` header — not the row marked `next`, which is
-next week's work. Then read
+`WEEK` matches the `teaching_week` header — not the row marked `next`. Then read
 `https://comp.anu.edu.au/courses/comp4020-agentic-coding-studio/api/crit-groups.json`
-for that crit's `num`: the riff repos are numbered by the C-number, which is not
-always the week.
+and find that crit's entry in `deliverables`:
+
+- `riffPrefix` names the repos. It can belong to an earlier crit (the crit 8
+  repos carry on through crits 9 and 10), so read it rather than building it
+  from the crit number.
+- `promptFor` is the slug of the deliverable the prompt aims at. Its brief is
+  `https://comp.anu.edu.au/courses/comp4020-agentic-coding-studio/api/crits/<slug>.json`,
+  or `.../api/assessments/<slug>.json` when that slug's `kind` is `assessment`.
 
 Two things to settle:
 
 - **the group** — `$COMP4020_GROUP`, and `status ok-no-group` means it's unset:
   ask, and offer **onboard** step 5 afterwards so it's never asked again.
-- **the pod number, 1–6** — dealt on the day, so ask. Nothing about it is
-  derivable and nothing else in this skill works without it.
+- **the pod number**, 1 to the payload's `riffPods` — dealt on the day, so ask.
 
-The repo is `comp4020-riff<num>-<group>-<pod>` in the course org, live at
-`https://comp4020-agentic-coding-studio.github.io/comp4020-riff<num>-<group>-<pod>/`.
-Say both back before cloning — a pod that works in the wrong number wastes the
-session, and it's the one mistake that's free to catch here.
+The repo is `<riffPrefix>-<group>-<pod>` in the course org, live at
+`https://<riffPrefix>-<group>-<pod>.fly.dev/`. Say both back before cloning.
 
-## 2. Clone it
+## 2. Clone it and look
 
 ```sh
-gh repo clone comp4020-agentic-coding-studio/comp4020-riff<num>-<group>-<pod>
+gh repo clone comp4020-agentic-coding-studio/<riffPrefix>-<group>-<pod>
 ```
 
-It's a full copy of the agent's repo, history and all, plus one commit from the
-course tooling that reframes `CLAUDE.md` for the riff. `riff-start` tags that
-commit, so everything after it is your pod's. Everyone in the cohort has push
-access to these repos, so any of the four can push; the pod leader is just
-whoever has the keyboard, and swapping mid-session is fine.
+If it 404s, check the number and the group with the tutor, and never
+`gh repo create`. If `prompt.md` already exists at the root, another pod has
+taken this number this week: stop and sort it out in the session.
 
-If it 404s, check the number and the group with the tutor before anything else,
-and never `gh repo create` — a repo you make yourself isn't the one the group
-looks at. If `git log --oneline riff-start..HEAD` already shows commits, another
-pod has taken this number: stop and sort it out in the session.
+Then get oriented fast, and in parallel: open the live app, read `CLAUDE.md`
+(the block at the top governs this repo), `README.md` (what the agent thinks
+good means for this app) and `git log --oneline | head -30`. From crit 9 on the
+history includes the last pod's run: `git show prompt-crit<N>:prompt.md` is the
+prompt that drove it, for the latest `prompt-crit<N>` tag.
 
-## 3. Get it green, and read it
+Fetch the target brief from step 1 and read it with the pod.
 
-From the repo root, `mise install`, install dependencies, then run the checks
-(`pnpm check` in the static template). Green before you start means a red check
-later is yours.
+## 3. Write the prompt
 
-This is someone else's harness. `CLAUDE.md` opens with a block written for the
-riff — read that first, because it's what governs the session. Everything below
-the rule in that file is the agent's own, written for a graded submission: read
-it for how they directed the agent, which is half of what's interesting about
-starting from their repo, not for what it says you owe.
+The prompt is the only file the pod changes. Draft it together, with the pod
+leader at the keyboard. A good one usually covers:
 
-Their spec tests are the same deal. `spec/*.test.ts` encodes the week's brief as
-the agent worked it, and `pnpm check` runs the lot, so a riff that goes
-somewhere new turns those tests red and stops the deploy. Change them or delete
-them once your riff has outgrown them — keep `spec/invariants.test.ts` green,
-since that one is true of any good site.
+- **the goal**, in terms of the target brief, and what would make this app's
+  answer interesting rather than just compliant
+- **what good looks like** — how anyone could tell the run succeeded, ideally
+  something checkable
+- **what to keep and what to leave alone** — the parts of the app that already
+  work, and any pod opinions about the stack or the data
+- **pointers** — files, issues, docs or examples in the repo or on the web the
+  agent should read first
 
-## 4. Decide the riff in the first few minutes
+The agent runs it once, with no follow-up questions, so ambiguity turns into
+guesses. Read the draft back as the agent would and cut anything it could take
+two ways. Don't write the code into the prompt: the pod's leverage is direction,
+and the run is where the work happens.
 
-Agree out loud what this pod is taking further, and pick something the four of
-you can land inside the session. The floor is one spec line with a first failing
-test, or a first PR — a pod that ends with a sharp red test and a plan has done
-the exercise.
+You can try ideas against the code while drafting (read files, run the app
+locally), but leave every file except `prompt.md` untouched, and don't run the
+prompt yourself.
 
-Don't restart the prototype. The point is to take this one somewhere, and a
-rewrite throws away the thing that made the starting point worth having.
+## 4. Push before you leave
 
-## 5. Push early, and keep `main` green
+```sh
+git add prompt.md && git commit -m "prompt: pod <pod>" && git push
+```
 
-A push to `main` runs `pnpm check` and then deploys to the Pages URL, so the
-share-back is the live site with nothing to set up. Push something in the first
-ten minutes so the pod proves that path while there's still time to fix it.
+Everyone in the cohort has push access to these repos, so anyone in the pod can
+push. A prompt that isn't on `main` when the session ends doesn't get run.
 
-The deploy only runs on a green check, so a red test on `main` leaves the live
-site sitting at the last commit that passed. Land work-in-progress on a branch
-and open a PR — the checks run there too, and merging is what deploys.
-
-## 6. The share-back
-
-`git diff riff-start` is exactly what the pod added, and the live URL is what
-the group looks at. Between them they're the whole report: what you changed, and
-it running.
-
-The riff isn't assessed and there's nothing to submit — no reflection entry, no
-`PROCESS.md` for it. The repo stays public in the org afterwards.
+Nothing here is assessed and there's nothing to submit — no reflection entry, no
+`PROCESS.md` for it.
 
 ## Notes
 
 - Don't touch the agent's own submission repo. It's their marked artefact; the
   riff repo is the copy.
-- Take ideas from the riff back into your own week if you want, but not the
-  commits — your prototype answers its own provocation.
+- Take ideas from the riff into your own final project if you want, but not the
+  agent's commits.
 
 ## Hand off
 
-- "which repo do I work in for my own prototype?" → **start**
+- "which repo do I work in for my own project?" → **start**
 - "what's due this week?" → **radar**
 - "make my repo public and deploy it" → **ship**
 - "why won't this run on my machine?" → **doctor**

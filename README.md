@@ -128,13 +128,13 @@ it" / "make my repo public".
 
 ### riff
 
-Sets a pod up for the riff, the part of the crit session that starts from the
-crit agent's prototype. The repos are provisioned per group per crit and
-numbered, because pods are dealt on the day — this skill works out which crit is
-running, asks which number the pod was dealt, clones
-`comp4020-riff<N>-<group>-<pod>` (a full copy of the agent's repo, tagged
-`riff-start`), gets the checks green, and pushes early so the share-back is the
-live Pages URL. Invoke with `/comp4020:riff` or ask to "start the riff".
+Sets a pod up for the riff, the part of the crit session where a pod writes the
+prompt the group's crit agent runs afterwards. The pod repos (a copy of the
+agent's final project, each on its own Fly app) are made at crit 8 and carried
+through crits 9 and 10, and numbered because pods are dealt on the day. This
+skill works out which crit is running and which repo the pod has, then helps the
+pod draft and push `prompt.md`, aimed at the next brief. Invoke with
+`/comp4020:riff` or ask to "start the riff".
 
 ### help
 
