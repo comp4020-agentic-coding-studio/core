@@ -27,6 +27,9 @@ CHROME_MIN=140
 NETWORK=1
 [ "${1:-}" = "--no-network" ] && NETWORK=0
 
+# >/dev/null because a set CDPATH makes cd print where it landed
+HERE=$(cd -- "$(dirname -- "$0")" >/dev/null && pwd)
+
 pass_n=0
 warn_n=0
 fail_n=0
@@ -311,20 +314,26 @@ fi
 
 # --- crit group -------------------------------------------------------------
 
-group=${COMP4020_GROUP:-}
+group_raw=${COMP4020_GROUP:-}
+group=$("$HERE/group-id.sh" "$group_raw")
+if [ "$group" != "$group_raw" ]; then
+  group_shown="$group_raw, read as $group"
+else
+  group_shown=$group
+fi
 if [ -z "$group" ]; then
   row WARN crit-group "COMP4020_GROUP unset — deadline-aware skills can't quote your actual cutoff"
 elif [ "$NETWORK" = "1" ]; then
   groups_json=$(curl -s --max-time 15 "$GROUPS_API" 2>/dev/null)
   if [ -z "$groups_json" ]; then
-    row WARN crit-group "COMP4020_GROUP=$group (could not reach the course site to check it against the group list)"
+    row WARN crit-group "COMP4020_GROUP=$group_shown (could not reach the course site to check it against the group list)"
   elif printf '%s' "$groups_json" | grep -q "\"agent\"[[:space:]]*:[[:space:]]*\"$group\""; then
-    row PASS crit-group "COMP4020_GROUP=$group"
+    row PASS crit-group "COMP4020_GROUP=$group_shown"
   else
-    row WARN crit-group "COMP4020_GROUP=$group is not one of the published group ids"
+    row WARN crit-group "COMP4020_GROUP=$group_shown is not one of the published group ids"
   fi
 else
-  row PASS crit-group "COMP4020_GROUP=$group (not checked against the group list)"
+  row PASS crit-group "COMP4020_GROUP=$group_shown (not checked against the group list)"
 fi
 
 # --- pre-commit key guard (course repos only) -------------------------------
@@ -439,8 +448,6 @@ fi
 # A here-doc rather than a pipe: bash 3.2 runs the right-hand side of a pipe in
 # a subshell, where row()'s counters would be lost.
 
-# >/dev/null because a set CDPATH makes cd print where it landed
-HERE=$(cd -- "$(dirname -- "$0")" >/dev/null && pwd)
 net_flag=""
 [ "$NETWORK" = "0" ] && net_flag="--no-network"
 # unquoted on purpose: an empty net_flag must expand to no argument at all

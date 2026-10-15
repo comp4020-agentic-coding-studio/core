@@ -148,8 +148,9 @@ Two conventions hold the skills together, and both are enforced in CI
 
 - **one owner per mechanic.** A fact or procedure that more than one skill needs
   lives in exactly one place, and the others point at it: the setup checks in
-  `scripts/doctor.sh`, the deadline arithmetic in `scripts/next-deadline.sh`,
-  the deploy check in `scripts/verify-deploy.sh` and the staleness check in
+  `scripts/doctor.sh`, the deadline arithmetic in `scripts/next-deadline.sh`, a
+  typed group name to its id in `scripts/group-id.sh`, the deploy check in
+  `scripts/verify-deploy.sh` and the staleness check in
   `scripts/plugin-version.sh` (which **ship** and **preflight** both call, and
   which **doctor** folds into its own report), settings changes in **onboard**,
   diagnosis in **doctor**, the status line in the companion plugin. Restating

@@ -66,6 +66,11 @@ while [ $# -gt 0 ]; do
   esac
 done
 
+# A name copied off the site carries its tone marks (liùrú); the ids don't.
+# >/dev/null because a set CDPATH makes cd print where it landed
+HERE=$(cd -- "$(dirname -- "$0")" >/dev/null && pwd)
+group=$("$HERE/group-id.sh" "$group")
+
 if ! command -v jq >/dev/null 2>&1; then
   printf 'status\tneeds-jq\n'
   printf 'hint\tinstall jq: mise use -g jq\n'

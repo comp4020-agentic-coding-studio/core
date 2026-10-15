@@ -188,10 +188,12 @@ rule as step 2:
 }
 ```
 
-Lowercase, one of the agent names from the group table. Claude Code applies
-`env` entries to every new session on every platform, so skills just read
-`$COMP4020_GROUP` — no per-OS config to manage. A student who switches groups
-mid-semester re-runs this step.
+Lowercase plain ASCII, one of the agent names from the group table: `liuru`, not
+the site's tone-marked `Liùrú`. The scripts fold the marks anyway, but the plain
+id is what doctor and every skill print back. Claude Code applies `env` entries
+to every new session on every platform, so skills just read `$COMP4020_GROUP` —
+no per-OS config to manage. A student who switches groups mid-semester re-runs
+this step.
 
 ## 6. Hand off
 
