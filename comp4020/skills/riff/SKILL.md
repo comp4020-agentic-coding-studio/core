@@ -41,7 +41,9 @@ and find that crit's entry in `deliverables`:
 
 - `riffPrefix` names the repos. It can belong to an earlier crit (the crit 8
   repos carry on through crits 9 and 10), so read it rather than building it
-  from the crit number.
+  from the crit number. If the entry has `riffSeeds` and the group is a key in
+  it, that group starts fresh repos this week: use its own `riffPrefix` from
+  there instead.
 - `promptFor` is the slug of the deliverable the prompt aims at. Its brief is
   `https://comp.anu.edu.au/courses/comp4020-agentic-coding-studio/api/crits/<slug>.json`,
   or `.../api/assessments/<slug>.json` when that slug's `kind` is `assessment`.
