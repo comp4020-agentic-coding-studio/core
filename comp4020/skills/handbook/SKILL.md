@@ -31,8 +31,9 @@ https://comp.anu.edu.au/courses/comp4020-agentic-coding-studio
 | ------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `/api/index.json`               | Every content node: `{id, type, title, description, tags, related, meta}`, plus `spec` (the checkable requirement lines) on crit and assessment nodes. `meta` carries the structured facts (`week`, `due`, `weight`, `draft`) — most factual questions are answerable from the index alone. Start here. |
 | `/api/<collection>/<slug>.json` | One node in full: the fields above plus `links` and `body` (complete markdown of the page).                                                                                                                                                                                                             |
-| `/llms.txt`                     | Annotated index of every page on the site (including pages not in the API, e.g. people). Draft pages are marked `(draft)`.                                                                                                                                                                              |
-| `/llms-full.txt`                | Full text of every page inline (~100 kB). The fallback when you can't route a question to a specific node. Draft pages carry a `_Draft: …_` notice line.                                                                                                                                                |
+| `/llms.txt`                     | Annotated index of every page on the site (including pages not in the API, e.g. people), grouped by section, with a generated **Key dates** block (every due date, weight and week, plus census and the last day to drop). Draft pages are marked `(draft)`.                                            |
+| `/<page>/index.html.md`         | Any listed page as clean markdown (e.g. `/people/ben-swift/index.html.md`, `/lectures/week-5/index.html.md`). The page's HTML head links it. Prefer this to scraping HTML.                                                                                                                              |
+| `/llms-full.txt`                | Full text of every page inline (~85k tokens; slide decks left out). The fallback when you can't route a question to a specific node. Draft pages carry a `_Draft: …_` notice line.                                                                                                                      |
 
 This table is the routing map for course **content** — it isn't exhaustive of
 every live endpoint. Course **logistics** data (crit-group session times and
@@ -51,23 +52,25 @@ Node ids are refs that map directly to page URLs: `assessments/assignment-1` ↔
 `related` list includes connections declared from either end, so "what relates
 to X" is answerable from X's entry alone.
 
-One URL that looks like a node but isn't: the hall of fame at
-`/crits/hall-of-fame/` is a listing page, so `/api/crits/hall-of-fame.json` does
-not exist — read the HTML page instead.
+Two URLs that look like nodes but aren't: the hall of fame (`/hof/`) and the
+prototype gallery (`/gallery/`) are listing pages with no `/api/` node; read
+their markdown twins or HTML instead.
 
 ## Routing
 
-- **Due dates, weights, weeks** — fetch `/api/index.json` and read the node's
-  `meta`: `{week, due, weight, draft}` for assessments, `{week, draft}` for
-  crits. Always match by title in the index — never construct a slug by
-  guessing, since an assignment's colloquial name ("assignment 3") may appear
-  only parenthetically in the title of a differently-slugged node. Crit slug
-  number ≠ week number (crits run weeks 2–11, so `01-…` is week 2) — trust
-  `meta.week`, not the slug. `due` is an ISO date; the page `body` (per-node
-  JSON) states the precise time-of-day and timezone rules, so fetch and quote
-  those rather than assuming. If the node's own body doesn't state a time (a
-  draft page often won't), the **assessment** topic's overview table carries the
-  canonical due times — check there before saying the time is unstated.
+- **Due dates, weights, weeks** — the Key dates block at the top of `/llms.txt`
+  answers most of these in one fetch. For anything finer, fetch
+  `/api/index.json` and read the node's `meta`: `{week, due, weight, draft}` for
+  assessments, `{week, draft}` for crits. Always match by title in the index —
+  never construct a slug by guessing, since an assignment's colloquial name
+  ("assignment 3") may appear only parenthetically in the title of a
+  differently-slugged node. Crit slug number ≠ week number (crits run weeks
+  2–11, so `01-…` is week 2) — trust `meta.week`, not the slug. `due` is an ISO
+  date; the page `body` (per-node JSON) states the precise time-of-day and
+  timezone rules, so fetch and quote those rather than assuming. If the node's
+  own body doesn't state a time (a draft page often won't), the **assessment**
+  topic's overview table carries the canonical due times — check there before
+  saying the time is unstated.
 - **Policies and course admin** (extensions, academic integrity, marking,
   enrolment, conduct) and **how-to guides** (submitting work, tool setup) —
   topics nodes tagged `admin` in the index. Fetch the matching node's JSON and
@@ -82,11 +85,10 @@ not exist — read the HTML page instead.
   answers a length question on its own.
 - **What a lecture or week covers** — `lectures` nodes; their `related` edges
   list the topics each deck covers.
-- **Who teaches the course / contact details** — fetch the `/people/` listing
-  page (HTML): its cards carry each person's role (convenor, TA, guest), which
-  `/llms.txt` does not. Then fetch the relevant `/people/<slug>/` page for
-  contact details. These are HTML pages to read through, not clean
-  JSON/markdown.
+- **Who teaches the course** — the People section of `/llms.txt` gives each
+  person's role in their description. For contact details, fetch
+  `/people/<slug>/` (HTML): the email lives in the page's frontmatter-driven
+  details list, which the markdown twin doesn't carry.
 - **Anything you can't route** — `/llms-full.txt` and search the text.
 
 ## Answering rules
