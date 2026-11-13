@@ -13,10 +13,6 @@ effort: low
 
 # COMP4020 deadline radar
 
-Turn the course schedule into "here's what to work on now". This is the
-proactive framing of the same data **handbook** answers reactively: instead of
-"when is assignment 2 due", it's "given today, what's next".
-
 ## 1. Resolve the deadlines
 
 ```sh
