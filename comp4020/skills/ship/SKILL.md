@@ -14,15 +14,11 @@ effort: medium
 
 # COMP4020 ship
 
-This is the one irreversible thing you will do in this course. The moment the
-repo goes public, your entire commit history and every CI log in it have been
-served to the world. A later `git push --force` does not unring that: it was
-fetched, cached, and possibly indexed. Treat the flip with the seriousness it
-deserves, and never do it on a repo you haven't just read.
-
-Everything up to the flip is reversible. The flip is not. So this skill does the
-checking first, the scanning second, and the flip last, and it stops at the
-first sign of trouble.
+The flip is the one irreversible thing in this course. The moment the repo goes
+public, its entire commit history and every CI log have been served to the
+world, and a later `git push --force` does not unring that: it was fetched,
+cached, and possibly indexed. So this skill checks first, scans second and flips
+last, and it stops at the first sign of trouble.
 
 ## 1. Confirm what you're shipping
 
@@ -44,19 +40,6 @@ group's session is moved, which the row marks in its `MOVED` column. Shipping
 after the cutoff is allowed and shipping early costs nothing, but the student
 should hear the actual time out loud before anything becomes public.
 
-Check the plugin is current in the same breath:
-
-```sh
-"$CLAUDE_PLUGIN_ROOT/scripts/plugin-version.sh" --quiet
-```
-
-Silence means it's current, and most runs are silent. A `WARN` row means this
-copy is behind the marketplace — so the steps below are the ones that shipped
-with whatever version the student installed, not the ones here. Tell them the
-row and the `claude plugin update comp4020@comp4020` it names, then carry on
-shipping: an update needs a restart, and a cutoff doesn't wait for one. Before
-the next ship, not instead of this one.
-
 ## 2. Is it even ready?
 
 Run **preflight** and read its verdict. If it reports any FAIL, stop and say so.
@@ -64,7 +47,11 @@ Do not offer to flip anyway: a public repo with uncommitted work in the tree is
 worse than a private repo with the same, because now the gap is permanent and
 visible.
 
-WARNs are the student's call. Show them, ask, continue only on a clear yes.
+WARNs are the student's call. Show them, ask, continue only on a clear yes. A
+WARN that the plugin is behind the marketplace is the exception: tell them the
+`claude plugin update comp4020@comp4020` it names for before the next ship, but
+carry on shipping, since an update needs a restart and a cutoff doesn't wait for
+one.
 
 ## 3. Scan for secrets, before the flip
 
@@ -178,32 +165,30 @@ repo — are how to see why.
 
 ## 5. Verify the deploy
 
-A green workflow is not a verified deploy, and this step is not optional — a run
-that ends at step 4 has not finished shipping. Run it every time, including the
-weeks the repo was already public and all you did was deploy:
+A green workflow is not a verified deploy, and a run that ends at step 4 has not
+finished shipping. Run this every time, including the weeks the repo was already
+public and all you did was deploy:
 
 ```sh
 "$CLAUDE_PLUGIN_ROOT/scripts/verify-deploy.sh" <url>
 ```
 
-The script polls until the site comes up, so don't declare victory before it
-returns. It checks the page serves _and_ that the css/js the page references
-resolve against the deployed URL. The second half is the point: a project Pages
-site is served from `/<repo>/`, so a build configured for the domain root emits
-`/_astro/index.css`, the page still returns 200, and every stylesheet 404s. A
-bare status code calls that a successful deploy. It renders as an unstyled page
-at the URL the sweep reads and the URL you demo from, and neither localhost nor
-CI's link check can see it, because in both the site sits at the root and the
-same path resolves.
+The script polls until the site comes up. It checks the page serves _and_ that
+the css/js the page references resolve against the deployed URL. The second half
+is the point: a project Pages site is served from `/<repo>/`, so a build
+configured for the domain root emits `/_astro/index.css`, the page still returns
+200, and every stylesheet 404s. A bare status code calls that a successful
+deploy. It renders as an unstyled page at the URL the sweep reads and the URL
+you demo from, and neither localhost nor CI's link check can see it, because in
+both the site sits at the root and the same path resolves.
 
 Fetching the URL yourself is not a substitute: that reads the same 200 the
 status code already gave you, and misses exactly what this catches.
 
 Report the URL and what the script found. A repo that never deployed is worth no
-marks, so "the flip worked" is not the finish line — a live URL that serves a
-working page is. If assets are missing on a Pages site, the fix is the base
-path: run the **stack** skill, which wires it up, or set Astro's `base` to
-`/<repo-name>` by hand, then push and re-verify.
+marks. If assets are missing on a Pages site, the fix is the base path: run the
+**stack** skill, which wires it up, or set Astro's `base` to `/<repo-name>` by
+hand, then push and re-verify.
 
 ## 6. Tag the crit state (final-project run, weeks 9–11)
 
@@ -240,15 +225,12 @@ its own frozen record.
 
 ## Notes
 
-- Never flip a repo that isn't the student's own deliverable. Read the owner and
-  the name back to them first.
 - Never `--force` anything, and never rewrite history on a public repo. The sole
   exception is moving a `crit-<n>` tag before its cutoff, as under step 6 —
   branches, never.
-- A repo that is already public when you arrive is not an error — the student
-  flipped it earlier; skip to the deploy and verify steps. Nothing in the course
-  flips a student repo automatically: if it is still private, nobody has shipped
-  it.
+- A repo that is already public when you arrive is not an error — skip to the
+  deploy and verify steps. Nothing in the course flips a student repo
+  automatically, so a private one has not been shipped.
 - Archived repos are read-only. If `isArchived` is true the student has been
   off-boarded; do not try to work around it, ask them to talk to the convenor.
 
