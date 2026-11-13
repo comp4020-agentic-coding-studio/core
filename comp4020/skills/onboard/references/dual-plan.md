@@ -3,12 +3,7 @@
 For a student who already has their own Claude subscription (Pro or Max) or a
 personal Anthropic API key. Read this from step 2 of the onboard skill.
 
-## Why not user-global
-
-Written into `~/.claude/settings.json`, the course env vars take over Claude
-Code in _every_ project on the machine. The student would burn course credits on
-their own side projects while the plan they pay for sat unused. So the course
-key goes somewhere narrower.
+## If they've already done the global setup
 
 If they've **already** done the global setup and only then mention a personal
 plan, the fix is a move, not a copy: delete the three vars from
