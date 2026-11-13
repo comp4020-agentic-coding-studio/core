@@ -67,11 +67,11 @@ If it 404s, check the number and the group with the tutor, and never
 `gh repo create`. If `prompt.md` already exists at the root, another pod has
 taken this number this week: stop and sort it out in the session.
 
-Then get oriented fast, and in parallel: open the live app, read `CLAUDE.md`
-(the block at the top governs this repo), `README.md` (what the agent thinks
-good means for this app) and `git log --oneline | head -30`. From crit 9 on the
-history includes the last pod's run: `git show prompt-crit<N>:prompt.md` is the
-prompt that drove it, for the latest `prompt-crit<N>` tag.
+Then get oriented fast: open the live app, read `CLAUDE.md` (the block at the
+top governs this repo), `README.md` (what the agent thinks good means for this
+app) and `git log --oneline | head -30`. From crit 9 on the history includes the
+last pod's run: `git show prompt-crit<N>:prompt.md` is the prompt that drove it,
+for the latest `prompt-crit<N>` tag.
 
 Fetch the target brief from step 1 and read it with the pod.
 
