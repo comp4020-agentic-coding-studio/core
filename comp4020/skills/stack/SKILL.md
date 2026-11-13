@@ -14,17 +14,11 @@ effort: medium
 
 # COMP4020 stack
 
-From C2 the course default stack is Astro, but your repo starts as the same
-SSG-agnostic template every week. This skill closes that gap: a tested script
-does the conversion the same way in every repo — config, file moves, the CI link
-check — and you review the result as one staged diff. The deterministic parts
-are scripted because the failure they prevent is silent: a wrong GitHub Pages
-base path works perfectly on localhost and 404s on the live URL.
-
-The default is a default, not a mandate. Bare hand-written HTML/CSS is a
-legitimate answer in the static half, and this skill's other arm sets that up
-with the same care. What the course does insist on: choose deliberately, and let
-the agent do the wiring while you verify the outcome.
+The course default (Astro, from C2) is a default, not a mandate. Bare
+hand-written HTML/CSS is a legitimate answer in the static half, and this
+skill's other arm sets that up with the same care. What the course does insist
+on: choose deliberately, and let the agent do the wiring while you verify the
+outcome.
 
 ## 1. Establish the arm and the repo
 
@@ -61,11 +55,12 @@ node "$CLAUDE_PLUGIN_ROOT/scripts/stack-astro.mjs"   # course default
 node "$CLAUDE_PLUGIN_ROOT/scripts/stack-bare.mjs"    # bare arm
 ```
 
-The script derives the Pages base path from the repo's origin remote, writes the
-config, converts pages, homes assets, patches the CI link check, runs
-`pnpm install`, stages everything, and finishes with `pnpm check`. It commits
-nothing — that stays with the student. It never touches the shipped `spec/`
-files, `PROCESS.md`, or `reflections/`, and neither do you.
+The script derives the Pages base path from the repo's origin remote (a wrong
+one works on localhost and 404s on the live URL), writes the config, converts
+pages, homes assets, patches the CI link check, runs `pnpm install`, stages
+everything, and finishes with `pnpm check`. It commits nothing — that stays with
+the student. It never touches the shipped `spec/` files, `PROCESS.md`, or
+`reflections/`, and neither do you.
 
 ## 4. Fix what the script hands you
 
