@@ -37,8 +37,8 @@ the model stays dim there whatever it is.
 
 **It needs `jq`** (and `curl`, which every supported platform already has).
 Check with `command -v jq`; if it's missing, install it first with
-`mise use -g jq` (the course's install path — see onboard step 2). Without `jq`
-the segment just reads `comp4020 budget: needs jq`.
+`mise use -g jq` (the course's install path — step 2 of the site's onboarding
+page). Without `jq` the segment just reads `comp4020 budget: needs jq`.
 
 It's a Unix shell script, so macOS, Linux and WSL. On native Windows there is
 nothing to install — that's the WSL2 nudge `/comp4020:doctor` already gives.
@@ -77,8 +77,8 @@ nothing to install — that's the WSL2 nudge `/comp4020:doctor` already gives.
 
 ## When it isn't working
 
-The script always prints one of two tags, so the first question is which of
-three states they're in. Work down in this order:
+The script always prints one of two tags, so the first question is which of four
+states they're in. Work down in this order:
 
 - **completely empty segment** — the script isn't running at all. Check, in
   order: `command -v jq`; `claude plugin list` shows `comp4020-statusline`;
@@ -103,21 +103,12 @@ three states they're in. Work down in this order:
   `budget: ?` means the script has never reached `/api/me`, nearly always the
   ANU VPN; a number that won't move is the 60-second cache, which off the VPN
   sits on the last figure it fetched indefinitely. Their Claude sessions are
-  unaffected either way.
+  unaffected either way. It is an indicator, not a ledger: the authoritative
+  number is `/comp4020:balance`, so say so if the two disagree.
 - **the right tag but no model name** — the script isn't being handed the
   session JSON. Nearly always a status line of their own calling ours with
   `</dev/null`; the append recipe above pipes it through instead. Everything
   else works without it, by design.
-
-A student who already had their own status line may have it pointing elsewhere —
-that's fine and deliberate; check whether their script calls ours (the append
-recipe above).
-
-## What it is, and isn't
-
-It reads a figure cached and refreshed at most once a minute in the background:
-an indicator, not a ledger. The authoritative number is `/comp4020:balance` —
-say so if the two disagree, rather than trusting the bar.
 
 ## Turning it off
 
