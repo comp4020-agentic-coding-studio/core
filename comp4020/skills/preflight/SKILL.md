@@ -13,11 +13,6 @@ effort: medium
 
 # COMP4020 submission preflight
 
-Catch the things that cost marks for no good reason — uncommitted work, an
-unpushed branch, a private repo the marker can't see, a deploy that 500s —
-before a crit or assignment deadline, not after. This crosses the published
-**brief and spec** with the **student's actual repo state**.
-
 ## 1. Which submission, and which repo?
 
 - **The deadline**:
@@ -134,12 +129,11 @@ or whenever the spec asks for a live URL; otherwise skip.
 
 ## Notes
 
-- The build fails loudly for real problems but stays advisory on prose spec
-  requirements — never claim a submission is compliant with a written rubric you
-  can only partly check. Say what you verified and what you didn't.
-- If you can't route the submission to a spec node on the site, don't invent
-  requirements — check the mechanical repo/deploy state and tell them to confirm
-  the spec details against the assessment page.
+- Prose spec requirements are advisory: say what you verified and what you
+  didn't.
+- If you can't route the submission to a spec node on the site, check the
+  mechanical repo/deploy state and tell them to confirm the spec details against
+  the assessment page.
 - This skill never flips a repo public. That is the one irreversible act in the
   course, and it has exactly one entry point, so that the secret scan always
   runs before it. Diagnose here; act in **ship**.
