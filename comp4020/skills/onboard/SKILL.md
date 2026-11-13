@@ -16,12 +16,6 @@ effort: medium
 
 # COMP4020 onboard: get your key working
 
-Take a student from nothing to a working, proxy-routed Claude Code. The end
-state is settings carrying the course proxy base URL and their `sk-…` key — in
-`~/.claude/settings.json` for most students, or scoped to their course repos if
-they have their own Claude plan (step 2 decides which) — verified with a live
-call.
-
 This skill **makes changes**; **doctor** reports state. If you don't know what's
 already configured, run doctor first: one call prints the whole picture, and
 these steps are then targeted rather than a tour.
