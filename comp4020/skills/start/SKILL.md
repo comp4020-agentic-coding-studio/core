@@ -25,8 +25,6 @@ whose architecture is itself part of the published contract. The starter says
 which parts are fixed: its `README.md`, or in the final-project repo, whose
 `README.md` is the student's to write, the comments in `fly.toml`, the
 `Dockerfile` and `spec/README.md`. Read them before offering to change anything.
-This skill runs that transition: new repo, stack chosen on purpose, and the
-week's spec pulled and turned into your own tests.
 
 ## 1. Which week, and which deliverable?
 
@@ -139,8 +137,7 @@ gh repo clone comp4020-agentic-coding-studio/<prefix>-<handle>
 
 `gh repo clone` writes into the current directory, so `cd` to wherever they keep
 the course first — one folder holding every course repo, `~/comp4020/` or their
-own choice. Offer to create it on the first run. By November there are a dozen
-repos, and scattered ones are harder to find your way around.
+own choice. Offer to create it on the first run.
 
 **Private, always.** It arrives private and goes public at the cutoff, not
 before — until then peers can't read your source, your prompts or your harness.
@@ -225,14 +222,10 @@ green are exactly the process evidence `PROCESS.md` wants to cite.
 
 ## Notes
 
-- Confirm before pushing, and never `gh repo create`. The course provisions the
-  repos; a repo you make yourself is in the wrong place, under the wrong owner,
-  and is not the one your tutor will mark.
-- If they've already cloned this week's repo, don't clone a second copy. Pick up
-  from step 2 in what they have.
+- Confirm before pushing, and never `gh repo create`.
 - Assignments (A1–A3) run through this skill exactly like crits
   (`kind: assessment` in the deliverables map) — same repo anatomy, same spec
-  pull. Don't invent a brief or a due date the site doesn't state.
+  pull.
 
 ## Hand off
 
