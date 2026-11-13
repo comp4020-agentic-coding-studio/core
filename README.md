@@ -171,7 +171,7 @@ fallback message when it's missing.
 A session loads an installed copy of the plugin, never this checkout, so an edit
 here reaches you the same way it reaches a student: land it, cut a release, then
 pick it up with the two commands under
-[keeping it up to date](#keeping-it-up-to-date). `CLAUDE.md` has the release
+[keeping it up to date](#keeping-it-up-to-date). `AGENTS.md` has the release
 steps.
 
 ## The status line (a separate, optional plugin)
